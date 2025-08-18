@@ -4,6 +4,7 @@ namespace CarryOn.API.Common
 {
     public interface ICarryEvent
     {
-      void Init(ICoreAPI api);
+      // TODO: Change to send API instead of ModSystem when API implements way to get CarryEvents
+      void Init(ModSystem modSystem);
     }
 }
