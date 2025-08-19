@@ -9,6 +9,6 @@
 	"authors": [ "NerdScurvy" ],
 
 	"dependencies": {
-		"game": "1.21.0-rc.4"
+		"game": "1.21.0-rc.6"
 	}
 }
