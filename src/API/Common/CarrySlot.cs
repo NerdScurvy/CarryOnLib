@@ -5,6 +5,6 @@ namespace CarryOn.API.Common
     {
         Hands,
         Back,
-        Shoulder,
+        Shoulder // Shoulder not in use
     }
 }
