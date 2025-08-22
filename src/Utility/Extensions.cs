@@ -3,7 +3,6 @@ using System.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
-using Vintagestory.API.MathTools;
 
 namespace CarryOn.Utility
 {
@@ -71,9 +70,6 @@ namespace CarryOn.Utility
 
         public static void Set(this IAttribute attr, ItemStack value, params string[] keys)
             => Set(attr, (value != null) ? new ItemstackAttribute(value) : null, keys);
-
-
- 
-               
+          
     }
 }

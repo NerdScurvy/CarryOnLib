@@ -40,12 +40,22 @@ namespace CarryOn.Utility
 
         public static bool TryGetFloat(JsonObject json, string key, out float result)
         {
+            if (!json.KeyExists(key))
+            {
+                result = float.NaN;
+                return false;
+            }            
             result = json[key].AsFloat(float.NaN);
             return !float.IsNaN(result);
         }
 
         public static bool TryGetVec3f(JsonObject json, string key, out Vec3f result)
         {
+            if (!json.KeyExists(key))
+            {
+                result = null;
+                return false;
+            }            
             var floats = json[key].AsArray<float>();
             var success = (floats?.Length == 3);
             result = success ? new Vec3f(floats) : null;
@@ -54,6 +64,11 @@ namespace CarryOn.Utility
 
         public static bool TryGetVec3i(JsonObject json, string key, out Vec3i result)
         {
+            if (!json.KeyExists(key))
+            {
+                result = null;
+                return false;
+            }
             var ints = json[key].AsArray<int>();
             var success = (ints?.Length == 3);
             result = success ? new Vec3i(ints[0], ints[1], ints[2]) : null;
