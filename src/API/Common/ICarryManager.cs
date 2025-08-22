@@ -4,6 +4,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
+using Vintagestory.API.Server;
 
 namespace CarryOn.API.Common
 {
@@ -15,28 +16,19 @@ namespace CarryOn.API.Common
         CarryEvents CarryEvents { get; }
 
         /// <summary>
-        /// Checks if entity can begin interaction with carryable item that is in the world or carried in hands slot
-        /// </summary>
-        /// <param name="entityAgent"></param>
-        /// <param name="requireEmptyHanded">if true, requires the entity agent to have both left and right hands empty</param>
-        /// <returns></returns>
-        bool CanDoCarryAction(EntityAgent entityAgent, bool requireEmptyHanded);
-
-
-        /// <summary>
         /// Checks if the entity has permission to carry the block at the specified position.
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="pos"></param>
         /// <returns></returns>
-        public bool HasPermissionToCarry(Entity entity, BlockPos pos);        
+        bool HasPermissionToCarry(Entity entity, BlockPos pos);
 
         /// <summary>
         /// Gets all carried blocks for the specified entity.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public IEnumerable<CarriedBlock> GetAllCarried(Entity entity);
+        IEnumerable<CarriedBlock> GetAllCarried(Entity entity);
 
         /// <summary>
         /// Gets the CarriedBlock carried by the entity in the specified carry slot.
@@ -80,7 +72,7 @@ namespace CarryOn.API.Common
         /// <param name="first">The first carry slot.</param>
         /// <param name="second">The second carry slot.</param>
         /// <exception cref="ArgumentNullException"> Thrown if entity is null. </exception>
-        public bool SwapCarried(Entity entity, CarrySlot first, CarrySlot second);
+        bool SwapCarried(Entity entity, CarrySlot first, CarrySlot second);
 
         /// <summary>
         /// Tries to place the carriedBlock in the world, removing from entity if successful
@@ -94,7 +86,7 @@ namespace CarryOn.API.Common
         /// <exception cref="ArgumentNullException"></exception>
         bool TryPlaceDown(Entity entity, CarriedBlock carriedBlock, BlockSelection selection, bool dropped = false, bool playSound = true);
 
-  /// <summary>
+        /// <summary>
         /// Tries to place the carriedBlock in the world, removing from entity if successful
         /// </summary>
         /// <param name="entity"></param>
@@ -127,8 +119,14 @@ namespace CarryOn.API.Common
         /// <param name="placedAt">Position of where the block was placed. It may have replaced the selected block.</param>
         /// <param name="failureCode"></param>
         /// <returns></returns>
-        public bool TryPlaceDownAt(IPlayer player, CarriedBlock carried,
-                                     BlockSelection selection, out BlockPos placedAt, ref string failureCode);        
+        bool TryPlaceDownAt(IPlayer player, CarriedBlock carried,
+                                     BlockSelection selection, out BlockPos placedAt, ref string failureCode);
+
+        /// <summary>
+        /// Sends a message to the player to lock the hotbar slots.
+        /// </summary>
+        /// <param name="player"></param>
+        public void LockHotbarSlots(IServerPlayer player);
 
     }
 }
