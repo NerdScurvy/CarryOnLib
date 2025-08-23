@@ -7,9 +7,5 @@ namespace CarryOn.CarryOnLib
     {
         public ICarryManager CarryManager { get; set; }
 
-        public override void Start(ICoreAPI api)
-        {
-
-        }
     }
 }
