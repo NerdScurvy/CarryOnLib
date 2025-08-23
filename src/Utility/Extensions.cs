@@ -48,7 +48,7 @@ namespace CarryOn.Utility
                 var key = keys[i];
                 if (attr is not ITreeAttribute tree)
                 {
-                    if ((tree == null) && (value == null)) return; // If removing value, return on missing tree nodes.
+                    if ((attr == null) && (value == null)) return; // If removing value, return on missing tree nodes.
                     var getter = $"attr{keys.Take(i).Select(k => $"[\"{k}\"]")}";
                     var type = attr?.GetType()?.ToString() ?? "null";
                     throw new ArgumentException($"{getter} is {type}, not TreeAttribute.", nameof(attr));
@@ -69,6 +69,6 @@ namespace CarryOn.Utility
             => Set(attr, (IAttribute)null, keys);
 
         public static void Set(this IAttribute attr, ItemStack value, params string[] keys)
-          
+            => Set(attr, (value != null) ? new ItemstackAttribute(value) : null, keys);
     }
 }
