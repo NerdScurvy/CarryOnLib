@@ -69,7 +69,6 @@ namespace CarryOn.Utility
             => Set(attr, (IAttribute)null, keys);
 
         public static void Set(this IAttribute attr, ItemStack value, params string[] keys)
-            => Set(attr, (value != null) ? new ItemstackAttribute(value) : null, keys);
           
     }
 }
