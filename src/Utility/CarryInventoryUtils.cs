@@ -58,8 +58,6 @@ namespace CarryOn.Utility
             }
 
             blockInventory.SetAttribute("slots", slotsAttribute);
-        
-
             return blockInventory;
         }
     }
