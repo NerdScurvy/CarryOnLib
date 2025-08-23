@@ -2,15 +2,14 @@ namespace CarryOn.API.Common
 {
     public static class CarryCode
     {
+        public static string ModId { get; } = "carryon";
 
-        public static class ModId
+        public static class CarryOnLib
         {
-            public static string CarryOn { get; } = "carryon";
-            public static string CarryOnLib { get; } = "carryonlib";
+            public static string ModId { get; } = "carryonlib";
         }
 
-
-        public static string CarryOnCode(string key) => $"{ModId.CarryOn}:{key}";
+        public static string CarryOnCode(string key) => $"{ModId}:{key}";
 
         public static class AttributeKey
         {
