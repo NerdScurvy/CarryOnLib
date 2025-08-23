@@ -48,7 +48,7 @@ namespace CarryOn.Utility
                 var key = keys[i];
                 if (attr is not ITreeAttribute tree)
                 {
-                    if ((attr == null) && (value == null)) return; // If removing value, return on missing tree nodes.
+                    if ((tree == null) && (value == null)) return; // If removing value, return on missing tree nodes.
                     var getter = $"attr{keys.Take(i).Select(k => $"[\"{k}\"]")}";
                     var type = attr?.GetType()?.ToString() ?? "null";
                     throw new ArgumentException($"{getter} is {type}, not TreeAttribute.", nameof(attr));
