@@ -6,7 +6,6 @@ namespace CarryOn.API.Common
 {
   public class CarriedBlock
   {
-    public static string AttributeId { get; } = "carryon:Carried";
 
     public CarrySlot Slot { get; }
 
