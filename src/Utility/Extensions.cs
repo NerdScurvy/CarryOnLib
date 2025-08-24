@@ -1,13 +1,115 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using CarryOn.API.Common;
+using CarryOn.API.Event;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.MathTools;
 
 namespace CarryOn.Utility
 {
     public static class Extensions
     {
+
+        private static ICarryManager clientCarryManager = null;
+        private static ICarryManager serverCarryManager = null;
+
+        /// <summary>
+        /// Clears the cached carry managers.
+        /// </summary>
+        public static void ClearCachedCarryManager()
+        {
+            clientCarryManager = null;
+            serverCarryManager = null;
+        }
+
+        /// <summary>
+        /// Returns the <see cref="ICarryManager"/> for the specified API.
+        /// </summary>
+        /// <param name="api"></param>
+        /// <returns></returns>
+        public static ICarryManager GetCarryManager(ICoreAPI api)
+        {
+            if (api.Side == EnumAppSide.Server)
+            {
+                serverCarryManager ??= api.ModLoader.GetModSystem<CarryOnLib.Core>()?.CarryManager;
+                return serverCarryManager;
+            }
+            clientCarryManager ??= api.ModLoader.GetModSystem<CarryOnLib.Core>()?.CarryManager;
+            return clientCarryManager;
+        }
+
+        /* ------------------------------ */
+        /* Entity extensions              */
+        /* ------------------------------ */
+
+        /// <summary>
+        /// Returns whether the specified entity has permission to carry the block at the given position.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="pos"></param>
+        /// <returns></returns>
+        public static bool HasPermissionToCarry(this Entity entity, BlockPos pos)
+            => GetCarryManager(entity.Api)?.HasPermissionToCarry(entity, pos) ?? false;
+
+        /// <summary>
+        /// Returns the <see cref="CarriedBlock"/> this entity is carrying in the specified slot, or null of none.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="slot"></param>
+        /// <returns></returns>
+        public static CarriedBlock GetCarried(this Entity entity, CarrySlot slot)
+            => GetCarryManager(entity.Api)?.GetCarried(entity, slot);
+
+        /// <summary>
+        /// Returns all the <see cref="CarriedBlock"/>s this entity is carrying.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static IEnumerable<CarriedBlock> GetCarried(this Entity entity)
+            => GetCarryManager(entity.Api)?.GetAllCarried(entity);
+
+        /// <summary>
+        /// Attempts to make this entity drop all of its carried blocks around its current position in the specified area.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="range"></param>
+        public static void DropAllCarried(this Entity entity, int range = 4)
+            => GetCarryManager(entity.Api)?.DropCarried(entity, Enum.GetValues(typeof(CarrySlot)).Cast<CarrySlot>(), range);
+
+        /// <summary>
+        /// Attempts to swap the <see cref="CarriedBlock"/>s currently carried in the
+        /// entity's <paramref name="first"/> and <paramref name="second"/> slots.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public static bool SwapCarried(this Entity entity, CarrySlot first, CarrySlot second)
+            => GetCarryManager(entity.Api).SwapCarried(entity, first, second);
+
+        /* ------------------------------ */
+        /* CarriedBlock Extensions        */
+        /* ------------------------------ */
+
+        /// <summary>
+        /// Sets the carried block for the entity in the specified carry slot.
+        /// </summary>
+        /// <param name="carriedBlock"></param>
+        /// <param name="entity"></param>
+        /// <param name="slot"></param>
+        public static void Set(this CarriedBlock carriedBlock, Entity entity, CarrySlot slot)
+            => GetCarryManager(entity.Api).SetCarried(entity, slot, carriedBlock.ItemStack, carriedBlock.BlockEntityData);
+
+        /* ------------------------------ */
+
+        /// <summary>
+        /// Registers a block or entity behavior class with the API.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="api"></param>
         public static void Register<T>(this ICoreAPI api)
         {
             var name = (string)typeof(T).GetProperty("Name").GetValue(null);
@@ -18,14 +120,35 @@ namespace CarryOn.Utility
             else throw new ArgumentException("T is not a block or entity behavior", nameof(T));
         }
 
+
+        /// <summary>
+        /// Checks if the block has a behavior of the specified type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="block"></param>
+        /// <returns></returns>
         public static bool HasBehavior<T>(this Block block)
             where T : BlockBehavior
                 => block.HasBehavior(typeof(T));
 
+        /// <summary>
+        /// Gets the behavior of the specified type, or the default value if it doesn't exist.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="block"></param>
+        /// <param name="default"></param>
+        /// <returns></returns>
         public static T GetBehaviorOrDefault<T>(this Block block, T @default)
             where T : BlockBehavior
                 => (T)block.GetBehavior<T>() ?? @default;
 
+
+        /// <summary>
+        /// Tries to get an attribute from the specified keys.
+        /// </summary>
+        /// <param name="attr"></param>
+        /// <param name="keys"></param>
+        /// <returns></returns>
         public static IAttribute TryGet(this IAttribute attr, params string[] keys)
         {
             foreach (var key in keys)
@@ -36,10 +159,25 @@ namespace CarryOn.Utility
             return attr;
         }
 
+        /// <summary>
+        /// Tries to get an attribute of the specified type from the specified keys.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="attr"></param>
+        /// <param name="keys"></param>
+        /// <returns></returns>
         public static T TryGet<T>(this IAttribute attr, params string[] keys)
                 where T : class, IAttribute
             => TryGet(attr, keys) as T;
 
+        /// <summary>
+        /// Sets an attribute at the specified keys, creating tree nodes as necessary.
+        /// </summary>
+        /// <param name="attr"></param>
+        /// <param name="value"></param>
+        /// <param name="keys"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
         public static void Set(this IAttribute attr, IAttribute value, params string[] keys)
         {
             if (attr == null) throw new ArgumentNullException(nameof(attr));
@@ -65,9 +203,20 @@ namespace CarryOn.Utility
             }
         }
 
+        /// <summary>
+        /// Removes an attribute at the specified keys.
+        /// </summary>
+        /// <param name="attr"></param>
+        /// <param name="keys"></param>
         public static void Remove(this IAttribute attr, params string[] keys)
             => Set(attr, (IAttribute)null, keys);
 
+        /// <summary>
+        /// Sets an attribute at the specified keys, creating tree nodes as necessary.
+        /// </summary>
+        /// <param name="attr"></param>
+        /// <param name="value"></param>
+        /// <param name="keys"></param>
         public static void Set(this IAttribute attr, ItemStack value, params string[] keys)
             => Set(attr, (value != null) ? new ItemstackAttribute(value) : null, keys);
     }

@@ -126,7 +126,45 @@ namespace CarryOn.API.Common
         /// Sends a message to the player to lock the hotbar slots.
         /// </summary>
         /// <param name="player"></param>
-        public void LockHotbarSlots(IServerPlayer player);
+        void LockHotbarSlots(IServerPlayer player);
 
+        /// <summary>
+        /// Drops the carried blocks from the specified slots.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="slots"></param>
+        /// <param name="range"></param>
+        void DropCarried(Entity entity, IEnumerable<CarrySlot> slots, int range = 4);
+
+        /// <summary>
+        /// Drops the carried block as item(s) at the specified position.
+        /// </summary>
+        /// <param name="carriedBlock"></param>
+        /// <param name="centerBlock"></param>
+        /// <param name="player"></param>
+        /// <param name="entity"></param>
+        void DropBlockAsItem(CarriedBlock carriedBlock, BlockPos centerBlock, IServerPlayer player, Entity entity);
+
+        /// <summary>
+        /// Checks if the block is carryable.
+        /// </summary>
+        /// <param name="block"></param>
+        /// <returns></returns>
+        bool IsCarryable(Block block);
+
+        /// <summary>
+        /// Checks if the block is carryable in the specified slot.
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="slot"></param>
+        /// <returns></returns>
+        bool IsCarryable(Block block, CarrySlot slot);
+
+        /// <summary>
+        /// Checks if the entity can interact with block while carrying a block in their hands
+        /// </summary>
+        /// <param name="block"></param>
+        /// <returns></returns>
+        bool CanInteractWhileCarrying(Block block);
     }
 }
