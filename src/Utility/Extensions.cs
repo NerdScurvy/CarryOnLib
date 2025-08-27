@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CarryOn.API.Common;
 using CarryOn.API.Event;
+using Newtonsoft.Json.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
@@ -219,5 +220,37 @@ namespace CarryOn.Utility
         /// <param name="keys"></param>
         public static void Set(this IAttribute attr, ItemStack value, params string[] keys)
             => Set(attr, (value != null) ? new ItemstackAttribute(value) : null, keys);
+
+        /// <summary>
+        /// Tries to get a string value from the dictionary of JTokens.
+        /// </summary>
+        /// <param name="dict"></param>
+        /// <param name="key"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public static bool TryGetBool(this Dictionary<string, JToken> dict, string key, bool defaultValue)
+            => dict.TryGetValue(key, out var token) && token.Type == JTokenType.Boolean ? token.Value<bool>() : defaultValue;
+
+        /// <summary>
+        /// Tries to get a float value from the dictionary of JTokens.
+        /// </summary>
+        /// <param name="dict"></param>
+        /// <param name="key"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public static float TryGetFloat(this Dictionary<string, JToken> dict, string key, float defaultValue)
+            => dict.TryGetValue(key, out var token) && token.Type == JTokenType.Float ? token.Value<float>() :
+               dict.TryGetValue(key, out token) && token.Type == JTokenType.Integer ? token.Value<int>() : defaultValue;
+
+        /// <summary>
+        /// Tries to get an array of strings from the dictionary of JTokens.
+        /// </summary>
+        /// <param name="dict"></param>
+        /// <param name="key"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public static string[] TryGetStringArray(this Dictionary<string, JToken> dict, string key, string[] defaultValue)
+            => dict.TryGetValue(key, out var token) && token.Type == JTokenType.Array ? token.ToObject<string[]>() : defaultValue;
+
     }
 }
