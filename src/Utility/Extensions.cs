@@ -222,7 +222,7 @@ namespace CarryOn.Utility
             => Set(attr, (value != null) ? new ItemstackAttribute(value) : null, keys);
 
         /// <summary>
-        /// Tries to get a string value from the dictionary of JTokens.
+        /// Tries to get a boolean value from the dictionary of JTokens.
         /// </summary>
         /// <param name="dict"></param>
         /// <param name="key"></param>
