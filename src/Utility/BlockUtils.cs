@@ -220,24 +220,5 @@ namespace CarryOn.Utility
             blockInventory.SetAttribute("slots", slotsAttribute);
             return blockInventory;
         }
-
-        /// <summary>
-        /// Finds all behaviors of a specific type in a list of behaviors.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="behaviors"></param>
-        /// <returns></returns>
-        public static List<T> FindBehaviors<T>(List<CollectibleBehavior> behaviors)
-        {
-            var foundBehaviors = new List<T>();
-            foreach (var behavior in behaviors)
-            {
-                if (behavior is T found)
-                {
-                    foundBehaviors.Add(found);
-                }
-            }
-            return foundBehaviors;
-        }
     }
 }

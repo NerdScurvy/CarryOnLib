@@ -151,7 +151,6 @@ namespace CarryOn.API.Common
         /// <param name="api"></param>
         void InitEvents(ICoreAPI api);
 
-        /// <summary>
         /// Checks if the block is carryable.
         /// </summary>
         /// <param name="block"></param>
