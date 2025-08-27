@@ -239,8 +239,16 @@ namespace CarryOn.Utility
         /// <param name="defaultValue"></param>
         /// <returns></returns>
         public static float TryGetFloat(this Dictionary<string, JToken> dict, string key, float defaultValue)
-            => dict.TryGetValue(key, out var token) && token.Type == JTokenType.Float ? token.Value<float>() :
-               dict.TryGetValue(key, out token) && token.Type == JTokenType.Integer ? token.Value<int>() : defaultValue;
+        {
+            if (dict.TryGetValue(key, out var token))
+            {
+                if (token.Type == JTokenType.Float)
+                    return token.Value<float>();
+                if (token.Type == JTokenType.Integer)
+                    return token.Value<int>();
+            }
+            return defaultValue;
+        }
 
         /// <summary>
         /// Tries to get an array of strings from the dictionary of JTokens.
