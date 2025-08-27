@@ -318,7 +318,7 @@ namespace CarryOn.Utility
                     bool andResult = true;
                     foreach (var key in andKeys)
                     {
-                        var attr = LookupValue(config, key.Trim());
+                        var attr = config.LookupValue(key.Trim());
                         if (attr is BoolAttribute boolAttr)
                             andResult &= boolAttr.value;
                         else
@@ -337,7 +337,7 @@ namespace CarryOn.Utility
             foreach (var key in keys)
             {
                 bool value;
-                var attr = LookupValue(config, key.Trim());
+                var attr = config.LookupValue(key.Trim());
                 if (attr is BoolAttribute boolAttr) // Assume true if not found or not boolean
                     value = boolAttr.value;
                 else
