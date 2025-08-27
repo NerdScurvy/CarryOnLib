@@ -252,5 +252,105 @@ namespace CarryOn.Utility
         public static string[] TryGetStringArray(this Dictionary<string, JToken> dict, string key, string[] defaultValue)
             => dict.TryGetValue(key, out var token) && token.Type == JTokenType.Array ? token.ToObject<string[]>() : defaultValue;
 
+
+        /// <summary>
+        /// Helper to lookup a value in an IAttribute using dot notation (e.g. "carryon.Carryables.Anvil").
+        /// Returns the final IAttribute found, or null if not found.
+        /// </summary>
+        public static IAttribute LookupValue(this IAttribute root, string dotNotation)
+        {
+            if (root == null || string.IsNullOrWhiteSpace(dotNotation)) return null;
+            var keys = dotNotation.Split('.');
+            IAttribute current = root;
+            foreach (var key in keys)
+            {
+                if (current is TreeAttribute tree)
+                {
+                    if (tree.HasAttribute(key))
+                    {
+                        current = tree[key];
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return current;
+        }
+
+        /// <summary>
+        /// Evaluates a logic string of dot-notation config keys separated by & (AND) or | (OR).
+        /// Uses LookupConfigValue to get each value, assumes true if not found or not boolean.
+        /// Example: "carryon.Carryables.Clutter&carryon.Carryables.BookCase" (AND)
+        ///          "carryon.Carryables.Clutter|carryon.Carryables.BookCase" (OR)
+        /// </summary>
+        public static bool EvaluateDotNotationLogic(this ITreeAttribute config, ICoreAPI api, string logicString)
+        {
+            if (string.IsNullOrWhiteSpace(logicString)) return true;
+
+            // Determine logic type
+            bool isAnd = logicString.Contains("&");
+            bool isOr = logicString.Contains("|");
+
+            // Split by delimiter
+            string[] keys;
+            if (isAnd && !isOr)
+                keys = logicString.Split('&');
+            else if (isOr && !isAnd)
+                keys = logicString.Split('|');
+            else if (isAnd && isOr)
+                // Mixed logic, treat & as higher precedence than |
+                keys = logicString.Split('|');
+            else
+                keys = new[] { logicString };
+
+            // If mixed logic, evaluate each OR group as AND
+            if (isAnd && isOr)
+            {
+                foreach (var orGroup in keys)
+                {
+                    var andKeys = orGroup.Split('&');
+                    bool andResult = true;
+                    foreach (var key in andKeys)
+                    {
+                        var attr = LookupValue(config, key.Trim());
+                        if (attr is BoolAttribute boolAttr)
+                            andResult &= boolAttr.value;
+                        else
+                        {
+                            api.Logger.Warning($"CarryOn: EvaluateDotNotationLogic - Key '{key.Trim()}' not found or not boolean, assuming true.");
+                            andResult &= true;
+                        }
+                    }
+                    if (andResult) return true;
+                }
+                return false;
+            }
+
+            // Pure AND or OR
+            bool result = isOr ? false : true;
+            foreach (var key in keys)
+            {
+                bool value;
+                var attr = LookupValue(config, key.Trim());
+                if (attr is BoolAttribute boolAttr) // Assume true if not found or not boolean
+                    value = boolAttr.value;
+                else
+                {
+                    api.Logger.Warning($"CarryOn: EvaluateDotNotationLogic - Key '{key.Trim()}' not found or not boolean, assuming true.");
+                    value = true;
+                }
+
+                if (isAnd) result &= value;
+                else if (isOr) result |= value;
+                else result = value;
+            }
+            return result;
+        }            
     }
 }

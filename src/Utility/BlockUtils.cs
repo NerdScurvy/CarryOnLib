@@ -220,7 +220,7 @@ namespace CarryOn.Utility
             blockInventory.SetAttribute("slots", slotsAttribute);
             return blockInventory;
         }
-        
+
         /// <summary>
         /// Finds all behaviors of a specific type in a list of behaviors.
         /// </summary>
@@ -238,6 +238,6 @@ namespace CarryOn.Utility
                 }
             }
             return foundBehaviors;
-        }        
+        }
     }
 }
