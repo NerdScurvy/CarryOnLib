@@ -138,6 +138,7 @@ namespace CarryOn.API.Common
             public static string SwapBackModifier { get; } = "carryonswapbackmodifierkey";
             public static string Toggle { get; } = "carryontogglekey";
             public static string QuickDrop { get; } = "carryonquickdropkey";
+            public static string QuickDropAll { get; } = "carryonquickdropallkey";
             public static string ToggleDoubleTapDismount { get; } = "carryontoggledoubletapdismountkey";
 
         }
