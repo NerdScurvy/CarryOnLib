@@ -1,3 +1,4 @@
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.GameContent;
 
@@ -7,12 +8,28 @@ namespace CarryOn.API.Common
     {
         public static string ModId { get; } = "carryon";
 
+        public const string ConfigFile = "CarryOnConfig.json";
+
         public static class CarryOnLib
         {
             public static string ModId { get; } = "carryonlib";
         }
 
         public static string CarryOnCode(string key) => $"{ModId}:{key}";
+
+        public static class Default
+        {
+            public static float PlaceSpeed { get; } = 0.75f;
+            public static float SwapSpeed { get; } = 1.5f;
+            public static float PickUpSpeed { get; } = 0.8f;
+            public static float TransferSpeed { get; } = 0.8f;
+            public static float InteractSpeed { get; } = 0.8f;
+            public static int DoubleTapThresholdMs { get; } = 500;
+            public static GlKeys PickupKeybind { get; } = GlKeys.ShiftLeft;
+            public static GlKeys SwapBackModifierKeybind { get; } = GlKeys.ControlLeft;
+            public static GlKeys FunctionKeybind { get; } = GlKeys.K;
+
+        }
 
         public static class AttributeKey
         {
