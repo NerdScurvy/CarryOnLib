@@ -129,6 +129,7 @@ namespace CarryOn.API.Common
             public static string Stop { get; } = "__stop__";
             public static string Default { get; } = "__default__";
             public static string Internal { get; } = "__failure__";
+            public static string Ignore { get; } = "__ignore__";
         }
 
         public static class HotKeyCode
