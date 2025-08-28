@@ -192,7 +192,7 @@ namespace CarryOn.Utility
             backpack.SetAttribute("slots", backpackSlots);
             return backpack;
         }
-        
+
         /// <summary>
         /// Converts a backpack attribute to a block inventory attribute.
         /// </summary>

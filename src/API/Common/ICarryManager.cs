@@ -146,6 +146,11 @@ namespace CarryOn.API.Common
         void DropBlockAsItem(CarriedBlock carriedBlock, BlockPos centerBlock, IServerPlayer player, Entity entity);
 
         /// <summary>
+        /// Initializes any carry events.
+        /// </summary>
+        /// <param name="api"></param>
+        void InitEvents(ICoreAPI api);
+
         /// Checks if the block is carryable.
         /// </summary>
         /// <param name="block"></param>
