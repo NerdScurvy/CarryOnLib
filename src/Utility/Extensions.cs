@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CarryOn.API.Common;
+using CarryOn.API.Common.Interfaces;
+using CarryOn.API.Common.Models;
 using Newtonsoft.Json.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;

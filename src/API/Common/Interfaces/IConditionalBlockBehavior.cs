@@ -1,6 +1,6 @@
 using Vintagestory.API.Common;
 
-namespace CarryOn.Common.Behaviors
+namespace CarryOn.API.Common.Interfaces
 {
     public interface IConditionalBlockBehavior
     {

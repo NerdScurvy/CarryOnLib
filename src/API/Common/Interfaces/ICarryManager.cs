@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CarryOn.API.Common.Models;
 using CarryOn.API.Event;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
@@ -6,7 +7,7 @@ using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 
-namespace CarryOn.API.Common
+namespace CarryOn.API.Common.Interfaces
 {
 
     public interface ICarryManager

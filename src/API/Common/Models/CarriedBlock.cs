@@ -1,8 +1,9 @@
+
 using System;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 
-namespace CarryOn.API.Common
+namespace CarryOn.API.Common.Models
 {
   public class CarriedBlock
   {
