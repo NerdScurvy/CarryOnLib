@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using CarryOn.API.Common;
+using CarryOn.API.Common.Models;
 using CarryOn.API.Event;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
@@ -70,6 +70,7 @@ namespace CarryOn.Utility
             blockEntityData.SetInt("posy", pos.Y);
             blockEntityData.SetInt("posz", pos.Z);
 
+            // Get the block entity at the position (Likely default from block just placed)
             var blockEntity = world.BlockAccessor.GetBlockEntity(pos);
 
             // Handle OnRestoreBlockEntityData events
@@ -89,6 +90,7 @@ namespace CarryOn.Utility
             }
 
             blockEntity?.FromTreeAttributes(blockEntityData, world);
+            blockEntity?.MarkDirty(true);
         }
 
         /// <summary> 

@@ -1,6 +1,5 @@
 using System;
-using CarryOn.API.Common;
-using Vintagestory.API.Common;
+using CarryOn.API.Common.Models;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.MathTools;
 

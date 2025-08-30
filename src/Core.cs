@@ -1,4 +1,5 @@
 using CarryOn.API.Common;
+using CarryOn.API.Common.Interfaces;
 using CarryOn.Utility;
 using Vintagestory.API.Common;
 

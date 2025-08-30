@@ -1,4 +1,4 @@
-namespace CarryOn.API.Common
+namespace CarryOn.API.Common.Interfaces
 {
     public interface ICarryEvent
     {
