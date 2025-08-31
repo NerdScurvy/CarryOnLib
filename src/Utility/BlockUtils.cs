@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using CarryOn.API.Common.Models;
 using CarryOn.API.Event;
+using CarryOn.API.Event.Delegates;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
@@ -49,48 +50,6 @@ namespace CarryOn.Utility
             }
 
             return new CarriedBlock(slot, stack, blockEntityData);
-        }
-
-
-        /// <summary>
-        /// Restores the block at a specified position with the entity data from the carried block.
-        /// </summary>
-        /// <param name="carriedBlock"></param>
-        /// <param name="pos"></param>
-        /// <param name="delegates">Optional delegates to call when restoring block entity data</param>
-        /// <param name="dropped">Signal block was dropped to any delegates</param>
-        public static void RestoreBlockEntityData(IWorldAccessor world, CarriedBlock carriedBlock, BlockPos pos, Delegate[] delegates = null, bool dropped = false)
-        {
-            if ((world.Side != EnumAppSide.Server) || (carriedBlock?.BlockEntityData == null)) return;
-
-            var blockEntityData = carriedBlock.BlockEntityData;
-            // Set the block entity's position to the new position.
-            // Without this, we get some funny behavior.
-            blockEntityData.SetInt("posx", pos.X);
-            blockEntityData.SetInt("posy", pos.Y);
-            blockEntityData.SetInt("posz", pos.Z);
-
-            // Get the block entity at the position (Likely default from block just placed)
-            var blockEntity = world.BlockAccessor.GetBlockEntity(pos);
-
-            // Handle OnRestoreBlockEntityData events
-            if (delegates != null)
-            {
-                foreach (var blockEntityDataDelegate in delegates.Cast<BlockEntityDataDelegate>())
-                {
-                    try
-                    {
-                        blockEntityDataDelegate(blockEntity, blockEntityData, dropped);
-                    }
-                    catch (Exception e)
-                    {
-                        world.Logger.Error(e.Message);
-                    }
-                }
-            }
-
-            blockEntity?.FromTreeAttributes(blockEntityData, world);
-            blockEntity?.MarkDirty(true);
         }
 
         /// <summary> 

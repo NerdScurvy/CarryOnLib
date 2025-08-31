@@ -76,6 +76,24 @@ namespace CarryOn.API.Common.Interfaces
         bool SwapCarried(Entity entity, CarrySlot first, CarrySlot second);
 
         /// <summary>
+        /// Gets the CarriedBlock from the world at the specified position and slot.
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="slot"></param>
+        /// <param name="checkIsCarryable"></param>
+        /// <returns></returns>
+        CarriedBlock GetCarriedFromWorld(BlockPos pos, CarrySlot slot, bool checkIsCarryable = false);
+
+        /// <summary>
+        /// Restores the block entity data for the carried block at the specified position.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="carriedBlock"></param>
+        /// <param name="pos"></param>
+        /// <param name="dropped"></param>
+        void RestoreBlockEntityData(IWorldAccessor world, CarriedBlock carriedBlock, BlockPos pos, bool dropped = false);
+
+        /// <summary>
         /// Tries to place the carriedBlock in the world, removing from entity if successful
         /// </summary>
         /// <param name="entity"></param>
