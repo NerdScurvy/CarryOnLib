@@ -77,7 +77,7 @@ namespace CarryOn.Utility
 
         public static ModelTransform GetTransform(JsonObject json, ModelTransform baseTransform)
         {
-            var trans = baseTransform.Clone();
+            var trans = baseTransform?.Clone()?? new ModelTransform();
             if (TryGetVec3f(json, "translation", out var t)) trans.Translation = t;
             if (TryGetVec3f(json, "rotation", out var r)) trans.Rotation = r;
             if (TryGetVec3f(json, "origin", out var o)) trans.Origin = o;
