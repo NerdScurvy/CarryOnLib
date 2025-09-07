@@ -74,10 +74,23 @@ namespace CarryOn.Utility
             result = success ? new Vec3i(ints[0], ints[1], ints[2]) : null;
             return success;
         }
+        
+        public static bool TryGetStringArray(JsonObject json, string key, out string[] result)
+        {
+            if (!json.KeyExists(key))
+            {
+                result = null;
+                return false;
+            }
+            var strings = json[key].AsArray<string>();
+            var success = true;
+            result = strings;
+            return success;
+        }        
 
         public static ModelTransform GetTransform(JsonObject json, ModelTransform baseTransform)
         {
-            var trans = baseTransform?.Clone()?? new ModelTransform();
+            var trans = baseTransform?.Clone() ?? new ModelTransform();
             if (TryGetVec3f(json, "translation", out var t)) trans.Translation = t;
             if (TryGetVec3f(json, "rotation", out var r)) trans.Rotation = r;
             if (TryGetVec3f(json, "origin", out var o)) trans.Origin = o;
