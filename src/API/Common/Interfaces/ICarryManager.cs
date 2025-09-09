@@ -16,6 +16,9 @@ namespace CarryOn.API.Common.Interfaces
 
         CarryEvents CarryEvents { get; }
 
+
+        CarryOnConfig GetConfig();
+
         /// <summary>
         /// Checks if the entity has permission to carry the block at the specified position.
         /// </summary>

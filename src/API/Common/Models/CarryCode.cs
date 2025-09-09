@@ -65,6 +65,7 @@ namespace CarryOn.API.Common.Models
             {
                 public static string LoggingEnabledKey { get; } = "LoggingEnabled";
                 public static string DisableHarmonyPatchKey { get; } = "DisableHarmonyPatch";
+                public static string EnablePackAdjustmentToolKey { get; } = "EnablePackAdjustmentTool";
             }
 
             public static class CarryOptions
