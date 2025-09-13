@@ -14,11 +14,19 @@ namespace CarryOn.API.Common.Models
 
     public ITreeAttribute BlockEntityData { get; }
 
-    public CarriedBlock(CarrySlot slot, ItemStack stack, ITreeAttribute blockEntityData)
+    // Optional client-side label data (synced subset when full BlockEntityData not available)
+    public string LabelText { get; }
+    public int? LabelColor { get; }
+    public float? LabelFontSize { get; }
+    public CarriedBlock(CarrySlot slot, ItemStack stack, ITreeAttribute blockEntityData,
+                        string labelText = null, int? labelColor = null, float? labelFontSize = null)
     {
       Slot = slot;
       ItemStack = stack ?? throw new ArgumentNullException(nameof(stack));
       BlockEntityData = blockEntityData;
+      LabelText = labelText;
+      LabelColor = labelColor;
+      LabelFontSize = labelFontSize;
     }
   }
 }
