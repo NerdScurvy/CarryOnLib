@@ -72,7 +72,7 @@ namespace CarryOn.API.Common.Models
             {
                 public static string BackSlotEnabledKey { get; } = "BackSlotEnabled";
                 public static string AllowChestTrunksOnBackKey { get; } = "AllowChestTrunksOnBack";
-                public static string AllowLargeChestsOnBackKey { get; } = "AllowLargeChestsOnBack";
+                public static string AllowHighCapacityStorageOnBackKey { get; } = "AllowHighCapacityStorageOnBack";
                 public static string AllowCratesOnBackKey { get; } = "AllowCratesOnBack";
                 public static string AllowSprintWhileCarryingKey { get; } = "AllowSprintWhileCarrying";
                 public static string IgnoreCarrySpeedPenaltyKey { get; } = "IgnoreCarrySpeedPenalty";

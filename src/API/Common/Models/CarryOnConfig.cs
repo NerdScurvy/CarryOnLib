@@ -68,9 +68,11 @@ namespace CarryOn.API.Common.Models
 
         public bool BackSlotEnabled { get; set; } = true;
         public bool AllowChestTrunksOnBack { get; set; } = false;
-        public bool AllowLargeChestsOnBack { get; set; } = false;
+        public bool AllowHighCapacityStorageOnBack { get; set; } = false;
         public bool AllowCratesOnBack { get; set; } = false;
 
+        [JsonExtensionData(ReadData = true, WriteData = false)]
+        internal Dictionary<string, JToken> Legacy { get; set; }
     }
 
     public class DebuggingOptionsConfig
@@ -130,7 +132,7 @@ namespace CarryOn.API.Common.Models
         public DebuggingOptionsConfig DebuggingOptions { get; set; } = new DebuggingOptionsConfig();
 
         [JsonExtensionData(ReadData = true, WriteData = false)]
-        private Dictionary<string, JToken> LegacyData { get; set; }
+        internal Dictionary<string, JToken> Legacy { get; set; }
 
         public CarryOnConfig()
         {
@@ -149,61 +151,73 @@ namespace CarryOn.API.Common.Models
             {
                 // Perform upgrade actions
                 ConfigVersion = 2;
-                if (LegacyData == null) return;
+                if (Legacy != null)
+                {
+                    // Carryables
+                    Carryables.Anvil = Legacy.TryGetBool("AnvilEnabled", Carryables.Anvil);
+                    Carryables.Barrel = Legacy.TryGetBool("BarrelEnabled", Carryables.Barrel);
+                    Carryables.Bookshelf = Legacy.TryGetBool("BookshelfEnabled", Carryables.Bookshelf);
+                    Carryables.BunchOCandles = Legacy.TryGetBool("BunchOCandlesEnabled", Carryables.BunchOCandles);
+                    Carryables.Chandelier = Legacy.TryGetBool("ChandelierEnabled", Carryables.Chandelier);
+                    Carryables.ChestLabeled = Legacy.TryGetBool("ChestLabeledEnabled", Carryables.ChestLabeled);
+                    Carryables.ChestTrunk = Legacy.TryGetBool("ChestTrunkEnabled", Carryables.ChestTrunk);
+                    Carryables.Chest = Legacy.TryGetBool("ChestEnabled", Carryables.Chest);
+                    Carryables.Clutter = Legacy.TryGetBool("ClutterEnabled", Carryables.Clutter);
+                    Carryables.Crate = Legacy.TryGetBool("CrateEnabled", Carryables.Crate);
+                    Carryables.DisplayCase = Legacy.TryGetBool("DisplayCaseEnabled", Carryables.DisplayCase);
+                    Carryables.Flowerpot = Legacy.TryGetBool("FlowerpotEnabled", Carryables.Flowerpot);
+                    Carryables.Forge = Legacy.TryGetBool("ForgeEnabled", Carryables.Forge);
+                    Carryables.Henbox = Legacy.TryGetBool("HenboxEnabled", Carryables.Henbox);
+                    Carryables.LogWithResin = Legacy.TryGetBool("LogWithResinEnabled", Carryables.LogWithResin);
+                    Carryables.LootVessel = Legacy.TryGetBool("LootVesselEnabled", Carryables.LootVessel);
+                    Carryables.MoldRack = Legacy.TryGetBool("MoldRackEnabled", Carryables.MoldRack);
+                    Carryables.Mold = Legacy.TryGetBool("MoldsEnabled", Carryables.Mold);
+                    Carryables.Oven = Legacy.TryGetBool("OvenEnabled", Carryables.Oven);
+                    Carryables.Planter = Legacy.TryGetBool("PlanterEnabled", Carryables.Planter);
+                    Carryables.Quern = Legacy.TryGetBool("QuernEnabled", Carryables.Quern);
+                    Carryables.ReedChest = Legacy.TryGetBool("ReedBasketEnabled", Carryables.ReedChest);
+                    Carryables.Shelf = Legacy.TryGetBool("ShelfEnabled", Carryables.Shelf);
+                    Carryables.Sign = Legacy.TryGetBool("SignEnabled", Carryables.Sign);
+                    Carryables.StorageVessel = Legacy.TryGetBool("StorageVesselEnabled", Carryables.StorageVessel);
+                    Carryables.ToolRack = Legacy.TryGetBool("ToolRackEnabled", Carryables.ToolRack);
+                    Carryables.TorchHolder = Legacy.TryGetBool("TorchHolderEnabled", Carryables.TorchHolder);
+                    Carryables.Resonator = Legacy.TryGetBool("ResonatorEnabled", Carryables.Resonator);
 
-                // Carryables
-                Carryables.Anvil = LegacyData.TryGetBool("AnvilEnabled", Carryables.Anvil);
-                Carryables.Barrel = LegacyData.TryGetBool("BarrelEnabled", Carryables.Barrel);
-                Carryables.Bookshelf = LegacyData.TryGetBool("BookshelfEnabled", Carryables.Bookshelf);
-                Carryables.BunchOCandles = LegacyData.TryGetBool("BunchOCandlesEnabled", Carryables.BunchOCandles);
-                Carryables.Chandelier = LegacyData.TryGetBool("ChandelierEnabled", Carryables.Chandelier);
-                Carryables.ChestLabeled = LegacyData.TryGetBool("ChestLabeledEnabled", Carryables.ChestLabeled);
-                Carryables.ChestTrunk = LegacyData.TryGetBool("ChestTrunkEnabled", Carryables.ChestTrunk);
-                Carryables.Chest = LegacyData.TryGetBool("ChestEnabled", Carryables.Chest);
-                Carryables.Clutter = LegacyData.TryGetBool("ClutterEnabled", Carryables.Clutter);
-                Carryables.Crate = LegacyData.TryGetBool("CrateEnabled", Carryables.Crate);
-                Carryables.DisplayCase = LegacyData.TryGetBool("DisplayCaseEnabled", Carryables.DisplayCase);
-                Carryables.Flowerpot = LegacyData.TryGetBool("FlowerpotEnabled", Carryables.Flowerpot);
-                Carryables.Forge = LegacyData.TryGetBool("ForgeEnabled", Carryables.Forge);
-                Carryables.Henbox = LegacyData.TryGetBool("HenboxEnabled", Carryables.Henbox);
-                Carryables.LogWithResin = LegacyData.TryGetBool("LogWithResinEnabled", Carryables.LogWithResin);
-                Carryables.LootVessel = LegacyData.TryGetBool("LootVesselEnabled", Carryables.LootVessel);
-                Carryables.MoldRack = LegacyData.TryGetBool("MoldRackEnabled", Carryables.MoldRack);
-                Carryables.Mold = LegacyData.TryGetBool("MoldsEnabled", Carryables.Mold);
-                Carryables.Oven = LegacyData.TryGetBool("OvenEnabled", Carryables.Oven);
-                Carryables.Planter = LegacyData.TryGetBool("PlanterEnabled", Carryables.Planter);
-                Carryables.Quern = LegacyData.TryGetBool("QuernEnabled", Carryables.Quern);
-                Carryables.ReedChest = LegacyData.TryGetBool("ReedBasketEnabled", Carryables.ReedChest);
-                Carryables.Shelf = LegacyData.TryGetBool("ShelfEnabled", Carryables.Shelf);
-                Carryables.Sign = LegacyData.TryGetBool("SignEnabled", Carryables.Sign);
-                Carryables.StorageVessel = LegacyData.TryGetBool("StorageVesselEnabled", Carryables.StorageVessel);
-                Carryables.ToolRack = LegacyData.TryGetBool("ToolRackEnabled", Carryables.ToolRack);
-                Carryables.TorchHolder = LegacyData.TryGetBool("TorchHolderEnabled", Carryables.TorchHolder);
-                Carryables.Resonator = LegacyData.TryGetBool("ResonatorEnabled", Carryables.Resonator);
+                    // Interactables
+                    Interactables.Door = Legacy.TryGetBool("InteractDoorEnabled", Interactables.Door);
+                    Interactables.Storage = Legacy.TryGetBool("InteractStorageEnabled", Interactables.Storage);
 
-                // Interactables
-                Interactables.Door = LegacyData.TryGetBool("InteractDoorEnabled", Interactables.Door);
-                Interactables.Storage = LegacyData.TryGetBool("InteractStorageEnabled", Interactables.Storage);
+                    // CarryOptions
+                    CarryOptions.BackSlotEnabled = Legacy.TryGetBool("BackSlotEnabled", CarryOptions.BackSlotEnabled);
+                    CarryOptions.AllowChestTrunksOnBack = Legacy.TryGetBool("AllowChestTrunksOnBack", CarryOptions.AllowChestTrunksOnBack);
+                    CarryOptions.AllowHighCapacityStorageOnBack = Legacy.TryGetBool("AllowLargeChestsOnBack", CarryOptions.AllowHighCapacityStorageOnBack);
+                    CarryOptions.AllowCratesOnBack = Legacy.TryGetBool("AllowCratesOnBack", CarryOptions.AllowCratesOnBack);
+                    CarryOptions.AllowSprintWhileCarrying = Legacy.TryGetBool("AllowSprintWhileCarrying", CarryOptions.AllowSprintWhileCarrying);
+                    CarryOptions.IgnoreCarrySpeedPenalty = Legacy.TryGetBool("IgnoreCarrySpeedPenalty", CarryOptions.IgnoreCarrySpeedPenalty);
+                    CarryOptions.RemoveInteractDelayWhileCarrying = Legacy.TryGetBool("RemoveInteractDelayWhileCarrying", CarryOptions.RemoveInteractDelayWhileCarrying);
+                    CarryOptions.InteractSpeedMultiplier = Legacy.TryGetFloat("InteractSpeedMultiplier", CarryOptions.InteractSpeedMultiplier);
 
-                // CarryOptions
-                CarryOptions.BackSlotEnabled = LegacyData.TryGetBool("BackSlotEnabled", CarryOptions.BackSlotEnabled);
-                CarryOptions.AllowChestTrunksOnBack = LegacyData.TryGetBool("AllowChestTrunksOnBack", CarryOptions.AllowChestTrunksOnBack);
-                CarryOptions.AllowLargeChestsOnBack = LegacyData.TryGetBool("AllowLargeChestsOnBack", CarryOptions.AllowLargeChestsOnBack);
-                CarryOptions.AllowCratesOnBack = LegacyData.TryGetBool("AllowCratesOnBack", CarryOptions.AllowCratesOnBack);
-                CarryOptions.AllowSprintWhileCarrying = LegacyData.TryGetBool("AllowSprintWhileCarrying", CarryOptions.AllowSprintWhileCarrying);
-                CarryOptions.IgnoreCarrySpeedPenalty = LegacyData.TryGetBool("IgnoreCarrySpeedPenalty", CarryOptions.IgnoreCarrySpeedPenalty);
-                CarryOptions.RemoveInteractDelayWhileCarrying = LegacyData.TryGetBool("RemoveInteractDelayWhileCarrying", CarryOptions.RemoveInteractDelayWhileCarrying);
-                CarryOptions.InteractSpeedMultiplier = LegacyData.TryGetFloat("InteractSpeedMultiplier", CarryOptions.InteractSpeedMultiplier);
+                    // Debugging Options
+                    DebuggingOptions.LoggingEnabled = Legacy.TryGetBool("LoggingEnabled", DebuggingOptions.LoggingEnabled);
+                    DebuggingOptions.DisableHarmonyPatch = !Legacy.TryGetBool("HarmonyPatchEnabled", !DebuggingOptions.DisableHarmonyPatch);
 
-                // Debugging Options
-                DebuggingOptions.LoggingEnabled = LegacyData.TryGetBool("LoggingEnabled", DebuggingOptions.LoggingEnabled);
-                DebuggingOptions.DisableHarmonyPatch = !LegacyData.TryGetBool("HarmonyPatchEnabled", !DebuggingOptions.DisableHarmonyPatch);
+                    // CarryablesFilters
+                    CarryablesFilters.AutoMatchIgnoreMods = Legacy.TryGetStringArray("AutoMatchIgnoreMods", CarryablesFilters.AutoMatchIgnoreMods);
+                    CarryablesFilters.AllowedShapeOnlyMatches = Legacy.TryGetStringArray("AllowedShapeOnlyMatches", CarryablesFilters.AllowedShapeOnlyMatches);
+                    CarryablesFilters.RemoveBaseCarryableBehaviour = Legacy.TryGetStringArray("RemoveBaseCarryableBehaviour", CarryablesFilters.RemoveBaseCarryableBehaviour);
+                    CarryablesFilters.RemoveCarryableBehaviour = Legacy.TryGetStringArray("RemoveCarryableBehaviour", CarryablesFilters.RemoveCarryableBehaviour);
+                }
+            }
+            if (ConfigVersion == 2)
+            {
+                ConfigVersion = 3;
 
-                // CarryablesFilters
-                CarryablesFilters.AutoMatchIgnoreMods = LegacyData.TryGetStringArray("AutoMatchIgnoreMods", CarryablesFilters.AutoMatchIgnoreMods);
-                CarryablesFilters.AllowedShapeOnlyMatches = LegacyData.TryGetStringArray("AllowedShapeOnlyMatches", CarryablesFilters.AllowedShapeOnlyMatches);
-                CarryablesFilters.RemoveBaseCarryableBehaviour = LegacyData.TryGetStringArray("RemoveBaseCarryableBehaviour", CarryablesFilters.RemoveBaseCarryableBehaviour);
-                CarryablesFilters.RemoveCarryableBehaviour = LegacyData.TryGetStringArray("RemoveCarryableBehaviour", CarryablesFilters.RemoveCarryableBehaviour);
+                if (CarryOptions?.Legacy == null) return;
+
+                if (CarryOptions.Legacy.ContainsKey("AllowLargeChestsOnBack"))
+                {
+                    CarryOptions.AllowHighCapacityStorageOnBack = CarryOptions.Legacy.TryGetBool("AllowLargeChestsOnBack", CarryOptions.AllowHighCapacityStorageOnBack);
+                }
             }
         }
 
@@ -260,7 +274,7 @@ namespace CarryOn.API.Common.Models
             carryOptions.SetFloat(ConfigKey.CarryOptions.InteractSpeedMultiplierKey, CarryOptions.InteractSpeedMultiplier);
             carryOptions.SetBool(ConfigKey.CarryOptions.BackSlotEnabledKey, CarryOptions.BackSlotEnabled);
             carryOptions.SetBool(ConfigKey.CarryOptions.AllowChestTrunksOnBackKey, CarryOptions.AllowChestTrunksOnBack);
-            carryOptions.SetBool(ConfigKey.CarryOptions.AllowLargeChestsOnBackKey, CarryOptions.AllowLargeChestsOnBack);
+            carryOptions.SetBool(ConfigKey.CarryOptions.AllowHighCapacityStorageOnBackKey, CarryOptions.AllowHighCapacityStorageOnBack);
             carryOptions.SetBool(ConfigKey.CarryOptions.AllowCratesOnBackKey, CarryOptions.AllowCratesOnBack);
             tree[ConfigKey.CarryOptionsKey] = carryOptions;
 
@@ -344,7 +358,7 @@ namespace CarryOn.API.Common.Models
                 config.CarryOptions.InteractSpeedMultiplier = carryOptions.GetFloat(ConfigKey.CarryOptions.InteractSpeedMultiplierKey);
                 config.CarryOptions.BackSlotEnabled = carryOptions.GetBool(ConfigKey.CarryOptions.BackSlotEnabledKey);
                 config.CarryOptions.AllowChestTrunksOnBack = carryOptions.GetBool(ConfigKey.CarryOptions.AllowChestTrunksOnBackKey);
-                config.CarryOptions.AllowLargeChestsOnBack = carryOptions.GetBool(ConfigKey.CarryOptions.AllowLargeChestsOnBackKey);
+                config.CarryOptions.AllowHighCapacityStorageOnBack = carryOptions.GetBool(ConfigKey.CarryOptions.AllowHighCapacityStorageOnBackKey);
                 config.CarryOptions.AllowCratesOnBack = carryOptions.GetBool(ConfigKey.CarryOptions.AllowCratesOnBackKey);
             }
 
