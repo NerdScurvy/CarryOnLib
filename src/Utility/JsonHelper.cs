@@ -55,11 +55,29 @@ namespace CarryOn.Utility
             {
                 result = null;
                 return false;
-            }            
+            }
+            // Try array form: [x, y, z]
             var floats = json[key].AsArray<float>();
-            var success = (floats?.Length == 3);
-            result = success ? new Vec3f(floats) : null;
-            return success;
+            if (floats != null && floats.Length == 3)
+            {
+                result = new Vec3f(floats);
+                return true;
+            }
+            // Try object form: { x: ..., y: ..., z: ... } with partials allowed (missing -> 0)
+            float xVal = json[key]["x"].AsFloat(float.NaN);
+            float yVal = json[key]["y"].AsFloat(float.NaN);
+            float zVal = json[key]["z"].AsFloat(float.NaN);
+            bool anyProvided = !(float.IsNaN(xVal) && float.IsNaN(yVal) && float.IsNaN(zVal));
+            if (anyProvided)
+            {
+                if (float.IsNaN(xVal)) xVal = 0f;
+                if (float.IsNaN(yVal)) yVal = 0f;
+                if (float.IsNaN(zVal)) zVal = 0f;
+                result = new Vec3f(xVal, yVal, zVal);
+                return true;
+            }
+            result = null;
+            return false;
         }
 
         public static bool TryGetVec3i(JsonObject json, string key, out Vec3i result)
