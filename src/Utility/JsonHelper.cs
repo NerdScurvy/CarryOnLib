@@ -80,6 +80,41 @@ namespace CarryOn.Utility
             return false;
         }
 
+        public static bool TryGetVec4f(JsonObject json, string key, out Vec4f result)
+        {
+            if (!json.KeyExists(key))
+            {
+                result = null;
+                return false;
+            }
+            // Try array form: [x, y, z, w]
+            var floats = json[key].AsArray<float>();
+            if (floats != null && floats.Length == 4)
+            {
+                result = new Vec4f();
+                result.Set(floats);
+                return true;
+            }
+            // Try object form: { x: ..., y: ..., z: ..., w: ... } with partials allowed (missing -> 0)
+            float xVal = json[key]["x"].AsFloat(float.NaN);
+            float yVal = json[key]["y"].AsFloat(float.NaN);
+            float zVal = json[key]["z"].AsFloat(float.NaN);
+            float wVal = json[key]["w"].AsFloat(float.NaN);
+            bool anyProvided = !(float.IsNaN(xVal) && float.IsNaN(yVal) && float.IsNaN(zVal) && float.IsNaN(wVal));
+            if (anyProvided)
+            {
+                if (float.IsNaN(xVal)) xVal = 0f;
+                if (float.IsNaN(yVal)) yVal = 0f;
+                if (float.IsNaN(zVal)) zVal = 0f;
+                if (float.IsNaN(wVal)) wVal = 0f;
+                result = new Vec4f(xVal, yVal, zVal, wVal);
+                return true;
+            }
+            result = null;
+            return false;
+        }
+    
+
         public static bool TryGetVec3i(JsonObject json, string key, out Vec3i result)
         {
             if (!json.KeyExists(key))
