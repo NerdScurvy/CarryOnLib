@@ -31,22 +31,19 @@ namespace CarryOn.Utility
             var stack = block.OnPickBlock(world, pos) ?? new ItemStack(block);
 
             ITreeAttribute blockEntityData = null;
-            if (world.Side == EnumAppSide.Server)
+            var blockEntity = world.BlockAccessor.GetBlockEntity(pos);
+            if (blockEntity != null)
             {
-                var blockEntity = world.BlockAccessor.GetBlockEntity(pos);
-                if (blockEntity != null)
-                {
-                    blockEntityData = new TreeAttribute();
-                    blockEntity.ToTreeAttributes(blockEntityData);
-                    blockEntityData = blockEntityData.Clone();
-                    // We don't need to keep the position.
-                    blockEntityData.RemoveAttribute("posx");
-                    blockEntityData.RemoveAttribute("posy");
-                    blockEntityData.RemoveAttribute("posz");
-                    // And angle needs to be removed, or else it will
-                    // override the angle set from block placement.
-                    blockEntityData.RemoveAttribute("meshAngle");
-                }
+                blockEntityData = new TreeAttribute();
+                blockEntity.ToTreeAttributes(blockEntityData);
+                blockEntityData = blockEntityData.Clone();
+                // We don't need to keep the position.
+                blockEntityData.RemoveAttribute("posx");
+                blockEntityData.RemoveAttribute("posy");
+                blockEntityData.RemoveAttribute("posz");
+                // And angle needs to be removed, or else it will
+                // override the angle set from block placement.
+                blockEntityData.RemoveAttribute("meshAngle");
             }
 
             return new CarriedBlock(slot, stack, blockEntityData);
