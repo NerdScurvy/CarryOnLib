@@ -78,7 +78,7 @@ namespace CarryOn.API.Common.Models
                 public static string IgnoreCarrySpeedPenaltyKey { get; } = "IgnoreCarrySpeedPenalty";
                 public static string RemoveInteractDelayWhileCarryingKey { get; } = "RemoveInteractDelayWhileCarrying";
                 public static string InteractSpeedMultiplierKey { get; } = "InteractSpeedMultiplier";
-                public static string HarmonyPatchEnabledKey { get; } = "HarmonyPatchEnabled";
+                public static string PreventSwapFromBackOnTargetKey { get; } = "PreventSwapFromBackOnTarget";
 
             }
 

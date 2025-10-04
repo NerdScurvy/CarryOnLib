@@ -70,6 +70,7 @@ namespace CarryOn.API.Common.Models
         public bool AllowChestTrunksOnBack { get; set; } = false;
         public bool AllowHighCapacityStorageOnBack { get; set; } = false;
         public bool AllowCratesOnBack { get; set; } = false;
+        public string[] PreventSwapFromBackOnTarget { get; set; } = ["behavior::Container", "behavior::Door", "class::portals.portal", "code::groundstorage"];
 
         [JsonExtensionData(ReadData = true, WriteData = false)]
         internal Dictionary<string, JToken> Legacy { get; set; }
@@ -276,6 +277,7 @@ namespace CarryOn.API.Common.Models
             carryOptions.SetBool(ConfigKey.CarryOptions.AllowChestTrunksOnBackKey, CarryOptions.AllowChestTrunksOnBack);
             carryOptions.SetBool(ConfigKey.CarryOptions.AllowHighCapacityStorageOnBackKey, CarryOptions.AllowHighCapacityStorageOnBack);
             carryOptions.SetBool(ConfigKey.CarryOptions.AllowCratesOnBackKey, CarryOptions.AllowCratesOnBack);
+            carryOptions.SetStringArray(ConfigKey.CarryOptions.PreventSwapFromBackOnTargetKey, CarryOptions.PreventSwapFromBackOnTarget);
             tree[ConfigKey.CarryOptionsKey] = carryOptions;
 
             // CarryablesFilters
@@ -360,6 +362,11 @@ namespace CarryOn.API.Common.Models
                 config.CarryOptions.AllowChestTrunksOnBack = carryOptions.GetBool(ConfigKey.CarryOptions.AllowChestTrunksOnBackKey);
                 config.CarryOptions.AllowHighCapacityStorageOnBack = carryOptions.GetBool(ConfigKey.CarryOptions.AllowHighCapacityStorageOnBackKey);
                 config.CarryOptions.AllowCratesOnBack = carryOptions.GetBool(ConfigKey.CarryOptions.AllowCratesOnBackKey);
+                //config.CarryOptions.PreventSwapFromBackOnTarget = carryOptions.GetStringArray(ConfigKey.CarryOptions.PreventSwapFromBackOnTargetKey);
+
+                // Get array from carryOptions ConfigKey.CarryOptions.PreventSwapFromBackOnTargetKey - GetStringArray does not exist
+                config.CarryOptions.PreventSwapFromBackOnTarget = (carryOptions[ConfigKey.CarryOptions.PreventSwapFromBackOnTargetKey] as StringArrayAttribute)?.value ?? [];
+                
             }
 
             // CarryablesFilters
