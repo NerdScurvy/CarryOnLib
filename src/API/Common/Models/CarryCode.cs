@@ -22,6 +22,7 @@ namespace CarryOn.API.Common.Models
             public static float PickUpSpeed { get; } = 0.8f;
             public static float TransferSpeed { get; } = 0.8f;
             public static float InteractSpeed { get; } = 0.8f;
+            public static int MaxInteractionDistance { get; } = 6;
             public static int DoubleTapThresholdMs { get; } = 500;
             public static GlKeys PickupKeybind { get; } = GlKeys.ShiftLeft;
             public static GlKeys SwapBackModifierKeybind { get; } = GlKeys.ControlLeft;
@@ -78,6 +79,7 @@ namespace CarryOn.API.Common.Models
                 public static string IgnoreCarrySpeedPenaltyKey { get; } = "IgnoreCarrySpeedPenalty";
                 public static string RemoveInteractDelayWhileCarryingKey { get; } = "RemoveInteractDelayWhileCarrying";
                 public static string InteractSpeedMultiplierKey { get; } = "InteractSpeedMultiplier";
+                public static string MaxInteractionDistanceKey { get; } = "MaxInteractionDistance";
                 public static string PreventSwapFromBackOnTargetKey { get; } = "PreventSwapFromBackOnTarget";
 
             }

@@ -66,6 +66,10 @@ namespace CarryOn.API.Common.Models
         public bool RemoveInteractDelayWhileCarrying { get; set; } = false;
         public float InteractSpeedMultiplier { get; set; } = 1.0f;
 
+        // Maximum distance (in world units) that interactions with carried/attachable
+        // entities/blocks are allowed from the player.
+        public int MaxInteractionDistance { get; set; } = Default.MaxInteractionDistance;
+
         public bool BackSlotEnabled { get; set; } = true;
         public bool AllowChestTrunksOnBack { get; set; } = false;
         public bool AllowHighCapacityStorageOnBack { get; set; } = false;
@@ -273,6 +277,7 @@ namespace CarryOn.API.Common.Models
             carryOptions.SetBool(ConfigKey.CarryOptions.IgnoreCarrySpeedPenaltyKey, CarryOptions.IgnoreCarrySpeedPenalty);
             carryOptions.SetBool(ConfigKey.CarryOptions.RemoveInteractDelayWhileCarryingKey, CarryOptions.RemoveInteractDelayWhileCarrying);
             carryOptions.SetFloat(ConfigKey.CarryOptions.InteractSpeedMultiplierKey, CarryOptions.InteractSpeedMultiplier);
+            carryOptions.SetInt(ConfigKey.CarryOptions.MaxInteractionDistanceKey, CarryOptions.MaxInteractionDistance);
             carryOptions.SetBool(ConfigKey.CarryOptions.BackSlotEnabledKey, CarryOptions.BackSlotEnabled);
             carryOptions.SetBool(ConfigKey.CarryOptions.AllowChestTrunksOnBackKey, CarryOptions.AllowChestTrunksOnBack);
             carryOptions.SetBool(ConfigKey.CarryOptions.AllowHighCapacityStorageOnBackKey, CarryOptions.AllowHighCapacityStorageOnBack);
@@ -358,6 +363,10 @@ namespace CarryOn.API.Common.Models
                 config.CarryOptions.IgnoreCarrySpeedPenalty = carryOptions.GetBool(ConfigKey.CarryOptions.IgnoreCarrySpeedPenaltyKey);
                 config.CarryOptions.RemoveInteractDelayWhileCarrying = carryOptions.GetBool(ConfigKey.CarryOptions.RemoveInteractDelayWhileCarryingKey);
                 config.CarryOptions.InteractSpeedMultiplier = carryOptions.GetFloat(ConfigKey.CarryOptions.InteractSpeedMultiplierKey);
+                if (carryOptions.HasAttribute(ConfigKey.CarryOptions.MaxInteractionDistanceKey))
+                {
+                    config.CarryOptions.MaxInteractionDistance = carryOptions.GetInt(ConfigKey.CarryOptions.MaxInteractionDistanceKey);
+                }
                 config.CarryOptions.BackSlotEnabled = carryOptions.GetBool(ConfigKey.CarryOptions.BackSlotEnabledKey);
                 config.CarryOptions.AllowChestTrunksOnBack = carryOptions.GetBool(ConfigKey.CarryOptions.AllowChestTrunksOnBackKey);
                 config.CarryOptions.AllowHighCapacityStorageOnBack = carryOptions.GetBool(ConfigKey.CarryOptions.AllowHighCapacityStorageOnBackKey);
