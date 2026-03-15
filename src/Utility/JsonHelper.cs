@@ -144,12 +144,45 @@ namespace CarryOn.Utility
         public static ModelTransform GetTransform(JsonObject json, ModelTransform baseTransform)
         {
             var trans = baseTransform?.Clone() ?? new ModelTransform();
-            if (TryGetVec3f(json, "translation", out var t)) trans.Translation = t;
-            if (TryGetVec3f(json, "rotation", out var r)) trans.Rotation = r;
-            if (TryGetVec3f(json, "origin", out var o)) trans.Origin = o;
+            if (TryGetVec3f(json, "translation", out var t))
+            {
+                trans.Translation = t;
+            }
+            else if (baseTransform != null)
+            {
+                trans.Translation = baseTransform.Translation;
+            }
+            if (TryGetVec3f(json, "rotation", out var r))
+            {
+                trans.Rotation = r;
+            }
+            else if (baseTransform != null)
+            {
+                trans.Rotation = baseTransform.Rotation;
+            }
+            if (TryGetVec3f(json, "origin", out var o))
+            {
+                trans.Origin = o;
+            }
+            else if (baseTransform != null)
+            {
+                trans.Origin = baseTransform.Origin;
+            }
             // Try to get scale both as a Vec3f and single float - for compatibility reasons.
-            if (TryGetVec3f(json, "scale", out var sv)) trans.ScaleXYZ = sv;
-            if (TryGetFloat(json, "scale", out var sf)) trans.ScaleXYZ = new Vec3f(sf, sf, sf);
+            var hasVecScale = TryGetVec3f(json, "scale", out var sv);
+            var hasFloatScale = TryGetFloat(json, "scale", out var sf);
+            if (hasVecScale)
+            {
+                trans.ScaleXYZ = sv;
+            }
+            if (hasFloatScale)
+            {
+                trans.ScaleXYZ = new Vec3f(sf, sf, sf);
+            }
+            else if (!hasVecScale && baseTransform != null)
+            {
+                trans.ScaleXYZ = baseTransform.ScaleXYZ;
+            }
             return trans;
         }
     }
