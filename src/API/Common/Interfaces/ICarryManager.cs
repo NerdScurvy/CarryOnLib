@@ -173,6 +173,26 @@ namespace CarryOn.API.Common.Interfaces
         /// <param name="api"></param>
         void InitEvents(ICoreAPI api);
 
+        /// <summary>
+        /// Registers a carried-render transform resolver.
+        /// Higher-priority resolvers run first.
+        /// </summary>
+        /// <param name="resolver"></param>
+        void RegisterRenderTransformResolver(ICarriedRenderTransformResolver resolver);
+
+        /// <summary>
+        /// Unregisters a previously registered carried-render transform resolver.
+        /// </summary>
+        /// <param name="resolver"></param>
+        /// <returns></returns>
+        bool UnregisterRenderTransformResolver(ICarriedRenderTransformResolver resolver);
+
+        /// <summary>
+        /// Returns all currently registered carried-render transform resolvers.
+        /// </summary>
+        /// <returns></returns>
+        IReadOnlyList<ICarriedRenderTransformResolver> GetRenderTransformResolvers();
+
         /// Checks if the block is carryable.
         /// </summary>
         /// <param name="block"></param>
