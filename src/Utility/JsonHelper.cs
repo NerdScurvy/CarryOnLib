@@ -183,6 +183,47 @@ namespace CarryOn.Utility
             {
                 trans.ScaleXYZ = baseTransform.ScaleXYZ;
             }
+
+            // Apply per-axis overrides on top of any full vector values.
+            if (TryGetFloat(json, "translationX", out var tx))
+            {
+                trans.Translation.X = tx;
+            }
+            if (TryGetFloat(json, "translationY", out var ty))
+            {
+                trans.Translation.Y = ty;
+            }
+            if (TryGetFloat(json, "translationZ", out var tz))
+            {
+                trans.Translation.Z = tz;
+            }
+
+            if (TryGetFloat(json, "rotationX", out var rx))
+            {
+                trans.Rotation.X = rx;
+            }
+            if (TryGetFloat(json, "rotationY", out var ry))
+            {
+                trans.Rotation.Y = ry;
+            }
+            if (TryGetFloat(json, "rotationZ", out var rz))
+            {
+                trans.Rotation.Z = rz;
+            }
+
+            if (TryGetFloat(json, "scaleX", out var sx))
+            {
+                trans.ScaleXYZ.X = sx;
+            }
+            if (TryGetFloat(json, "scaleY", out var sy))
+            {
+                trans.ScaleXYZ.Y = sy;
+            }
+            if (TryGetFloat(json, "scaleZ", out var sz))
+            {
+                trans.ScaleXYZ.Z = sz;
+            }
+
             return trans;
         }
     }
