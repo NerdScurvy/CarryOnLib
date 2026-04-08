@@ -3,7 +3,7 @@ using Vintagestory.API.Common;
 
 namespace CarryOn.API.Common.Interfaces
 {
-    public interface ICarriedRenderTransformResolver
+    public interface ICarriedTransformGroupResolver
     {
         string ResolverCode { get; }
 
