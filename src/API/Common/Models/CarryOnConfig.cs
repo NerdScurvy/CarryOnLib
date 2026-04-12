@@ -292,7 +292,7 @@ namespace CarryOn.API.Common.Models
             carryablesOnBack.SetBool(ConfigKey.Carryables.PlanterKey, Carryables.Planter);
             carryablesOnBack.SetBool(ConfigKey.Carryables.ReedChestKey, Carryables.ReedChest);
             carryablesOnBack.SetBool(ConfigKey.Carryables.StorageVesselKey, Carryables.StorageVessel);
-            tree[ConfigKey.CarryablesKey] = carryablesOnBack;
+            tree[ConfigKey.CarryablesOnBackKey] = carryablesOnBack;
 
             // Interactables
             var interactables = new TreeAttribute();
