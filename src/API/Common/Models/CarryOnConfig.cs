@@ -14,13 +14,12 @@ namespace CarryOn.API.Common.Models
         public bool Bookshelf { get; set; }
         public bool BunchOCandles { get; set; }
         public bool Chandelier { get; set; }
-        public bool ChestLabeled { get; set; } = true;
         public bool ChestTrunk { get; set; }
         public bool Chest { get; set; } = true;
         public bool Clutter { get; set; }
         public bool Crate { get; set; } = true;
         public bool DisplayCase { get; set; }
-        public bool Flowerpot { get; set; }
+        public bool Flowerpot { get; set; } = true;
         public bool Forge { get; set; }
         public bool Henbox { get; set; }
         public bool LogWithResin { get; set; }
@@ -37,6 +36,22 @@ namespace CarryOn.API.Common.Models
         public bool StorageVessel { get; set; } = true;
         public bool ToolRack { get; set; }
         public bool TorchHolder { get; set; }
+    }
+
+    public class CarryablesOnBackConfig
+    {
+        public bool Barrel { get; set; } = true;
+        public bool ChestLabeled { get; set; } = true;
+        public bool ChestTrunk { get; set; }
+        public bool Chest { get; set; } = true;
+        public bool Crate { get; set; }
+        public bool Flowerpot { get; set; } = true;
+        public bool LogWithResin { get; set; }
+        public bool LootVessel { get; set; } = true;
+        public bool Planter { get; set; } = true;
+        public bool ReedChest { get; set; } = true;
+        public bool Resonator { get; set; } = true;
+        public bool StorageVessel { get; set; } = true;
     }
 
     public class InteractablesConfig
@@ -94,6 +109,8 @@ namespace CarryOn.API.Common.Models
 
         public int? ConfigVersion { get; set; }
         public CarryablesConfig Carryables { get; set; } = new CarryablesConfig();
+
+        public CarryablesOnBackConfig CarryablesOnBack { get; set; } = new CarryablesOnBackConfig();
 
         public InteractablesConfig Interactables { get; set; } = new InteractablesConfig();
 
@@ -164,7 +181,6 @@ namespace CarryOn.API.Common.Models
                     Carryables.Bookshelf = Legacy.TryGetBool("BookshelfEnabled", Carryables.Bookshelf);
                     Carryables.BunchOCandles = Legacy.TryGetBool("BunchOCandlesEnabled", Carryables.BunchOCandles);
                     Carryables.Chandelier = Legacy.TryGetBool("ChandelierEnabled", Carryables.Chandelier);
-                    Carryables.ChestLabeled = Legacy.TryGetBool("ChestLabeledEnabled", Carryables.ChestLabeled);
                     Carryables.ChestTrunk = Legacy.TryGetBool("ChestTrunkEnabled", Carryables.ChestTrunk);
                     Carryables.Chest = Legacy.TryGetBool("ChestEnabled", Carryables.Chest);
                     Carryables.Clutter = Legacy.TryGetBool("ClutterEnabled", Carryables.Clutter);
@@ -239,7 +255,6 @@ namespace CarryOn.API.Common.Models
             carryables.SetBool(ConfigKey.Carryables.BookshelfKey, Carryables.Bookshelf);
             carryables.SetBool(ConfigKey.Carryables.BunchOCandlesKey, Carryables.BunchOCandles);
             carryables.SetBool(ConfigKey.Carryables.ChandelierKey, Carryables.Chandelier);
-            carryables.SetBool(ConfigKey.Carryables.ChestLabeledKey, Carryables.ChestLabeled);
             carryables.SetBool(ConfigKey.Carryables.ChestTrunkKey, Carryables.ChestTrunk);
             carryables.SetBool(ConfigKey.Carryables.ChestKey, Carryables.Chest);
             carryables.SetBool(ConfigKey.Carryables.ClutterKey, Carryables.Clutter);
@@ -263,6 +278,21 @@ namespace CarryOn.API.Common.Models
             carryables.SetBool(ConfigKey.Carryables.ToolRackKey, Carryables.ToolRack);
             carryables.SetBool(ConfigKey.Carryables.TorchHolderKey, Carryables.TorchHolder);
             tree[ConfigKey.CarryablesKey] = carryables;
+
+
+            // Carryables on Back
+            var carryablesOnBack = new TreeAttribute();
+            carryablesOnBack.SetBool(ConfigKey.Carryables.BarrelKey, Carryables.Barrel);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.ChestTrunkKey, Carryables.ChestTrunk);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.ChestKey, Carryables.Chest);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.CrateKey, Carryables.Crate);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.FlowerpotKey, Carryables.Flowerpot);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.LogWithResinKey, Carryables.LogWithResin);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.LootVesselKey, Carryables.LootVessel);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.PlanterKey, Carryables.Planter);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.ReedChestKey, Carryables.ReedChest);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.StorageVesselKey, Carryables.StorageVessel);
+            tree[ConfigKey.CarryablesKey] = carryablesOnBack;
 
             // Interactables
             var interactables = new TreeAttribute();
@@ -321,7 +351,6 @@ namespace CarryOn.API.Common.Models
                 config.Carryables.Bookshelf = carryables.GetBool(ConfigKey.Carryables.BookshelfKey);
                 config.Carryables.BunchOCandles = carryables.GetBool(ConfigKey.Carryables.BunchOCandlesKey);
                 config.Carryables.Chandelier = carryables.GetBool(ConfigKey.Carryables.ChandelierKey);
-                config.Carryables.ChestLabeled = carryables.GetBool(ConfigKey.Carryables.ChestLabeledKey);
                 config.Carryables.ChestTrunk = carryables.GetBool(ConfigKey.Carryables.ChestTrunkKey);
                 config.Carryables.Chest = carryables.GetBool(ConfigKey.Carryables.ChestKey);
                 config.Carryables.Clutter = carryables.GetBool(ConfigKey.Carryables.ClutterKey);
@@ -345,6 +374,23 @@ namespace CarryOn.API.Common.Models
                 config.Carryables.ToolRack = carryables.GetBool(ConfigKey.Carryables.ToolRackKey);
                 config.Carryables.TorchHolder = carryables.GetBool(ConfigKey.Carryables.TorchHolderKey);
             }
+
+            // Carryables
+            var carryablesOnBack = tree[ConfigKey.CarryablesOnBackKey] as ITreeAttribute;
+            if (carryablesOnBack != null)
+            {
+                config.CarryablesOnBack.Barrel = carryablesOnBack.GetBool(ConfigKey.Carryables.BarrelKey);
+                config.CarryablesOnBack.ChestTrunk = carryablesOnBack.GetBool(ConfigKey.Carryables.ChestTrunkKey);
+                config.CarryablesOnBack.Chest = carryablesOnBack.GetBool(ConfigKey.Carryables.ChestKey);
+                config.CarryablesOnBack.Crate = carryablesOnBack.GetBool(ConfigKey.Carryables.CrateKey);
+                config.CarryablesOnBack.Flowerpot = carryablesOnBack.GetBool(ConfigKey.Carryables.FlowerpotKey);
+                config.CarryablesOnBack.LogWithResin = carryablesOnBack.GetBool(ConfigKey.Carryables.LogWithResinKey);
+                config.CarryablesOnBack.LootVessel = carryablesOnBack.GetBool(ConfigKey.Carryables.LootVesselKey);
+                config.CarryablesOnBack.Planter = carryablesOnBack.GetBool(ConfigKey.Carryables.PlanterKey);
+                config.CarryablesOnBack.ReedChest = carryablesOnBack.GetBool(ConfigKey.Carryables.ReedChestKey);
+                config.CarryablesOnBack.Resonator = carryablesOnBack.GetBool(ConfigKey.Carryables.ResonatorKey);
+                config.CarryablesOnBack.StorageVessel = carryablesOnBack.GetBool(ConfigKey.Carryables.StorageVesselKey);
+            }            
 
             // Interactables
             var interactables = tree[ConfigKey.InteractablesKey] as ITreeAttribute;

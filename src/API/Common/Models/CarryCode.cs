@@ -48,6 +48,7 @@ namespace CarryOn.API.Common.Models
             public static string ConfigVersionKey { get; } = "ConfigVersion";
 
             public static string CarryablesKey = "Carryables";
+            public static string CarryablesOnBackKey = "CarryablesOnBack";
             public static string InteractablesKey = "Interactables";
             public static string CarryOptionsKey = "CarryOptions";
             public static string DebuggingOptionsKey = "DebuggingOptions";
@@ -98,7 +99,6 @@ namespace CarryOn.API.Common.Models
                 public static string BookshelfKey { get; } = "Bookshelf";
                 public static string BunchOCandlesKey { get; } = "BunchOCandles";
                 public static string ChandelierKey { get; } = "Chandelier";
-                public static string ChestLabeledKey { get; } = "ChestLabeled";
                 public static string ChestTrunkKey { get; } = "ChestTrunk";
                 public static string ChestKey { get; } = "Chest";
                 public static string ClutterKey { get; } = "Clutter";
