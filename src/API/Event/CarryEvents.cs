@@ -9,7 +9,9 @@ namespace CarryOn.API.Event
 {
     public class CarryEvents
     {
-        public RemoveBlockDelegate BeforeRemoveBlockFromWorld;
+        public BeforePickUpBlockDelegate BeforePickUpBlock;
+        
+        public BeforeRemoveBlockDelegate BeforeRemoveBlockFromWorld;
 
         public BlockEntityDataDelegate BeforeRestoreBlockEntityData;
 

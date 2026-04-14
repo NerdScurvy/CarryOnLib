@@ -127,10 +127,11 @@ namespace CarryOn.API.Common.Interfaces
         /// <param name="entity"></param>
         /// <param name="pos"></param>
         /// <param name="slot"></param>
+        /// <param name="failureCode"></param>
         /// <param name="checkIsCarryable"></param>
         /// <param name="playSound"></param>
         /// <returns></returns>
-        bool TryPickUp(Entity entity, BlockPos pos, CarrySlot slot, bool checkIsCarryable = true, bool playSound = true);
+        bool TryPickUp(Entity entity, BlockPos pos, CarrySlot slot, ref string failureCode, bool checkIsCarryable = true, bool playSound = true);
 
         /// <summary>
         /// Tries to place the carried block at the specified position.

@@ -3,5 +3,5 @@ using Vintagestory.API.MathTools;
 
 namespace CarryOn.API.Event.Delegates
 {
-    public delegate void RemoveBlockDelegate(CarriedBlock carriedBlock, BlockPos pos);
+    public delegate void BeforeRemoveBlockDelegate(CarriedBlock carriedBlock, BlockPos pos);
 }
