@@ -82,6 +82,8 @@ namespace CarryOn.API.Common.Models
                 public static string InteractSpeedMultiplierKey { get; } = "InteractSpeedMultiplier";
                 public static string MaxInteractionDistanceKey { get; } = "MaxInteractionDistance";
                 public static string PreventSwapFromBackOnTargetKey { get; } = "PreventSwapFromBackOnTarget";
+                public static string TooHotToCarryKey { get; } = "TooHotToCarry";
+                public static string TooHotToCarryTemperatureKey { get; } = "TooHotToCarryTemperature";
 
             }
 

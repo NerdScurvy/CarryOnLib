@@ -91,6 +91,9 @@ namespace CarryOn.API.Common.Models
         public bool AllowCratesOnBack { get; set; } = false;
         public string[] PreventSwapFromBackOnTarget { get; set; } = ["behavior::Container", "behavior::Door", "class::portals.portal", "code::groundstorage"];
 
+        public bool TooHotToCarry { get; set; } = true;
+        public int TooHotToCarryTemperature { get; set; } = 50;
+
         [JsonExtensionData(ReadData = true, WriteData = false)]
         internal Dictionary<string, JToken> Legacy { get; set; }
     }
@@ -313,6 +316,8 @@ namespace CarryOn.API.Common.Models
             carryOptions.SetBool(ConfigKey.CarryOptions.AllowHighCapacityStorageOnBackKey, CarryOptions.AllowHighCapacityStorageOnBack);
             carryOptions.SetBool(ConfigKey.CarryOptions.AllowCratesOnBackKey, CarryOptions.AllowCratesOnBack);
             carryOptions.SetStringArray(ConfigKey.CarryOptions.PreventSwapFromBackOnTargetKey, CarryOptions.PreventSwapFromBackOnTarget);
+            carryOptions.SetBool(ConfigKey.CarryOptions.TooHotToCarryKey, CarryOptions.TooHotToCarry);
+            carryOptions.SetInt(ConfigKey.CarryOptions.TooHotToCarryTemperatureKey, CarryOptions.TooHotToCarryTemperature);
             tree[ConfigKey.CarryOptionsKey] = carryOptions;
 
             // CarryablesFilters
@@ -421,7 +426,8 @@ namespace CarryOn.API.Common.Models
 
                 // Get array from carryOptions ConfigKey.CarryOptions.PreventSwapFromBackOnTargetKey - GetStringArray does not exist
                 config.CarryOptions.PreventSwapFromBackOnTarget = (carryOptions[ConfigKey.CarryOptions.PreventSwapFromBackOnTargetKey] as StringArrayAttribute)?.value ?? [];
-                
+                config.CarryOptions.TooHotToCarry = carryOptions.GetBool(ConfigKey.CarryOptions.TooHotToCarryKey);
+                config.CarryOptions.TooHotToCarryTemperature = carryOptions.GetInt(ConfigKey.CarryOptions.TooHotToCarryTemperatureKey);
             }
 
             // CarryablesFilters
