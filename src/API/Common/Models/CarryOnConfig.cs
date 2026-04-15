@@ -86,9 +86,7 @@ namespace CarryOn.API.Common.Models
         public int MaxInteractionDistance { get; set; } = Default.MaxInteractionDistance;
 
         public bool BackSlotEnabled { get; set; } = true;
-        public bool AllowChestTrunksOnBack { get; set; } = false;
         public bool AllowHighCapacityStorageOnBack { get; set; } = false;
-        public bool AllowCratesOnBack { get; set; } = false;
         public string[] PreventSwapFromBackOnTarget { get; set; } = ["behavior::Container", "behavior::Door", "class::portals.portal", "code::groundstorage"];
 
         public bool TooHotToCarry { get; set; } = true;
@@ -213,9 +211,9 @@ namespace CarryOn.API.Common.Models
 
                     // CarryOptions
                     CarryOptions.BackSlotEnabled = Legacy.TryGetBool("BackSlotEnabled", CarryOptions.BackSlotEnabled);
-                    CarryOptions.AllowChestTrunksOnBack = Legacy.TryGetBool("AllowChestTrunksOnBack", CarryOptions.AllowChestTrunksOnBack);
+                    CarryablesOnBack.ChestTrunk = Legacy.TryGetBool("AllowChestTrunksOnBack", CarryablesOnBack.ChestTrunk);
                     CarryOptions.AllowHighCapacityStorageOnBack = Legacy.TryGetBool("AllowLargeChestsOnBack", CarryOptions.AllowHighCapacityStorageOnBack);
-                    CarryOptions.AllowCratesOnBack = Legacy.TryGetBool("AllowCratesOnBack", CarryOptions.AllowCratesOnBack);
+                    CarryablesOnBack.Crate = Legacy.TryGetBool("AllowCratesOnBack", CarryablesOnBack.Crate);
                     CarryOptions.AllowSprintWhileCarrying = Legacy.TryGetBool("AllowSprintWhileCarrying", CarryOptions.AllowSprintWhileCarrying);
                     CarryOptions.IgnoreCarrySpeedPenalty = Legacy.TryGetBool("IgnoreCarrySpeedPenalty", CarryOptions.IgnoreCarrySpeedPenalty);
                     CarryOptions.RemoveInteractDelayWhileCarrying = Legacy.TryGetBool("RemoveInteractDelayWhileCarrying", CarryOptions.RemoveInteractDelayWhileCarrying);
@@ -242,6 +240,15 @@ namespace CarryOn.API.Common.Models
                 {
                     CarryOptions.AllowHighCapacityStorageOnBack = CarryOptions.Legacy.TryGetBool("AllowLargeChestsOnBack", CarryOptions.AllowHighCapacityStorageOnBack);
                 }
+                if (CarryOptions.Legacy.ContainsKey("AllowChestTrunksOnBack"))
+                {
+                    CarryablesOnBack.ChestTrunk = CarryOptions.Legacy.TryGetBool("AllowChestTrunksOnBack", CarryablesOnBack.ChestTrunk);
+                }                
+                if (CarryOptions.Legacy.ContainsKey("AllowCratesOnBack"))
+                {
+                    CarryablesOnBack.Crate = CarryOptions.Legacy.TryGetBool("AllowCratesOnBack", CarryablesOnBack.Crate);
+                }
+
             }
         }
 
@@ -312,9 +319,7 @@ namespace CarryOn.API.Common.Models
             carryOptions.SetFloat(ConfigKey.CarryOptions.InteractSpeedMultiplierKey, CarryOptions.InteractSpeedMultiplier);
             carryOptions.SetInt(ConfigKey.CarryOptions.MaxInteractionDistanceKey, CarryOptions.MaxInteractionDistance);
             carryOptions.SetBool(ConfigKey.CarryOptions.BackSlotEnabledKey, CarryOptions.BackSlotEnabled);
-            carryOptions.SetBool(ConfigKey.CarryOptions.AllowChestTrunksOnBackKey, CarryOptions.AllowChestTrunksOnBack);
             carryOptions.SetBool(ConfigKey.CarryOptions.AllowHighCapacityStorageOnBackKey, CarryOptions.AllowHighCapacityStorageOnBack);
-            carryOptions.SetBool(ConfigKey.CarryOptions.AllowCratesOnBackKey, CarryOptions.AllowCratesOnBack);
             carryOptions.SetStringArray(ConfigKey.CarryOptions.PreventSwapFromBackOnTargetKey, CarryOptions.PreventSwapFromBackOnTarget);
             carryOptions.SetBool(ConfigKey.CarryOptions.TooHotToCarryKey, CarryOptions.TooHotToCarry);
             carryOptions.SetInt(ConfigKey.CarryOptions.TooHotToCarryTemperatureKey, CarryOptions.TooHotToCarryTemperature);
@@ -419,10 +424,7 @@ namespace CarryOn.API.Common.Models
                     config.CarryOptions.MaxInteractionDistance = carryOptions.GetInt(ConfigKey.CarryOptions.MaxInteractionDistanceKey);
                 }
                 config.CarryOptions.BackSlotEnabled = carryOptions.GetBool(ConfigKey.CarryOptions.BackSlotEnabledKey);
-                config.CarryOptions.AllowChestTrunksOnBack = carryOptions.GetBool(ConfigKey.CarryOptions.AllowChestTrunksOnBackKey);
                 config.CarryOptions.AllowHighCapacityStorageOnBack = carryOptions.GetBool(ConfigKey.CarryOptions.AllowHighCapacityStorageOnBackKey);
-                config.CarryOptions.AllowCratesOnBack = carryOptions.GetBool(ConfigKey.CarryOptions.AllowCratesOnBackKey);
-                //config.CarryOptions.PreventSwapFromBackOnTarget = carryOptions.GetStringArray(ConfigKey.CarryOptions.PreventSwapFromBackOnTargetKey);
 
                 // Get array from carryOptions ConfigKey.CarryOptions.PreventSwapFromBackOnTargetKey - GetStringArray does not exist
                 config.CarryOptions.PreventSwapFromBackOnTarget = (carryOptions[ConfigKey.CarryOptions.PreventSwapFromBackOnTargetKey] as StringArrayAttribute)?.value ?? [];
