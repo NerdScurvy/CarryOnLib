@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace CarryOn.API.Common.Models
 {
-    public enum CarryRenderAssetType
+    public enum CarriedGroupAssetType
     {
         None,
         Block,
@@ -15,7 +15,7 @@ namespace CarryOn.API.Common.Models
 
         public bool AddAllMatches { get; set; } = false;
 
-        public CarryRenderAssetType AssetTypeIfUnset { get; set; } = CarryRenderAssetType.None;
+        public CarriedGroupAssetType AssetTypeIfUnset { get; set; } = CarriedGroupAssetType.None;
 
         public string AssetNameIfUnset { get; set; }
 
@@ -23,7 +23,7 @@ namespace CarryOn.API.Common.Models
         public string SourceSlotKey { get; set; }
     }
 
-    public class CarriedRenderResolution
+    public class CarriedGroupResolution
     {
         public IList<string> PrimaryGroupCandidates { get; set; } = new List<string>();
 

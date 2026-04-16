@@ -4,7 +4,7 @@ using Vintagestory.API.Datastructures;
 
 namespace CarryOn.Utility
 {
-    public static class RenderResolverHelper
+    public static class TransformGroupResolverHelper
     {
         public static TreeAttribute GetContainerSlots(CarriedBlock carried)
         {
@@ -22,9 +22,9 @@ namespace CarryOn.Utility
             return inventory.GetTreeAttribute("slots") as TreeAttribute;
         }
 
-        public static bool TryResolveFallbackAsset(ICoreAPI api, ItemStack itemStack, out CarryRenderAssetType assetType, out string assetName)
+        public static bool TryResolveFallbackAsset(ICoreAPI api, ItemStack itemStack, out CarriedGroupAssetType assetType, out string assetName)
         {
-            assetType = CarryRenderAssetType.None;
+            assetType = CarriedGroupAssetType.None;
             assetName = null;
 
             if (api?.World == null || itemStack == null)
@@ -40,7 +40,7 @@ namespace CarryOn.Utility
                     return false;
                 }
 
-                assetType = CarryRenderAssetType.Item;
+                assetType = CarriedGroupAssetType.Item;
                 assetName = item.Code.ToString();
                 return true;
             }
@@ -53,7 +53,7 @@ namespace CarryOn.Utility
                     return false;
                 }
 
-                assetType = CarryRenderAssetType.Block;
+                assetType = CarriedGroupAssetType.Block;
                 assetName = block.Code.ToString();
                 return true;
             }
