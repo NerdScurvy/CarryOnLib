@@ -18,6 +18,9 @@ namespace CarryOn.API.Common.Models
         public CarryRenderAssetType AssetTypeIfUnset { get; set; } = CarryRenderAssetType.None;
 
         public string AssetNameIfUnset { get; set; }
+
+        // Explicit link back to source container slot key ("0", "1", etc.)
+        public string SourceSlotKey { get; set; }
     }
 
     public class CarriedRenderResolution
