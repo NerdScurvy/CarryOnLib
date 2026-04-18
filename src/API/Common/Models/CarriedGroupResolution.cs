@@ -21,6 +21,15 @@ namespace CarryOn.API.Common.Models
 
         // Explicit link back to source container slot key ("0", "1", etc.)
         public string SourceSlotKey { get; set; }
+
+        // Apply slot yaw from block entity rotation data (e.g. rotation0, rotation1).
+        public bool ApplyDisplaySlotYaw { get; set; } = false;
+
+        // Apply the display case basis offset (+45 degrees) when slot yaw is used.
+        public bool ApplyDisplayCaseYawOffset { get; set; } = false;
+
+        // Apply collectible onDisplayTransform as a secondary transform.
+        public bool ApplyOnDisplayTransform { get; set; } = false;
     }
 
     public class CarriedGroupResolution
