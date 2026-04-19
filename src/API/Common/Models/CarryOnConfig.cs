@@ -87,7 +87,7 @@ namespace CarryOn.API.Common.Models
 
         public bool BackSlotEnabled { get; set; } = true;
         public bool AllowHighCapacityStorageOnBack { get; set; } = false;
-        public string[] PreventSwapFromBackOnTarget { get; set; } = ["behavior::Container", "behavior::Door", "class::portals.portal", "code::groundstorage"];
+        public string[] PreventSwapFromBackOnTarget { get; set; } = ["behavior::Container", "behavior::Door", "class::portals.portal", "code::groundstorage", "class::BlockGroundStorage"];
 
         public bool TooHotToCarry { get; set; } = true;
         public int TooHotToCarryTemperature { get; set; } = 50;
