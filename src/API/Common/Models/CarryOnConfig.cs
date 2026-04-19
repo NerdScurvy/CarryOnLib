@@ -292,16 +292,16 @@ namespace CarryOn.API.Common.Models
 
             // Carryables on Back
             var carryablesOnBack = new TreeAttribute();
-            carryablesOnBack.SetBool(ConfigKey.Carryables.BarrelKey, Carryables.Barrel);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.ChestTrunkKey, Carryables.ChestTrunk);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.ChestKey, Carryables.Chest);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.CrateKey, Carryables.Crate);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.FlowerpotKey, Carryables.Flowerpot);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.LogWithResinKey, Carryables.LogWithResin);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.LootVesselKey, Carryables.LootVessel);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.PlanterKey, Carryables.Planter);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.ReedChestKey, Carryables.ReedChest);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.StorageVesselKey, Carryables.StorageVessel);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.BarrelKey, CarryablesOnBack.Barrel);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.ChestTrunkKey, CarryablesOnBack.ChestTrunk);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.ChestKey, CarryablesOnBack.Chest);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.CrateKey, CarryablesOnBack.Crate);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.FlowerpotKey, CarryablesOnBack.Flowerpot);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.LogWithResinKey, CarryablesOnBack.LogWithResin);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.LootVesselKey, CarryablesOnBack.LootVessel);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.PlanterKey, CarryablesOnBack.Planter);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.ReedChestKey, CarryablesOnBack.ReedChest);
+            carryablesOnBack.SetBool(ConfigKey.Carryables.StorageVesselKey, CarryablesOnBack.StorageVessel);
             tree[ConfigKey.CarryablesOnBackKey] = carryablesOnBack;
 
             // Interactables

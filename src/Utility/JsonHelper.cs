@@ -136,7 +136,7 @@ namespace CarryOn.Utility
                 return false;
             }
             var strings = json[key].AsArray<string>();
-            var success = true;
+            var success = strings != null;
             result = strings;
             return success;
         }        
