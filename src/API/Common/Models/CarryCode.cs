@@ -22,6 +22,7 @@ namespace CarryOn.API.Common.Models
             public static float PickUpSpeed { get; } = 0.8f;
             public static float TransferSpeed { get; } = 0.8f;
             public static float InteractSpeed { get; } = 0.8f;
+            public static int MaxInteractionDistance { get; } = 6;
             public static int DoubleTapThresholdMs { get; } = 500;
             public static GlKeys PickupKeybind { get; } = GlKeys.ShiftLeft;
             public static GlKeys SwapBackModifierKeybind { get; } = GlKeys.ControlLeft;
@@ -47,6 +48,7 @@ namespace CarryOn.API.Common.Models
             public static string ConfigVersionKey { get; } = "ConfigVersion";
 
             public static string CarryablesKey = "Carryables";
+            public static string CarryablesOnBackKey = "CarryablesOnBack";
             public static string InteractablesKey = "Interactables";
             public static string CarryOptionsKey = "CarryOptions";
             public static string DebuggingOptionsKey = "DebuggingOptions";
@@ -65,19 +67,23 @@ namespace CarryOn.API.Common.Models
             {
                 public static string LoggingEnabledKey { get; } = "LoggingEnabled";
                 public static string DisableHarmonyPatchKey { get; } = "DisableHarmonyPatch";
+                public static string EnablePackAdjustmentToolKey { get; } = "EnablePackAdjustmentTool";
             }
 
             public static class CarryOptions
             {
                 public static string BackSlotEnabledKey { get; } = "BackSlotEnabled";
                 public static string AllowChestTrunksOnBackKey { get; } = "AllowChestTrunksOnBack";
-                public static string AllowLargeChestsOnBackKey { get; } = "AllowLargeChestsOnBack";
+                public static string AllowHighCapacityStorageOnBackKey { get; } = "AllowHighCapacityStorageOnBack";
                 public static string AllowCratesOnBackKey { get; } = "AllowCratesOnBack";
                 public static string AllowSprintWhileCarryingKey { get; } = "AllowSprintWhileCarrying";
                 public static string IgnoreCarrySpeedPenaltyKey { get; } = "IgnoreCarrySpeedPenalty";
                 public static string RemoveInteractDelayWhileCarryingKey { get; } = "RemoveInteractDelayWhileCarrying";
                 public static string InteractSpeedMultiplierKey { get; } = "InteractSpeedMultiplier";
-                public static string HarmonyPatchEnabledKey { get; } = "HarmonyPatchEnabled";
+                public static string MaxInteractionDistanceKey { get; } = "MaxInteractionDistance";
+                public static string PreventSwapFromBackOnTargetKey { get; } = "PreventSwapFromBackOnTarget";
+                public static string TooHotToCarryKey { get; } = "TooHotToCarry";
+                public static string TooHotToCarryTemperatureKey { get; } = "TooHotToCarryTemperature";
 
             }
 
@@ -95,7 +101,6 @@ namespace CarryOn.API.Common.Models
                 public static string BookshelfKey { get; } = "Bookshelf";
                 public static string BunchOCandlesKey { get; } = "BunchOCandles";
                 public static string ChandelierKey { get; } = "Chandelier";
-                public static string ChestLabeledKey { get; } = "ChestLabeled";
                 public static string ChestTrunkKey { get; } = "ChestTrunk";
                 public static string ChestKey { get; } = "Chest";
                 public static string ClutterKey { get; } = "Clutter";

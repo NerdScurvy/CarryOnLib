@@ -1,6 +1,7 @@
 using System;
 using CarryOn.API.Common.Models;
 using CarryOn.API.Event.Data;
+using CarryOn.API.Event.Delegates;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.MathTools;
 
@@ -8,9 +9,13 @@ namespace CarryOn.API.Event
 {
     public class CarryEvents
     {
-        public BlockEntityDataDelegate OnRestoreEntityBlockData;
+        public BeforePickUpBlockDelegate BeforePickUpBlock;
+        
+        public BeforeRemoveBlockDelegate BeforeRemoveBlockFromWorld;
 
-        public CheckPermissionToCarryDelegate OnCheckPermissionToCarry;
+        public BlockEntityDataDelegate BeforeRestoreBlockEntityData;
+
+        public CheckPermissionToCarryDelegate CheckPermissionToCarry;
 
         public event EventHandler<BlockDroppedEventArgs> BlockDropped;
 

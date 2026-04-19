@@ -20,5 +20,6 @@ namespace CarryOn.API.Common.Models
       ItemStack = stack ?? throw new ArgumentNullException(nameof(stack));
       BlockEntityData = blockEntityData;
     }
+
   }
 }

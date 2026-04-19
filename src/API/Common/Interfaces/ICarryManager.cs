@@ -16,6 +16,9 @@ namespace CarryOn.API.Common.Interfaces
 
         CarryEvents CarryEvents { get; }
 
+
+        CarryOnConfig GetConfig();
+
         /// <summary>
         /// Checks if the entity has permission to carry the block at the specified position.
         /// </summary>
@@ -76,6 +79,24 @@ namespace CarryOn.API.Common.Interfaces
         bool SwapCarried(Entity entity, CarrySlot first, CarrySlot second);
 
         /// <summary>
+        /// Gets the CarriedBlock from the world at the specified position and slot.
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="slot"></param>
+        /// <param name="checkIsCarryable"></param>
+        /// <returns></returns>
+        CarriedBlock GetCarriedFromWorld(BlockPos pos, CarrySlot slot, bool checkIsCarryable = false);
+
+        /// <summary>
+        /// Restores the block entity data for the carried block at the specified position.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="carriedBlock"></param>
+        /// <param name="pos"></param>
+        /// <param name="dropped"></param>
+        void RestoreBlockEntityData(IWorldAccessor world, CarriedBlock carriedBlock, BlockPos pos, bool dropped = false);
+
+        /// <summary>
         /// Tries to place the carriedBlock in the world, removing from entity if successful
         /// </summary>
         /// <param name="entity"></param>
@@ -106,10 +127,11 @@ namespace CarryOn.API.Common.Interfaces
         /// <param name="entity"></param>
         /// <param name="pos"></param>
         /// <param name="slot"></param>
+        /// <param name="failureCode"></param>
         /// <param name="checkIsCarryable"></param>
         /// <param name="playSound"></param>
         /// <returns></returns>
-        bool TryPickUp(Entity entity, BlockPos pos, CarrySlot slot, bool checkIsCarryable = true, bool playSound = true);
+        bool TryPickUp(Entity entity, BlockPos pos, CarrySlot slot, ref string failureCode, bool checkIsCarryable = true, bool playSound = true);
 
         /// <summary>
         /// Tries to place the carried block at the specified position.
@@ -151,6 +173,26 @@ namespace CarryOn.API.Common.Interfaces
         /// </summary>
         /// <param name="api"></param>
         void InitEvents(ICoreAPI api);
+
+        /// <summary>
+        /// Registers a carried-render transform resolver.
+        /// Higher-priority resolvers run first.
+        /// </summary>
+        /// <param name="resolver"></param>
+        void RegisterTransformGroupResolver(ICarriedTransformGroupResolver resolver);
+
+        /// <summary>
+        /// Unregisters a previously registered carried-render transform resolver.
+        /// </summary>
+        /// <param name="resolver"></param>
+        /// <returns></returns>
+        bool UnregisterTransformGroupResolver(ICarriedTransformGroupResolver resolver);
+
+        /// <summary>
+        /// Returns all currently registered carried-render transform resolvers.
+        /// </summary>
+        /// <returns></returns>
+        IReadOnlyList<ICarriedTransformGroupResolver> GetTransformGroupResolvers();
 
         /// Checks if the block is carryable.
         /// </summary>
