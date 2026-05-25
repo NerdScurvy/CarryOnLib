@@ -34,9 +34,12 @@ namespace CarryOn.API.Common.Models
         {
             public static string EntityLastSneakTap { get; } = CarryOnCode("LastSneakTapMs");
 
+            public static string CarriedRevision { get; } = "Rev";
+
             public static class Watched
             {
                 public static string EntityCarried { get; } = CarryOnCode("Carried");
+
                 public static string EntityDoubleTapDismountEnabled { get; } = CarryOnCode("DoubleTapDismountEnabled");
 
             }
@@ -133,6 +136,13 @@ namespace CarryOn.API.Common.Models
             public static string Default { get; } = "__default__";
             public static string Internal { get; } = "__failure__";
             public static string Ignore { get; } = "__ignore__";
+
+            // Kept as the historical wire value for compatibility.
+            public static string RequiresOwnership { get; } = "requiresownership";
+            public static string EntityNotFound { get; } = "entity-not-found";
+            public static string EntityOutOfReach { get; } = "entity-out-of-reach";
+            public static string SlotNotEmpty { get; } = "slot-not-empty";
+            public static string SlotEmpty { get; } = "slot-empty";
         }
 
         public static class HotKeyCode

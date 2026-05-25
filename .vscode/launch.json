@@ -24,7 +24,7 @@
 			"--playStyle", "surviveandbuild",
 			"--openWorld", "modding test world",
 			"--addModPath", "${workspaceFolder}/bin/Debug/net10.0",
-			"--addOrigin", "${workspaceFolder}/resources/assets",
+			
 			"--dataPath", "${env:VINTAGE_STORY_DATA}/CarryOnDev"
 		],
 		"console": "internalConsole",
