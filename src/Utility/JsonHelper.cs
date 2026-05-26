@@ -139,7 +139,7 @@ namespace CarryOn.Utility
             var success = strings != null;
             result = strings;
             return success;
-        }        
+        }
 
         public static ModelTransform GetTransform(JsonObject json, ModelTransform baseTransform)
         {
@@ -226,5 +226,27 @@ namespace CarryOn.Utility
 
             return trans;
         }
+        
+        public static bool HasAnyTransformValue(JsonObject json)
+        {
+            if (json == null || !json.Exists)
+            {
+                return false;
+            }
+
+            return json.KeyExists("translation")
+                || json.KeyExists("rotation")
+                || json.KeyExists("origin")
+                || json.KeyExists("scale")
+                || json.KeyExists("translationX")
+                || json.KeyExists("translationY")
+                || json.KeyExists("translationZ")
+                || json.KeyExists("rotationX")
+                || json.KeyExists("rotationY")
+                || json.KeyExists("rotationZ")
+                || json.KeyExists("scaleX")
+                || json.KeyExists("scaleY")
+                || json.KeyExists("scaleZ");
+        }        
     }
 }

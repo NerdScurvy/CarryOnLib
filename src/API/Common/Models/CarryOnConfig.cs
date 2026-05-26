@@ -71,7 +71,7 @@ namespace CarryOn.API.Common.Models
 
         public string[] RemoveBaseCarryableBehaviour { get; set; } = ["woodchests:wtrunk"];
 
-        public string[] RemoveCarryableBehaviour { get; set; } = ["game:banner"];
+        public string[] RemoveCarryableBehaviour { get; set; } = ["game:banner", "game:clutter-devastation"];
     }
 
     public class CarryOptionsConfig
