@@ -7,8 +7,6 @@ namespace CarryOn.API.Common.Interfaces
     {
         string ResolverCode { get; }
 
-        int Priority { get; }
-
         bool TryResolve(ICoreAPI api, CarriedBlock carried, string baseGroup, out CarriedGroupResolution resolution);
 
         /// <summary>

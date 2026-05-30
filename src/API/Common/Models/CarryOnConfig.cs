@@ -41,7 +41,6 @@ namespace CarryOn.API.Common.Models
     public class CarryablesOnBackConfig
     {
         public bool Barrel { get; set; } = true;
-        public bool ChestLabeled { get; set; } = true;
         public bool ChestTrunk { get; set; }
         public bool Chest { get; set; } = true;
         public bool Crate { get; set; }

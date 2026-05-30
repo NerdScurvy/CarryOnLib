@@ -277,10 +277,17 @@ namespace CarryOn.API.Common.Interfaces
 
         /// <summary>
         /// Registers a carried-render transform resolver.
-        /// Higher-priority resolvers run first.
         /// </summary>
         /// <param name="resolver">The resolver to register.</param>
         void RegisterTransformGroupResolver(ICarriedTransformGroupResolver resolver);
+
+        /// <summary>
+        /// Attempts to get a registered carried-render transform resolver by code.
+        /// </summary>
+        /// <param name="resolverCode">The resolver code to look up.</param>
+        /// <param name="resolver">The resolver instance when found.</param>
+        /// <returns>True if the resolver was found; otherwise false.</returns>
+        bool TryGetTransformGroupResolver(string resolverCode, out ICarriedTransformGroupResolver resolver);
 
         /// <summary>
         /// Unregisters a previously registered carried-render transform resolver.
