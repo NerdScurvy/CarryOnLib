@@ -278,8 +278,9 @@ namespace CarryOn.API.Common.Interfaces
         /// <summary>
         /// Registers a carried-render transform resolver.
         /// </summary>
+        /// <param name="modId">Owning mod id for the resolver registration.</param>
         /// <param name="resolver">The resolver to register.</param>
-        void RegisterTransformGroupResolver(ICarriedTransformGroupResolver resolver);
+        void RegisterTransformGroupResolver(string modId, ICarriedTransformGroupResolver resolver);
 
         /// <summary>
         /// Attempts to get a registered carried-render transform resolver by code.
@@ -288,6 +289,14 @@ namespace CarryOn.API.Common.Interfaces
         /// <param name="resolver">The resolver instance when found.</param>
         /// <returns>True if the resolver was found; otherwise false.</returns>
         bool TryGetTransformGroupResolver(string resolverCode, out ICarriedTransformGroupResolver resolver);
+
+        /// <summary>
+        /// Attempts to get resolver registration metadata by resolver code.
+        /// </summary>
+        /// <param name="resolverCode">The resolver code to look up.</param>
+        /// <param name="registration">The resolver registration when found.</param>
+        /// <returns>True if the resolver registration was found; otherwise false.</returns>
+        bool TryGetTransformGroupResolverRegistration(string resolverCode, out RegisteredTransformGroupResolver registration);
 
         /// <summary>
         /// Unregisters a previously registered carried-render transform resolver.
@@ -300,7 +309,7 @@ namespace CarryOn.API.Common.Interfaces
         /// Returns all currently registered carried-render transform resolvers.
         /// </summary>
         /// <returns>An ordered read-only list of registered resolvers.</returns>
-        IReadOnlyList<ICarriedTransformGroupResolver> GetTransformGroupResolvers();
+        IReadOnlyList<RegisteredTransformGroupResolver> GetTransformGroupResolvers();
 
         /// <summary>
         /// Checks if the block is carryable.
