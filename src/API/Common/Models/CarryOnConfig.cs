@@ -13,6 +13,7 @@ namespace CarryOn.API.Common.Models
         public bool Barrel { get; set; } = true;
         public bool Bookshelf { get; set; }
         public bool BunchOCandles { get; set; }
+        public bool Cabinet { get; set; } = true;
         public bool Chandelier { get; set; }
         public bool ChestTrunk { get; set; }
         public bool Chest { get; set; } = true;
@@ -265,6 +266,7 @@ namespace CarryOn.API.Common.Models
             carryables.SetBool(ConfigKey.Carryables.BunchOCandlesKey, Carryables.BunchOCandles);
             carryables.SetBool(ConfigKey.Carryables.ChandelierKey, Carryables.Chandelier);
             carryables.SetBool(ConfigKey.Carryables.ChestTrunkKey, Carryables.ChestTrunk);
+            carryables.SetBool(ConfigKey.Carryables.CabinetKey, Carryables.Cabinet);
             carryables.SetBool(ConfigKey.Carryables.ChestKey, Carryables.Chest);
             carryables.SetBool(ConfigKey.Carryables.ClutterKey, Carryables.Clutter);
             carryables.SetBool(ConfigKey.Carryables.CrateKey, Carryables.Crate);
@@ -359,6 +361,7 @@ namespace CarryOn.API.Common.Models
                 config.Carryables.Barrel = carryables.GetBool(ConfigKey.Carryables.BarrelKey);
                 config.Carryables.Bookshelf = carryables.GetBool(ConfigKey.Carryables.BookshelfKey);
                 config.Carryables.BunchOCandles = carryables.GetBool(ConfigKey.Carryables.BunchOCandlesKey);
+                config.Carryables.Cabinet = carryables.GetBool(ConfigKey.Carryables.CabinetKey);
                 config.Carryables.Chandelier = carryables.GetBool(ConfigKey.Carryables.ChandelierKey);
                 config.Carryables.ChestTrunk = carryables.GetBool(ConfigKey.Carryables.ChestTrunkKey);
                 config.Carryables.Chest = carryables.GetBool(ConfigKey.Carryables.ChestKey);

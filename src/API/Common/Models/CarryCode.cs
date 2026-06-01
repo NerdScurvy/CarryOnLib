@@ -103,6 +103,7 @@ namespace CarryOn.API.Common.Models
                 public static string BarrelKey { get; } = "Barrel";
                 public static string BookshelfKey { get; } = "Bookshelf";
                 public static string BunchOCandlesKey { get; } = "BunchOCandles";
+                public static string CabinetKey { get; } = "Cabinet";
                 public static string ChandelierKey { get; } = "Chandelier";
                 public static string ChestTrunkKey { get; } = "ChestTrunk";
                 public static string ChestKey { get; } = "Chest";
