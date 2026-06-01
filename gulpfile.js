@@ -25,7 +25,7 @@ async function setVersion() {
 
     try {
         await new Promise((resolve, reject) => {
-            gulp.src('./modinfo.json')
+            gulp.src('./resources/modinfo.json')
                 .pipe(replace(/"version"\s*:\s*".*?"/, `"version": "${modVersion}"`))
                 .pipe(replace(/"(.*?)"\s*:\s*"(.*?)"/g, (match, dep, ver) => {
                     if (dependencies.hasOwnProperty(dep)) {
