@@ -18,7 +18,7 @@ namespace CarryOn.Utility
         /// <param name="slot"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static CarriedBlock CreateCarriedFromBlockPos(IWorldAccessor world, BlockPos pos, CarrySlot slot)
+        public static CarriedBlock? CreateCarriedFromBlockPos(IWorldAccessor world, BlockPos pos, CarrySlot slot)
         {
             if (world == null) throw new ArgumentNullException(nameof(world));
             if (pos == null) throw new ArgumentNullException(nameof(pos));
@@ -27,7 +27,7 @@ namespace CarryOn.Utility
             if (block.Id == 0) return null; // Can't pick up air.
             var stack = block.OnPickBlock(world, pos) ?? new ItemStack(block);
 
-            ITreeAttribute blockEntityData = null;
+            ITreeAttribute? blockEntityData = null;
             var blockEntity = world.BlockAccessor.GetBlockEntity(pos);
             if (blockEntity != null)
             {
@@ -50,7 +50,7 @@ namespace CarryOn.Utility
         /// Returns the position that the specified block would
         /// be placed at for the specified block selection.
         /// </summary>
-        public static BlockPos GetPlacedPosition(IBlockAccessor blockAccessor, BlockSelection selection, Block block)
+        public static BlockPos? GetPlacedPosition(IBlockAccessor blockAccessor, BlockSelection selection, Block block)
         {
             if (selection == null) return null;
             var position = selection.Position.Copy();
@@ -73,7 +73,7 @@ namespace CarryOn.Utility
         /// <returns>will return the origin block if it exists, otherwise the original block</returns>
         public static Block GetOriginBlockIfMultiBlock(IBlockAccessor blockAccessor, BlockPos position, Block block)
         {
-            if (position == null || block == null || blockAccessor == null) return block;
+            if (blockAccessor == null || position == null) return block;
 
             if (block is BlockMultiblock multiblock)
             {
@@ -87,7 +87,7 @@ namespace CarryOn.Utility
         /// <summary>
         /// Get the block position for the main block within for a multiblock structure
         /// </summary>
-        public static BlockPos GetMultiblockOrigin(BlockPos position, BlockMultiblock multiblock)
+        public static BlockPos? GetMultiblockOrigin(BlockPos position, BlockMultiblock multiblock)
         {
             if (position == null) return null;
 
@@ -103,11 +103,12 @@ namespace CarryOn.Utility
         /// <summary>
         /// Create a new block selection pointing to the main block within a multiblock structure
         /// </summary>
-        public static BlockSelection GetMultiblockOriginSelection(IBlockAccessor blockAccessor, BlockSelection blockSelection)
+        public static BlockSelection? GetMultiblockOriginSelection(IBlockAccessor blockAccessor, BlockSelection? blockSelection)
         {
             if (blockSelection?.Block is BlockMultiblock multiblock)
             {
                 var position = GetMultiblockOrigin(blockSelection.Position, multiblock);
+                if (position == null) return null;
                 var block = blockAccessor.GetBlock(position);
                 var selection = blockSelection.Clone();
                 selection.Position = position;
@@ -153,7 +154,7 @@ namespace CarryOn.Utility
         /// </summary>
         /// <param name="backpack"></param>
         /// <returns></returns>
-        public static ITreeAttribute ConvertBackpackToBlockInventory(ITreeAttribute backpack)
+        public static ITreeAttribute ConvertBackpackToBlockInventory(ITreeAttribute? backpack)
         {
             var blockInventory = new TreeAttribute();
             if (backpack == null || backpack.Count == 0) return blockInventory; // graceful fallback

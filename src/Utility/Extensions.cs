@@ -15,8 +15,8 @@ namespace CarryOn.Utility
     public static class Extensions
     {
 
-        private static ICarryManager clientCarryManager = null;
-        private static ICarryManager serverCarryManager = null;
+        private static ICarryManager? clientCarryManager = null;
+        private static ICarryManager? serverCarryManager = null;
 
         /// <summary>
         /// Clears the cached carry managers.
@@ -32,7 +32,7 @@ namespace CarryOn.Utility
         /// </summary>
         /// <param name="api"></param>
         /// <returns></returns>
-        public static ICarryManager GetCarryManager(ICoreAPI api)
+        public static ICarryManager? GetCarryManager(ICoreAPI api)
         {
             if (api.Side == EnumAppSide.Server)
             {
@@ -62,7 +62,7 @@ namespace CarryOn.Utility
         /// <param name="entity"></param>
         /// <param name="slot"></param>
         /// <returns></returns>
-        public static CarriedBlock GetCarried(this Entity entity, CarrySlot slot)
+        public static CarriedBlock? GetCarried(this Entity entity, CarrySlot slot)
             => GetCarryManager(entity.Api)?.GetCarried(entity, slot);
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace CarryOn.Utility
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static IEnumerable<CarriedBlock> GetCarried(this Entity entity)
+        public static IEnumerable<CarriedBlock>? GetCarried(this Entity entity)
             => GetCarryManager(entity.Api)?.GetAllCarried(entity);
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace CarryOn.Utility
         /// <param name="second"></param>
         /// <returns></returns>
         public static bool SwapCarried(this Entity entity, CarrySlot first, CarrySlot second)
-            => GetCarryManager(entity.Api).SwapCarried(entity, first, second);
+            => GetCarryManager(entity.Api)?.SwapCarried(entity, first, second) ?? false;
 
         /* ------------------------------ */
         /* CarriedBlock Extensions        */
@@ -104,7 +104,7 @@ namespace CarryOn.Utility
         /// <param name="slot"></param>
         /// <param name="markDirty"></param>
         public static void Set(this CarriedBlock carriedBlock, Entity entity, CarrySlot slot, bool markDirty = true)
-            => GetCarryManager(entity.Api).SetCarried(entity, slot, carriedBlock.ItemStack, carriedBlock.BlockEntityData, markDirty);
+            => GetCarryManager(entity.Api)?.SetCarried(entity, slot, carriedBlock.ItemStack, carriedBlock.BlockEntityData, markDirty);
 
         /* ------------------------------ */
 
@@ -115,7 +115,7 @@ namespace CarryOn.Utility
         /// <param name="api"></param>
         public static void Register<T>(this ICoreAPI api)
         {
-            var name = (string)typeof(T).GetProperty("Name").GetValue(null);
+            var name = typeof(T).GetProperty("Name")?.GetValue(null) as string ?? throw new ArgumentException($"Type {typeof(T).Name} does not have a static 'Name' property.");
             if (typeof(BlockBehavior).IsAssignableFrom(typeof(T)))
                 api.RegisterBlockBehaviorClass(name, typeof(T));
             else if (typeof(EntityBehavior).IsAssignableFrom(typeof(T)))
@@ -143,7 +143,7 @@ namespace CarryOn.Utility
         /// <returns></returns>
         public static T GetBehaviorOrDefault<T>(this Block block, T @default)
             where T : BlockBehavior
-                => (T)block.GetBehavior<T>() ?? @default;
+                => block.GetBehavior<T>() ?? @default;
 
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace CarryOn.Utility
         /// <param name="attr"></param>
         /// <param name="keys"></param>
         /// <returns></returns>
-        public static IAttribute TryGet(this IAttribute attr, params string[] keys)
+        public static IAttribute? TryGet(this IAttribute? attr, params string[] keys)
         {
             foreach (var key in keys)
             {
@@ -169,7 +169,7 @@ namespace CarryOn.Utility
         /// <param name="attr"></param>
         /// <param name="keys"></param>
         /// <returns></returns>
-        public static T TryGet<T>(this IAttribute attr, params string[] keys)
+        public static T? TryGet<T>(this IAttribute attr, params string[] keys)
                 where T : class, IAttribute
             => TryGet(attr, keys) as T;
 
@@ -181,7 +181,7 @@ namespace CarryOn.Utility
         /// <param name="keys"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public static void Set(this IAttribute attr, IAttribute value, params string[] keys)
+        public static void Set(this IAttribute? attr, IAttribute? value, params string[] keys)
         {
             if (attr == null) throw new ArgumentNullException(nameof(attr));
             for (var i = 0; i < keys.Length; i++)
@@ -212,7 +212,7 @@ namespace CarryOn.Utility
         /// <param name="attr"></param>
         /// <param name="keys"></param>
         public static void Remove(this IAttribute attr, params string[] keys)
-            => Set(attr, (IAttribute)null, keys);
+            => Set(attr, (IAttribute?)null, keys);
 
         /// <summary>
         /// Sets an attribute at the specified keys, creating tree nodes as necessary.
@@ -231,7 +231,7 @@ namespace CarryOn.Utility
         /// <param name="defaultValue"></param>
         /// <returns></returns>
         public static bool TryGetBool(this Dictionary<string, JToken> dict, string key, bool defaultValue)
-            => dict.TryGetValue(key, out var token) && token.Type == JTokenType.Boolean ? token.Value<bool>() : defaultValue;
+            => JsonHelper.TryGetTokenBool(dict, key, defaultValue);
 
         /// <summary>
         /// Tries to get a float value from the dictionary of JTokens.
@@ -241,16 +241,7 @@ namespace CarryOn.Utility
         /// <param name="defaultValue"></param>
         /// <returns></returns>
         public static float TryGetFloat(this Dictionary<string, JToken> dict, string key, float defaultValue)
-        {
-            if (dict.TryGetValue(key, out var token))
-            {
-                if (token.Type == JTokenType.Float)
-                    return token.Value<float>();
-                if (token.Type == JTokenType.Integer)
-                    return token.Value<int>();
-            }
-            return defaultValue;
-        }
+            => JsonHelper.TryGetTokenFloat(dict, key, defaultValue);
 
         /// <summary>
         /// Tries to get an array of strings from the dictionary of JTokens.
@@ -260,18 +251,18 @@ namespace CarryOn.Utility
         /// <param name="defaultValue"></param>
         /// <returns></returns>
         public static string[] TryGetStringArray(this Dictionary<string, JToken> dict, string key, string[] defaultValue)
-            => dict.TryGetValue(key, out var token) && token.Type == JTokenType.Array ? token.ToObject<string[]>() : defaultValue;
+            => JsonHelper.TryGetTokenStringArray(dict, key, defaultValue);
 
 
         /// <summary>
         /// Helper to lookup a value in an IAttribute using dot notation (e.g. "carryon.Carryables.Anvil").
         /// Returns the final IAttribute found, or null if not found.
         /// </summary>
-        public static IAttribute LookupValue(this IAttribute root, string dotNotation)
+        public static IAttribute? LookupValue(this IAttribute? root, string dotNotation)
         {
             if (root == null || string.IsNullOrWhiteSpace(dotNotation)) return null;
             var keys = dotNotation.Split('.');
-            IAttribute current = root;
+            IAttribute? current = root;
             foreach (var key in keys)
             {
                 if (current is TreeAttribute tree)

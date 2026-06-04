@@ -9,117 +9,124 @@ namespace CarryOn.API.Common.Models
 {
     public class CarryablesConfig
     {
-        public bool Anvil { get; set; } = true;
-        public bool Barrel { get; set; } = true;
-        public bool Bookshelf { get; set; }
-        public bool BunchOCandles { get; set; }
-        public bool Cabinet { get; set; } = true;
-        public bool Chandelier { get; set; }
-        public bool ChestTrunk { get; set; }
-        public bool Chest { get; set; } = true;
-        public bool Clutter { get; set; }
-        public bool Crate { get; set; } = true;
-        public bool DisplayCase { get; set; }
-        public bool Flowerpot { get; set; } = true;
-        public bool Forge { get; set; }
-        public bool Henbox { get; set; }
-        public bool LogWithResin { get; set; }
-        public bool LootVessel { get; set; } = true;
-        public bool MoldRack { get; set; }
-        public bool Mold { get; set; }
-        public bool Oven { get; set; }
-        public bool Planter { get; set; } = true;
-        public bool Quern { get; set; } = true;
-        public bool ReedChest { get; set; } = true;
-        public bool Resonator { get; set; } = true;
-        public bool Shelf { get; set; }
-        public bool Sign { get; set; }
-        public bool StorageVessel { get; set; } = true;
-        public bool ToolRack { get; set; }
-        public bool TorchHolder { get; set; }
+        [TreeValue("Anvil")]           public bool Anvil { get; set; } = true;
+        [TreeValue("Barrel")]          public bool Barrel { get; set; } = true;
+        [TreeValue("Bookshelf")]       public bool Bookshelf { get; set; }
+        [TreeValue("BunchOCandles")]   public bool BunchOCandles { get; set; }
+        [TreeValue("Cabinet")]         public bool Cabinet { get; set; } = true;
+        [TreeValue("Chandelier")]      public bool Chandelier { get; set; }
+        [TreeValue("ChestTrunk")]      public bool ChestTrunk { get; set; }
+        [TreeValue("Chest")]           public bool Chest { get; set; } = true;
+        [TreeValue("Clutter")]         public bool Clutter { get; set; }
+        [TreeValue("Crate")]           public bool Crate { get; set; } = true;
+        [TreeValue("DisplayCase")]     public bool DisplayCase { get; set; }
+        [TreeValue("Flowerpot")]       public bool Flowerpot { get; set; } = true;
+        [TreeValue("Forge")]           public bool Forge { get; set; }
+        [TreeValue("Henbox")]          public bool Henbox { get; set; }
+        [TreeValue("LogWithResin")]    public bool LogWithResin { get; set; }
+        [TreeValue("LootVessel")]      public bool LootVessel { get; set; } = true;
+        [TreeValue("MoldRack")]        public bool MoldRack { get; set; }
+        [TreeValue("Mold")]            public bool Mold { get; set; }
+        [TreeValue("Oven")]            public bool Oven { get; set; }
+        [TreeValue("Planter")]         public bool Planter { get; set; } = true;
+        [TreeValue("Quern")]           public bool Quern { get; set; } = true;
+        [TreeValue("ReedChest")]       public bool ReedChest { get; set; } = true;
+        [TreeValue("Resonator")]       public bool Resonator { get; set; } = true;
+        [TreeValue("Shelf")]           public bool Shelf { get; set; }
+        [TreeValue("Sign")]            public bool Sign { get; set; }
+        [TreeValue("StorageVessel")]   public bool StorageVessel { get; set; } = true;
+        [TreeValue("ToolRack")]        public bool ToolRack { get; set; }
+        [TreeValue("TorchHolder")]     public bool TorchHolder { get; set; }
     }
 
     public class CarryablesOnBackConfig
     {
-        public bool Barrel { get; set; } = true;
-        public bool ChestTrunk { get; set; }
-        public bool Chest { get; set; } = true;
-        public bool Crate { get; set; }
-        public bool Flowerpot { get; set; } = true;
-        public bool LogWithResin { get; set; }
-        public bool LootVessel { get; set; } = true;
-        public bool Planter { get; set; } = true;
-        public bool ReedChest { get; set; } = true;
-        public bool Resonator { get; set; } = true;
-        public bool StorageVessel { get; set; } = true;
+        [TreeValue("Barrel")]          public bool Barrel { get; set; } = true;
+        [TreeValue("ChestTrunk")]      public bool ChestTrunk { get; set; }
+        [TreeValue("Chest")]           public bool Chest { get; set; } = true;
+        [TreeValue("Crate")]           public bool Crate { get; set; }
+        [TreeValue("Flowerpot")]       public bool Flowerpot { get; set; } = true;
+        [TreeValue("LogWithResin")]    public bool LogWithResin { get; set; }
+        [TreeValue("LootVessel")]      public bool LootVessel { get; set; } = true;
+        [TreeValue("Planter")]         public bool Planter { get; set; } = true;
+        [TreeValue("ReedChest")]       public bool ReedChest { get; set; } = true;
+        [TreeValue("Resonator")]       public bool Resonator { get; set; } = true;
+        [TreeValue("StorageVessel")]   public bool StorageVessel { get; set; } = true;
     }
 
     public class InteractablesConfig
     {
-        public bool Door { get; set; } = true;
-        public bool Barrel { get; set; } = true;
-        public bool Storage { get; set; } = true;
+        [TreeValue("Door")]            public bool Door { get; set; } = true;
+        [TreeValue("Barrel")]          public bool Barrel { get; set; } = true;
+        [TreeValue("Storage")]         public bool Storage { get; set; } = true;
     }
 
     public class CarryablesFiltersConfig
     {
-        public bool AutoMapSimilar { get; set; } = true;
+        [TreeValue("AutoMapSimilar")]                public bool AutoMapSimilar { get; set; } = true;
+        [TreeValue("AutoMatchIgnoreMods")]           public string[] AutoMatchIgnoreMods { get; set; } = ["mcrate"];
+        [TreeValue("AllowedShapeOnlyMatches")]       public string[] AllowedShapeOnlyMatches { get; set; } = ["block/clay/lootvessel", "block/wood/chest/normal", "block/wood/trunk/normal", "block/reed/basket-normal"];
+        [TreeValue("RemoveBaseCarryableBehaviour")]  public string[] RemoveBaseCarryableBehaviour { get; set; } = ["woodchests:wtrunk"];
+        [TreeValue("RemoveCarryableBehaviour")]      public string[] RemoveCarryableBehaviour { get; set; } = ["game:banner", "game:clutter-devastation"];
+    }
 
-        public string[] AutoMatchIgnoreMods { get; set; } = ["mcrate"];
+    public class CarrySlotSpeedConfig
+    {
+        public float? Hands { get; set; }
+        public float? Back { get; set; }
 
-        public string[] AllowedShapeOnlyMatches { get; set; } = ["block/clay/lootvessel", "block/wood/chest/normal", "block/wood/trunk/normal", "block/reed/basket-normal"];
+        [JsonIgnore]
+        public bool IsEmpty => Hands == null && Back == null;
+    }
 
-        public string[] RemoveBaseCarryableBehaviour { get; set; } = ["woodchests:wtrunk"];
+    public class WalkSpeedOverridesConfig
+    {
+        public IDictionary<string, CarrySlotSpeedConfig> ByBlockCode { get; set; }
+            = new Dictionary<string, CarrySlotSpeedConfig>();
 
-        public string[] RemoveCarryableBehaviour { get; set; } = ["game:banner", "game:clutter-devastation"];
+        public IDictionary<string, CarrySlotSpeedConfig> ByBlockClass { get; set; }
+            = new Dictionary<string, CarrySlotSpeedConfig>();
+
+        public CarrySlotSpeedConfig SlotDefaults { get; set; } = new CarrySlotSpeedConfig();
     }
 
     public class CarryOptionsConfig
     {
-        public bool AllowSprintWhileCarrying { get; set; } = false;
-        public bool IgnoreCarrySpeedPenalty { get; set; } = false;
-        public bool RemoveInteractDelayWhileCarrying { get; set; } = false;
-        public float InteractSpeedMultiplier { get; set; } = 1.0f;
+        [TreeValue("AllowSprintWhileCarrying")]           public bool AllowSprintWhileCarrying { get; set; } = false;
+        [TreeValue("IgnoreCarrySpeedPenalty")]             public bool IgnoreCarrySpeedPenalty { get; set; } = false;
+        [TreeValue("RemoveInteractDelayWhileCarrying")]    public bool RemoveInteractDelayWhileCarrying { get; set; } = false;
+        [TreeValue("InteractSpeedMultiplier")]             public float InteractSpeedMultiplier { get; set; } = 1.0f;
+        [TreeValue("MaxInteractionDistance")]              public int MaxInteractionDistance { get; set; } = Default.MaxInteractionDistance;
+        [TreeValue("BackSlotEnabled")]                     public bool BackSlotEnabled { get; set; } = true;
+        [TreeValue("AllowHighCapacityStorageOnBack")]     public bool AllowHighCapacityStorageOnBack { get; set; } = false;
+        [TreeValue("PreventSwapFromBackOnTarget")]         public string[] PreventSwapFromBackOnTarget { get; set; } = ["behavior::Container", "behavior::Door", "class::portals.portal", "code::groundstorage", "class::BlockGroundStorage"];
+        [TreeValue("TooHotToCarry")]                       public bool TooHotToCarry { get; set; } = true;
+        [TreeValue("TooHotToCarryTemperature")]            public int TooHotToCarryTemperature { get; set; } = 50;
 
-        // Maximum distance (in world units) that interactions with carried/attachable
-        // entities/blocks are allowed from the player.
-        public int MaxInteractionDistance { get; set; } = Default.MaxInteractionDistance;
-
-        public bool BackSlotEnabled { get; set; } = true;
-        public bool AllowHighCapacityStorageOnBack { get; set; } = false;
-        public string[] PreventSwapFromBackOnTarget { get; set; } = ["behavior::Container", "behavior::Door", "class::portals.portal", "code::groundstorage", "class::BlockGroundStorage"];
-
-        public bool TooHotToCarry { get; set; } = true;
-        public int TooHotToCarryTemperature { get; set; } = 50;
+        public WalkSpeedOverridesConfig WalkSpeedOverrides { get; set; } = new WalkSpeedOverridesConfig();
 
         [JsonExtensionData(ReadData = true, WriteData = false)]
-        internal Dictionary<string, JToken> Legacy { get; set; }
+        internal Dictionary<string, JToken>? Legacy { get; set; }
     }
 
     public class DebuggingOptionsConfig
     {
-        public bool LoggingEnabled { get; set; } = false;
-        public bool DisableHarmonyPatch { get; set; } = false;
-        public bool EnablePackAdjustmentTool { get; set; } = false;
+        [TreeValue("LoggingEnabled")]          public bool LoggingEnabled { get; set; } = false;
+        [TreeValue("DisableHarmonyPatch")]     public bool DisableHarmonyPatch { get; set; } = false;
+        [TreeValue("EnablePackAdjustmentTool")] public bool EnablePackAdjustmentTool { get; set; } = false;
     }
 
 
     public class CarryOnConfig
     {
-        private IDictionary<string, string> backpackMapping;
+        private IDictionary<string, string>? backpackMapping;
 
         public int? ConfigVersion { get; set; }
         public CarryablesConfig Carryables { get; set; } = new CarryablesConfig();
-
         public CarryablesOnBackConfig CarryablesOnBack { get; set; } = new CarryablesOnBackConfig();
-
         public InteractablesConfig Interactables { get; set; } = new InteractablesConfig();
-
         public CarryOptionsConfig CarryOptions { get; set; } = new CarryOptionsConfig();
-
         public CarryablesFiltersConfig CarryablesFilters { get; set; } = new CarryablesFiltersConfig();
-
-
 
         [JsonIgnore]
         public IDictionary<string, string> BackpackMapping
@@ -155,7 +162,7 @@ namespace CarryOn.API.Common.Models
         public DebuggingOptionsConfig DebuggingOptions { get; set; } = new DebuggingOptionsConfig();
 
         [JsonExtensionData(ReadData = true, WriteData = false)]
-        internal Dictionary<string, JToken> Legacy { get; set; }
+        internal Dictionary<string, JToken>? Legacy { get; set; }
 
         public CarryOnConfig()
         {
@@ -243,7 +250,7 @@ namespace CarryOn.API.Common.Models
                 if (CarryOptions.Legacy.ContainsKey("AllowChestTrunksOnBack"))
                 {
                     CarryablesOnBack.ChestTrunk = CarryOptions.Legacy.TryGetBool("AllowChestTrunksOnBack", CarryablesOnBack.ChestTrunk);
-                }                
+                }
                 if (CarryOptions.Legacy.ContainsKey("AllowCratesOnBack"))
                 {
                     CarryablesOnBack.Crate = CarryOptions.Legacy.TryGetBool("AllowCratesOnBack", CarryablesOnBack.Crate);
@@ -256,91 +263,14 @@ namespace CarryOn.API.Common.Models
         public ITreeAttribute ToTreeAttribute()
         {
             var tree = new TreeAttribute();
-            tree.SetInt(ConfigKey.ConfigVersionKey, ConfigVersion ?? 2);
+            tree.SetInt("ConfigVersion", ConfigVersion ?? 2);
 
-            // Carryables
-            var carryables = new TreeAttribute();
-            carryables.SetBool(ConfigKey.Carryables.AnvilKey, Carryables.Anvil);
-            carryables.SetBool(ConfigKey.Carryables.BarrelKey, Carryables.Barrel);
-            carryables.SetBool(ConfigKey.Carryables.BookshelfKey, Carryables.Bookshelf);
-            carryables.SetBool(ConfigKey.Carryables.BunchOCandlesKey, Carryables.BunchOCandles);
-            carryables.SetBool(ConfigKey.Carryables.ChandelierKey, Carryables.Chandelier);
-            carryables.SetBool(ConfigKey.Carryables.ChestTrunkKey, Carryables.ChestTrunk);
-            carryables.SetBool(ConfigKey.Carryables.CabinetKey, Carryables.Cabinet);
-            carryables.SetBool(ConfigKey.Carryables.ChestKey, Carryables.Chest);
-            carryables.SetBool(ConfigKey.Carryables.ClutterKey, Carryables.Clutter);
-            carryables.SetBool(ConfigKey.Carryables.CrateKey, Carryables.Crate);
-            carryables.SetBool(ConfigKey.Carryables.DisplayCaseKey, Carryables.DisplayCase);
-            carryables.SetBool(ConfigKey.Carryables.FlowerpotKey, Carryables.Flowerpot);
-            carryables.SetBool(ConfigKey.Carryables.ForgeKey, Carryables.Forge);
-            carryables.SetBool(ConfigKey.Carryables.HenboxKey, Carryables.Henbox);
-            carryables.SetBool(ConfigKey.Carryables.LogWithResinKey, Carryables.LogWithResin);
-            carryables.SetBool(ConfigKey.Carryables.LootVesselKey, Carryables.LootVessel);
-            carryables.SetBool(ConfigKey.Carryables.MoldRackKey, Carryables.MoldRack);
-            carryables.SetBool(ConfigKey.Carryables.MoldKey, Carryables.Mold);
-            carryables.SetBool(ConfigKey.Carryables.OvenKey, Carryables.Oven);
-            carryables.SetBool(ConfigKey.Carryables.PlanterKey, Carryables.Planter);
-            carryables.SetBool(ConfigKey.Carryables.QuernKey, Carryables.Quern);
-            carryables.SetBool(ConfigKey.Carryables.ReedChestKey, Carryables.ReedChest);
-            carryables.SetBool(ConfigKey.Carryables.ResonatorKey, Carryables.Resonator);
-            carryables.SetBool(ConfigKey.Carryables.ShelfKey, Carryables.Shelf);
-            carryables.SetBool(ConfigKey.Carryables.SignKey, Carryables.Sign);
-            carryables.SetBool(ConfigKey.Carryables.StorageVesselKey, Carryables.StorageVessel);
-            carryables.SetBool(ConfigKey.Carryables.ToolRackKey, Carryables.ToolRack);
-            carryables.SetBool(ConfigKey.Carryables.TorchHolderKey, Carryables.TorchHolder);
-            tree[ConfigKey.CarryablesKey] = carryables;
-
-
-            // Carryables on Back
-            var carryablesOnBack = new TreeAttribute();
-            carryablesOnBack.SetBool(ConfigKey.Carryables.BarrelKey, CarryablesOnBack.Barrel);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.ChestTrunkKey, CarryablesOnBack.ChestTrunk);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.ChestKey, CarryablesOnBack.Chest);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.CrateKey, CarryablesOnBack.Crate);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.FlowerpotKey, CarryablesOnBack.Flowerpot);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.LogWithResinKey, CarryablesOnBack.LogWithResin);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.LootVesselKey, CarryablesOnBack.LootVessel);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.PlanterKey, CarryablesOnBack.Planter);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.ReedChestKey, CarryablesOnBack.ReedChest);
-            carryablesOnBack.SetBool(ConfigKey.Carryables.StorageVesselKey, CarryablesOnBack.StorageVessel);
-            tree[ConfigKey.CarryablesOnBackKey] = carryablesOnBack;
-
-            // Interactables
-            var interactables = new TreeAttribute();
-            interactables.SetBool(ConfigKey.Interactables.DoorKey, Interactables.Door);
-            interactables.SetBool(ConfigKey.Interactables.BarrelKey, Interactables.Barrel);
-            interactables.SetBool(ConfigKey.Interactables.StorageKey, Interactables.Storage);
-            tree[ConfigKey.InteractablesKey] = interactables;
-
-            // CarryOptions
-            var carryOptions = new TreeAttribute();
-            carryOptions.SetBool(ConfigKey.CarryOptions.AllowSprintWhileCarryingKey, CarryOptions.AllowSprintWhileCarrying);
-            carryOptions.SetBool(ConfigKey.CarryOptions.IgnoreCarrySpeedPenaltyKey, CarryOptions.IgnoreCarrySpeedPenalty);
-            carryOptions.SetBool(ConfigKey.CarryOptions.RemoveInteractDelayWhileCarryingKey, CarryOptions.RemoveInteractDelayWhileCarrying);
-            carryOptions.SetFloat(ConfigKey.CarryOptions.InteractSpeedMultiplierKey, CarryOptions.InteractSpeedMultiplier);
-            carryOptions.SetInt(ConfigKey.CarryOptions.MaxInteractionDistanceKey, CarryOptions.MaxInteractionDistance);
-            carryOptions.SetBool(ConfigKey.CarryOptions.BackSlotEnabledKey, CarryOptions.BackSlotEnabled);
-            carryOptions.SetBool(ConfigKey.CarryOptions.AllowHighCapacityStorageOnBackKey, CarryOptions.AllowHighCapacityStorageOnBack);
-            carryOptions.SetStringArray(ConfigKey.CarryOptions.PreventSwapFromBackOnTargetKey, CarryOptions.PreventSwapFromBackOnTarget);
-            carryOptions.SetBool(ConfigKey.CarryOptions.TooHotToCarryKey, CarryOptions.TooHotToCarry);
-            carryOptions.SetInt(ConfigKey.CarryOptions.TooHotToCarryTemperatureKey, CarryOptions.TooHotToCarryTemperature);
-            tree[ConfigKey.CarryOptionsKey] = carryOptions;
-
-            // CarryablesFilters
-            var filters = new TreeAttribute();
-            filters.SetBool(ConfigKey.CarryableFilters.AutoMapSimilarKey, CarryablesFilters.AutoMapSimilar);
-            filters.SetStringArray(ConfigKey.CarryableFilters.AutoMatchIgnoreModsKey, CarryablesFilters.AutoMatchIgnoreMods);
-            filters.SetStringArray(ConfigKey.CarryableFilters.AllowedShapeOnlyMatchesKey, CarryablesFilters.AllowedShapeOnlyMatches);
-            filters.SetStringArray(ConfigKey.CarryableFilters.RemoveBaseCarryableBehaviourKey, CarryablesFilters.RemoveBaseCarryableBehaviour);
-            filters.SetStringArray(ConfigKey.CarryableFilters.RemoveCarryableBehaviourKey, CarryablesFilters.RemoveCarryableBehaviour);
-            tree[ConfigKey.CarryableFiltersKey] = filters;
-
-            // DebuggingOptions
-            var debug = new TreeAttribute();
-            debug.SetBool(ConfigKey.DebuggingOptions.LoggingEnabledKey, DebuggingOptions.LoggingEnabled);
-            debug.SetBool(ConfigKey.DebuggingOptions.DisableHarmonyPatchKey, DebuggingOptions.DisableHarmonyPatch);
-            debug.SetBool(ConfigKey.DebuggingOptions.EnablePackAdjustmentToolKey, DebuggingOptions.EnablePackAdjustmentTool);
-            tree[ConfigKey.DebuggingOptionsKey] = debug;
+            tree["Carryables"] = TreeSerializer.ToTree(Carryables);
+            tree["CarryablesOnBack"] = TreeSerializer.ToTree(CarryablesOnBack);
+            tree["Interactables"] = TreeSerializer.ToTree(Interactables);
+            tree["CarryOptions"] = ToCarryOptionsTree();
+            tree["CarryableFilters"] = TreeSerializer.ToTree(CarryablesFilters);
+            tree["DebuggingOptions"] = TreeSerializer.ToTree(DebuggingOptions);
 
             return tree;
         }
@@ -349,112 +279,149 @@ namespace CarryOn.API.Common.Models
         {
             var config = new CarryOnConfig();
 
-            // ConfigVersion
-            if (tree.HasAttribute(ConfigKey.ConfigVersionKey))
-                config.ConfigVersion = tree.GetInt(ConfigKey.ConfigVersionKey);
+            if (tree.HasAttribute("ConfigVersion"))
+                config.ConfigVersion = tree.GetInt("ConfigVersion");
 
-            // Carryables
-            var carryables = tree[ConfigKey.CarryablesKey] as ITreeAttribute;
-            if (carryables != null)
-            {
-                config.Carryables.Anvil = carryables.GetBool(ConfigKey.Carryables.AnvilKey);
-                config.Carryables.Barrel = carryables.GetBool(ConfigKey.Carryables.BarrelKey);
-                config.Carryables.Bookshelf = carryables.GetBool(ConfigKey.Carryables.BookshelfKey);
-                config.Carryables.BunchOCandles = carryables.GetBool(ConfigKey.Carryables.BunchOCandlesKey);
-                config.Carryables.Cabinet = carryables.GetBool(ConfigKey.Carryables.CabinetKey);
-                config.Carryables.Chandelier = carryables.GetBool(ConfigKey.Carryables.ChandelierKey);
-                config.Carryables.ChestTrunk = carryables.GetBool(ConfigKey.Carryables.ChestTrunkKey);
-                config.Carryables.Chest = carryables.GetBool(ConfigKey.Carryables.ChestKey);
-                config.Carryables.Clutter = carryables.GetBool(ConfigKey.Carryables.ClutterKey);
-                config.Carryables.Crate = carryables.GetBool(ConfigKey.Carryables.CrateKey);
-                config.Carryables.DisplayCase = carryables.GetBool(ConfigKey.Carryables.DisplayCaseKey);
-                config.Carryables.Flowerpot = carryables.GetBool(ConfigKey.Carryables.FlowerpotKey);
-                config.Carryables.Forge = carryables.GetBool(ConfigKey.Carryables.ForgeKey);
-                config.Carryables.Henbox = carryables.GetBool(ConfigKey.Carryables.HenboxKey);
-                config.Carryables.LogWithResin = carryables.GetBool(ConfigKey.Carryables.LogWithResinKey);
-                config.Carryables.LootVessel = carryables.GetBool(ConfigKey.Carryables.LootVesselKey);
-                config.Carryables.MoldRack = carryables.GetBool(ConfigKey.Carryables.MoldRackKey);
-                config.Carryables.Mold = carryables.GetBool(ConfigKey.Carryables.MoldKey);
-                config.Carryables.Oven = carryables.GetBool(ConfigKey.Carryables.OvenKey);
-                config.Carryables.Planter = carryables.GetBool(ConfigKey.Carryables.PlanterKey);
-                config.Carryables.Quern = carryables.GetBool(ConfigKey.Carryables.QuernKey);
-                config.Carryables.ReedChest = carryables.GetBool(ConfigKey.Carryables.ReedChestKey);
-                config.Carryables.Resonator = carryables.GetBool(ConfigKey.Carryables.ResonatorKey);
-                config.Carryables.Shelf = carryables.GetBool(ConfigKey.Carryables.ShelfKey);
-                config.Carryables.Sign = carryables.GetBool(ConfigKey.Carryables.SignKey);
-                config.Carryables.StorageVessel = carryables.GetBool(ConfigKey.Carryables.StorageVesselKey);
-                config.Carryables.ToolRack = carryables.GetBool(ConfigKey.Carryables.ToolRackKey);
-                config.Carryables.TorchHolder = carryables.GetBool(ConfigKey.Carryables.TorchHolderKey);
-            }
-
-            // Carryables
-            var carryablesOnBack = tree[ConfigKey.CarryablesOnBackKey] as ITreeAttribute;
-            if (carryablesOnBack != null)
-            {
-                config.CarryablesOnBack.Barrel = carryablesOnBack.GetBool(ConfigKey.Carryables.BarrelKey);
-                config.CarryablesOnBack.ChestTrunk = carryablesOnBack.GetBool(ConfigKey.Carryables.ChestTrunkKey);
-                config.CarryablesOnBack.Chest = carryablesOnBack.GetBool(ConfigKey.Carryables.ChestKey);
-                config.CarryablesOnBack.Crate = carryablesOnBack.GetBool(ConfigKey.Carryables.CrateKey);
-                config.CarryablesOnBack.Flowerpot = carryablesOnBack.GetBool(ConfigKey.Carryables.FlowerpotKey);
-                config.CarryablesOnBack.LogWithResin = carryablesOnBack.GetBool(ConfigKey.Carryables.LogWithResinKey);
-                config.CarryablesOnBack.LootVessel = carryablesOnBack.GetBool(ConfigKey.Carryables.LootVesselKey);
-                config.CarryablesOnBack.Planter = carryablesOnBack.GetBool(ConfigKey.Carryables.PlanterKey);
-                config.CarryablesOnBack.ReedChest = carryablesOnBack.GetBool(ConfigKey.Carryables.ReedChestKey);
-                config.CarryablesOnBack.Resonator = carryablesOnBack.GetBool(ConfigKey.Carryables.ResonatorKey);
-                config.CarryablesOnBack.StorageVessel = carryablesOnBack.GetBool(ConfigKey.Carryables.StorageVesselKey);
-            }            
-
-            // Interactables
-            var interactables = tree[ConfigKey.InteractablesKey] as ITreeAttribute;
-            if (interactables != null)
-            {
-                config.Interactables.Door = interactables.GetBool(ConfigKey.Interactables.DoorKey);
-                config.Interactables.Barrel = interactables.GetBool(ConfigKey.Interactables.BarrelKey);
-                config.Interactables.Storage = interactables.GetBool(ConfigKey.Interactables.StorageKey);
-            }
-
-            // CarryOptions
-            var carryOptions = tree[ConfigKey.CarryOptionsKey] as ITreeAttribute;
-            if (carryOptions != null)
-            {
-                config.CarryOptions.AllowSprintWhileCarrying = carryOptions.GetBool(ConfigKey.CarryOptions.AllowSprintWhileCarryingKey);
-                config.CarryOptions.IgnoreCarrySpeedPenalty = carryOptions.GetBool(ConfigKey.CarryOptions.IgnoreCarrySpeedPenaltyKey);
-                config.CarryOptions.RemoveInteractDelayWhileCarrying = carryOptions.GetBool(ConfigKey.CarryOptions.RemoveInteractDelayWhileCarryingKey);
-                config.CarryOptions.InteractSpeedMultiplier = carryOptions.GetFloat(ConfigKey.CarryOptions.InteractSpeedMultiplierKey);
-                if (carryOptions.HasAttribute(ConfigKey.CarryOptions.MaxInteractionDistanceKey))
-                {
-                    config.CarryOptions.MaxInteractionDistance = carryOptions.GetInt(ConfigKey.CarryOptions.MaxInteractionDistanceKey);
-                }
-                config.CarryOptions.BackSlotEnabled = carryOptions.GetBool(ConfigKey.CarryOptions.BackSlotEnabledKey);
-                config.CarryOptions.AllowHighCapacityStorageOnBack = carryOptions.GetBool(ConfigKey.CarryOptions.AllowHighCapacityStorageOnBackKey);
-
-                // Get array from carryOptions ConfigKey.CarryOptions.PreventSwapFromBackOnTargetKey - GetStringArray does not exist
-                config.CarryOptions.PreventSwapFromBackOnTarget = (carryOptions[ConfigKey.CarryOptions.PreventSwapFromBackOnTargetKey] as StringArrayAttribute)?.value ?? [];
-                config.CarryOptions.TooHotToCarry = carryOptions.GetBool(ConfigKey.CarryOptions.TooHotToCarryKey);
-                config.CarryOptions.TooHotToCarryTemperature = carryOptions.GetInt(ConfigKey.CarryOptions.TooHotToCarryTemperatureKey);
-            }
-
-            // CarryablesFilters
-            var filters = tree[ConfigKey.CarryableFiltersKey] as TreeAttribute;
-            if (filters != null)
-            {
-                config.CarryablesFilters.AutoMapSimilar = filters.GetBool(ConfigKey.CarryableFilters.AutoMapSimilarKey);
-                config.CarryablesFilters.AutoMatchIgnoreMods = filters.GetStringArray(ConfigKey.CarryableFilters.AutoMatchIgnoreModsKey);
-                config.CarryablesFilters.AllowedShapeOnlyMatches = filters.GetStringArray(ConfigKey.CarryableFilters.AllowedShapeOnlyMatchesKey);
-                config.CarryablesFilters.RemoveBaseCarryableBehaviour = filters.GetStringArray(ConfigKey.CarryableFilters.RemoveBaseCarryableBehaviourKey);
-                config.CarryablesFilters.RemoveCarryableBehaviour = (filters[ConfigKey.CarryableFilters.RemoveCarryableBehaviourKey] as StringArrayAttribute)?.value ?? [];
-            }
-
-            // DebuggingOptions
-            var debug = tree[ConfigKey.DebuggingOptionsKey] as ITreeAttribute;
-            if (debug != null)
-            {
-                config.DebuggingOptions.LoggingEnabled = debug.GetBool(ConfigKey.DebuggingOptions.LoggingEnabledKey);
-                config.DebuggingOptions.DisableHarmonyPatch = debug.GetBool(ConfigKey.DebuggingOptions.DisableHarmonyPatchKey);
-                config.DebuggingOptions.EnablePackAdjustmentTool = debug.GetBool(ConfigKey.DebuggingOptions.EnablePackAdjustmentToolKey);
-            }
+            TreeSerializer.FromTree(tree["Carryables"] as ITreeAttribute, config.Carryables);
+            TreeSerializer.FromTree(tree["CarryablesOnBack"] as ITreeAttribute, config.CarryablesOnBack);
+            TreeSerializer.FromTree(tree["Interactables"] as ITreeAttribute, config.Interactables);
+            FromCarryOptionsTree(tree["CarryOptions"] as ITreeAttribute, config.CarryOptions);
+            TreeSerializer.FromTree(tree["CarryableFilters"] as ITreeAttribute, config.CarryablesFilters);
+            TreeSerializer.FromTree(tree["DebuggingOptions"] as ITreeAttribute, config.DebuggingOptions);
 
             return config;
+        }
+
+        private ITreeAttribute ToCarryOptionsTree()
+        {
+            var tree = (TreeAttribute)TreeSerializer.ToTree(CarryOptions);
+            tree["WalkSpeedOverrides"] = ToWalkSpeedOverridesTree(CarryOptions.WalkSpeedOverrides);
+            return tree;
+        }
+
+        private static void FromCarryOptionsTree(ITreeAttribute? tree, CarryOptionsConfig carryOptions)
+        {
+            if (tree == null) return;
+
+            TreeSerializer.FromTree(tree, carryOptions);
+            carryOptions.WalkSpeedOverrides = FromWalkSpeedOverridesTree(tree["WalkSpeedOverrides"] as ITreeAttribute);
+        }
+
+        private static ITreeAttribute ToWalkSpeedOverridesTree(WalkSpeedOverridesConfig overrides)
+        {
+            var tree = new TreeAttribute();
+            overrides ??= new WalkSpeedOverridesConfig();
+
+            tree["ByBlockCode"] = ToSpeedMapTree(overrides.ByBlockCode);
+            tree["ByBlockClass"] = ToSpeedMapTree(overrides.ByBlockClass);
+            tree["SlotDefaults"] = ToSlotSpeedTree(overrides.SlotDefaults);
+
+            return tree;
+        }
+
+        private static WalkSpeedOverridesConfig FromWalkSpeedOverridesTree(ITreeAttribute? tree)
+        {
+            if (tree == null)
+            {
+                return new WalkSpeedOverridesConfig();
+            }
+
+            return new WalkSpeedOverridesConfig
+            {
+                ByBlockCode = FromSpeedMapTree(tree["ByBlockCode"] as ITreeAttribute),
+                ByBlockClass = FromSpeedMapTree(tree["ByBlockClass"] as ITreeAttribute),
+                SlotDefaults = FromSlotSpeedTree(tree["SlotDefaults"] as ITreeAttribute)
+            };
+        }
+
+        private static ITreeAttribute ToSpeedMapTree(IDictionary<string, CarrySlotSpeedConfig> map)
+        {
+            var tree = new TreeAttribute();
+
+            if (map == null)
+            {
+                return tree;
+            }
+
+            foreach (var entry in map)
+            {
+                if (string.IsNullOrWhiteSpace(entry.Key) || entry.Value == null || entry.Value.IsEmpty)
+                {
+                    continue;
+                }
+
+                tree[entry.Key.Trim()] = ToSlotSpeedTree(entry.Value);
+            }
+
+            return tree;
+        }
+
+        private static IDictionary<string, CarrySlotSpeedConfig> FromSpeedMapTree(ITreeAttribute? tree)
+        {
+            var map = new Dictionary<string, CarrySlotSpeedConfig>();
+
+            if (tree is not TreeAttribute speedTree)
+            {
+                return map;
+            }
+
+            foreach (var key in speedTree.Keys)
+            {
+                if (string.IsNullOrWhiteSpace(key))
+                {
+                    continue;
+                }
+
+                var value = FromSlotSpeedTree(speedTree[key] as ITreeAttribute);
+                if (value.IsEmpty)
+                {
+                    continue;
+                }
+
+                map[key.Trim()] = value;
+            }
+
+            return map;
+        }
+
+        private static ITreeAttribute ToSlotSpeedTree(CarrySlotSpeedConfig speed)
+        {
+            var tree = new TreeAttribute();
+            speed ??= new CarrySlotSpeedConfig();
+
+            if (speed.Hands.HasValue)
+            {
+                tree.SetFloat(CarrySlot.Hands.ToString(), speed.Hands.Value);
+            }
+
+            if (speed.Back.HasValue)
+            {
+                tree.SetFloat(CarrySlot.Back.ToString(), speed.Back.Value);
+            }
+
+            return tree;
+        }
+
+        private static CarrySlotSpeedConfig FromSlotSpeedTree(ITreeAttribute? tree)
+        {
+            var speed = new CarrySlotSpeedConfig();
+
+            if (tree == null)
+            {
+                return speed;
+            }
+
+            if (tree.HasAttribute(CarrySlot.Hands.ToString()))
+            {
+                speed.Hands = tree.GetFloat(CarrySlot.Hands.ToString());
+            }
+
+            if (tree.HasAttribute(CarrySlot.Back.ToString()))
+            {
+                speed.Back = tree.GetFloat(CarrySlot.Back.ToString());
+            }
+
+            return speed;
         }
     }
 }

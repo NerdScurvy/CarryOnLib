@@ -7,7 +7,7 @@ namespace CarryOn.CarryOnLib
 {
     public class Core : ModSystem
     {
-        public ICarryManager CarryManager { get; set; }
+        public ICarryManager? CarryManager { get; set; }
 
         public override void Dispose()
         {

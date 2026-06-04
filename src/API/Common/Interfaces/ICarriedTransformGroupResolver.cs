@@ -7,7 +7,7 @@ namespace CarryOn.API.Common.Interfaces
     {
         string ResolverCode { get; }
 
-        bool TryResolve(ICoreAPI api, CarriedBlock carried, string baseGroup, out CarriedGroupResolution resolution);
+        bool TryResolve(ICoreAPI api, CarriedBlock carried, string baseGroup, out CarriedGroupResolution? resolution);
 
         /// <summary>
         /// Returns an additional cache signature fragment for this resolver.
@@ -18,7 +18,7 @@ namespace CarryOn.API.Common.Interfaces
         /// <param name="carried">The carried block.</param>
         /// <param name="baseGroup">The base transform group.</param>
         /// <param name="resolution">The resolved group resolution.</param>
-        string GetCacheSignature(ICoreAPI api, CarriedBlock carried, string baseGroup, CarriedGroupResolution resolution)
+        string? GetCacheSignature(ICoreAPI api, CarriedBlock carried, string baseGroup, CarriedGroupResolution? resolution)
         {
             return null;
         }        

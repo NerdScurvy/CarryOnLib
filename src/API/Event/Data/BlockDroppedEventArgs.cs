@@ -7,9 +7,9 @@ namespace CarryOn.API.Event.Data
 {
     public class BlockDroppedEventArgs : EventArgs
     {
-        public Entity Entity { get; set; }
-        public BlockPos Position { get; set; }
-        public CarriedBlock CarriedBlock { get; set; }
+        public Entity? Entity { get; set; }
+        public BlockPos? Position { get; set; }
+        public CarriedBlock? CarriedBlock { get; set; }
         public bool Destroyed { get; set; }
         public bool HadContents { get; set; }
         public bool BlockPlaced { get; set; }

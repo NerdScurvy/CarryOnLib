@@ -85,6 +85,11 @@ namespace CarryOn.API.Common.Models
                 public static string InteractSpeedMultiplierKey { get; } = "InteractSpeedMultiplier";
                 public static string MaxInteractionDistanceKey { get; } = "MaxInteractionDistance";
                 public static string PreventSwapFromBackOnTargetKey { get; } = "PreventSwapFromBackOnTarget";
+                public static string WalkSpeedOverridesKey { get; } = "WalkSpeedOverrides";
+                public static string WalkSpeedOverridesByBlockCodeKey { get; } = "ByBlockCode";
+                public static string WalkSpeedOverridesByBlockClassKey { get; } = "ByBlockClass";
+                public static string WalkSpeedOverridesSlotDefaultsKey { get; } = "SlotDefaults";
+ 
                 public static string TooHotToCarryKey { get; } = "TooHotToCarry";
                 public static string TooHotToCarryTemperatureKey { get; } = "TooHotToCarryTemperature";
 
@@ -144,6 +149,40 @@ namespace CarryOn.API.Common.Models
             public static string EntityOutOfReach { get; } = "entity-out-of-reach";
             public static string SlotNotEmpty { get; } = "slot-not-empty";
             public static string SlotEmpty { get; } = "slot-empty";
+
+            // Carry placement failure codes
+            public static string AlreadyCarrying { get; } = "already-carrying";
+            public static string NoPermission { get; } = "no-permission";
+            public static string NotCarryable { get; } = "not-carryable";
+            public static string NotCarrying { get; } = "not-carrying";
+
+            // Carry attachment failure codes
+            public static string SlotNotFound { get; } = "slot-not-found";
+            public static string SlotDataMissing { get; } = "slot-data-missing";
+            public static string SlotIncompatibleBlock { get; } = "slot-incompatible-block";
+            public static string SlotPreventAttaching { get; } = "slot-prevent-attaching";
+            public static string AttachUnavailable { get; } = "attach-unavailable";
+            public static string AttachFailed { get; } = "attach-failed";
+            public static string DetachUnavailable { get; } = "detach-unavailable";
+            public static string SlotNotCarryable { get; } = "slot-not-carryable";
+            public static string SlotInventoryOpen { get; } = "slot-inventory-open";
+
+            // Event-driven failure codes
+            public static string TooHot { get; } = "too-hot";
+
+            // Carry handler failure codes
+            public static string InvalidData { get; } = "invalid-data";
+            public static string CannotInteract { get; } = "cannot-interact";
+
+            // Interaction logic failure codes
+            public static string AttachableNotFound { get; } = "attachable-not-found";
+            public static string CannotSwapBack { get; } = "cannot-swap-back";
+            public static string NothingCarried { get; } = "nothing-carried";
+            public static string PlaceDownNoPermission { get; } = "place-down-no-permission";
+
+            // Default fallback codes
+            public static string PickUpFailed { get; } = "pick-up-failed";
+            public static string PlaceDownFailed { get; } = "place-down-failed";
         }
 
         public static class HotKeyCode
