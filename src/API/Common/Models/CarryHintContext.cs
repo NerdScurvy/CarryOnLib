@@ -4,11 +4,11 @@ namespace CarryOn.API.Common.Models
 {
     public class CarryHintContext
     {
-        public IPlayer Player { get; set; }
+        public IPlayer? Player { get; set; }
 
-        public BlockSelection Selection { get; set; }
+        public BlockSelection? Selection { get; set; }
 
-        public BlockEntity BlockEntity { get; set; }
+        public BlockEntity? BlockEntity { get; set; }
 
         public int SelectionBoxIndex { get; set; } = -1;
 

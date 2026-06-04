@@ -6,7 +6,7 @@ namespace CarryOn.Utility
 {
     public static class TransformGroupResolverHelper
     {
-        public static TreeAttribute GetContainerSlots(CarriedBlock carried)
+        public static TreeAttribute? GetContainerSlots(CarriedBlock? carried)
         {
             if (carried?.BlockEntityData == null)
             {
@@ -22,7 +22,7 @@ namespace CarryOn.Utility
             return inventory.GetTreeAttribute("slots") as TreeAttribute;
         }
 
-        public static bool TryResolveFallbackAsset(ICoreAPI api, ItemStack itemStack, out CarriedGroupAssetType assetType, out string assetName)
+        public static bool TryResolveFallbackAsset(ICoreAPI api, ItemStack itemStack, out CarriedGroupAssetType assetType, out string? assetName)
         {
             assetType = CarriedGroupAssetType.None;
             assetName = null;

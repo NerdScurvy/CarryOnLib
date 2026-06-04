@@ -51,7 +51,7 @@ namespace CarryOn.API.Common.Interfaces
         /// <param name="slot">The carry slot to inspect.</param>
         /// <returns>The carried block in the specified slot, or null when empty.</returns>
         /// <exception cref="ArgumentNullException"></exception>
-        CarriedBlock GetCarried(Entity entity, CarrySlot slot);
+        CarriedBlock? GetCarried(Entity entity, CarrySlot slot);
 
         /// <summary>
         /// Sets the CarriedBlock for the entity in the specified carry slot.
@@ -76,7 +76,7 @@ namespace CarryOn.API.Common.Interfaces
         /// <param name="itemStack">The block item stack to store in the slot.</param>
         /// <param name="blockEntityData">Serialized block entity data associated with the carried block.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        void SetCarried(Entity entity, CarrySlot slot, ItemStack itemStack, ITreeAttribute blockEntityData);
+        void SetCarried(Entity entity, CarrySlot slot, ItemStack itemStack, ITreeAttribute? blockEntityData);
 
         /// <summary>
         /// Sets the CarriedBlock for the entity in the specified carry slot.
@@ -87,7 +87,7 @@ namespace CarryOn.API.Common.Interfaces
         /// <param name="blockEntityData">Serialized block entity data associated with the carried block.</param>
         /// <param name="markDirty">Whether to mark carried attributes dirty after the change.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        void SetCarried(Entity entity, CarrySlot slot, ItemStack itemStack, ITreeAttribute blockEntityData, bool markDirty = true);
+        void SetCarried(Entity entity, CarrySlot slot, ItemStack itemStack, ITreeAttribute? blockEntityData, bool markDirty = true);
 
         /// <summary>
         /// Removes the CarriedBlock from the entity in the specified carry slot.
@@ -190,7 +190,7 @@ namespace CarryOn.API.Common.Interfaces
         /// <param name="selection">The initial target block selection.</param>
         /// <param name="placedAt">Position of where the block was placed. It may have replaced the selected block.</param>
         /// <returns>True if placement succeeds; otherwise false.</returns>
-        bool TryPlaceDownAt(IPlayer player, CarrySlot carrySlot, BlockSelection selection, out BlockPos placedAt);
+        bool TryPlaceDownAt(IPlayer player, CarrySlot carrySlot, BlockSelection selection, out BlockPos? placedAt);
 
         /// <summary>
         /// Tries to place the carried block at the specified position.
@@ -202,7 +202,7 @@ namespace CarryOn.API.Common.Interfaces
         /// <param name="failureCode">Failure code output when placement fails.</param>
         /// <returns>True if placement succeeds; otherwise false.</returns>
         bool TryPlaceDownAt(IPlayer player, CarrySlot carrySlot,
-                                     BlockSelection selection, out BlockPos placedAt, ref string failureCode);
+                                     BlockSelection selection, out BlockPos? placedAt, ref string failureCode);
 
         /// <summary>
         /// Tries to attach the carried block in player hands to an entity attachment slot.
@@ -288,7 +288,7 @@ namespace CarryOn.API.Common.Interfaces
         /// <param name="resolverCode">The resolver code to look up.</param>
         /// <param name="resolver">The resolver instance when found.</param>
         /// <returns>True if the resolver was found; otherwise false.</returns>
-        bool TryGetTransformGroupResolver(string resolverCode, out ICarriedTransformGroupResolver resolver);
+        bool TryGetTransformGroupResolver(string resolverCode, out ICarriedTransformGroupResolver? resolver);
 
         /// <summary>
         /// Attempts to get resolver registration metadata by resolver code.
@@ -296,7 +296,7 @@ namespace CarryOn.API.Common.Interfaces
         /// <param name="resolverCode">The resolver code to look up.</param>
         /// <param name="registration">The resolver registration when found.</param>
         /// <returns>True if the resolver registration was found; otherwise false.</returns>
-        bool TryGetTransformGroupResolverRegistration(string resolverCode, out RegisteredTransformGroupResolver registration);
+        bool TryGetTransformGroupResolverRegistration(string resolverCode, out RegisteredTransformGroupResolver? registration);
 
         /// <summary>
         /// Unregisters a previously registered carried-render transform resolver.
