@@ -4,7 +4,6 @@ namespace CarryOn.API.Common.Models
     public enum CarrySlot
     {
         Hands,
-        Back,
-        Shoulder // Shoulder not in use
+        Back
     }
 }

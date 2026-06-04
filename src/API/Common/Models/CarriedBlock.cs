@@ -12,9 +12,9 @@ namespace CarryOn.API.Common.Models
     public ItemStack ItemStack { get; }
     public Block Block => ItemStack.Block;
 
-    public ITreeAttribute BlockEntityData { get; }
+    public ITreeAttribute? BlockEntityData { get; }
 
-    public CarriedBlock(CarrySlot slot, ItemStack stack, ITreeAttribute blockEntityData)
+    public CarriedBlock(CarrySlot slot, ItemStack stack, ITreeAttribute? blockEntityData)
     {
       Slot = slot;
       ItemStack = stack ?? throw new ArgumentNullException(nameof(stack));

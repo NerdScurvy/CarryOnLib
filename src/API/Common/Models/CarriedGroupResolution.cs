@@ -17,10 +17,10 @@ namespace CarryOn.API.Common.Models
 
         public CarriedGroupAssetType AssetTypeIfUnset { get; set; } = CarriedGroupAssetType.None;
 
-        public string AssetNameIfUnset { get; set; }
+        public string? AssetNameIfUnset { get; set; }
 
         // Explicit link back to source container slot key ("0", "1", etc.)
-        public string SourceSlotKey { get; set; }
+        public string? SourceSlotKey { get; set; }
 
         // Apply slot yaw from block entity rotation data (e.g. rotation0, rotation1).
         public bool ApplyDisplaySlotYaw { get; set; } = false;
@@ -36,7 +36,7 @@ namespace CarryOn.API.Common.Models
     {
         public IList<string> PrimaryGroupCandidates { get; set; } = new List<string>();
 
-        public string PrimaryGroup
+        public string? PrimaryGroup
         {
             get => PrimaryGroupCandidates != null && PrimaryGroupCandidates.Count > 0
                 ? PrimaryGroupCandidates[0]

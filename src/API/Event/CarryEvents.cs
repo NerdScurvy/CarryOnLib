@@ -1,25 +1,50 @@
 using System;
+using System.Linq;
 using CarryOn.API.Common.Models;
 using CarryOn.API.Event.Data;
 using CarryOn.API.Event.Delegates;
+using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
+using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 
 namespace CarryOn.API.Event
 {
     public class CarryEvents
     {
-        public BeforePickUpBlockDelegate BeforePickUpBlock;
-        
-        public BeforeRemoveBlockDelegate BeforeRemoveBlockFromWorld;
+        public event BeforePickUpBlockDelegate? BeforePickUpBlock;
 
-        public BlockEntityDataDelegate BeforeRestoreBlockEntityData;
+        public event BeforeRemoveBlockDelegate? BeforeRemoveBlockFromWorld;
 
-        public CheckPermissionToCarryDelegate CheckPermissionToCarry;
+        public event BlockEntityDataDelegate? BeforeRestoreBlockEntityData;
 
-        public event EventHandler<BlockDroppedEventArgs> BlockDropped;
+        public event CheckPermissionToCarryDelegate? CheckPermissionToCarry;
 
-        public event EventHandler<BlockRemovedEventArgs> BlockRemoved;
+        public event EventHandler<BlockDroppedEventArgs>? BlockDropped;
+
+        public event EventHandler<BlockRemovedEventArgs>? BlockRemoved;
+
+        public Action<Exception>? OnEventHandlerError { get; set; }
+
+        public bool TriggerCheckPermissionToCarry(EntityPlayer playerEntity, BlockPos pos, bool isReinforced)
+        {
+            return OnCheckPermissionToCarry(playerEntity, pos, isReinforced);
+        }
+
+        public bool TriggerBeforePickUpBlock(Entity entity, BlockPos pos, CarrySlot slot, CarriedBlock carriedBlock, ref string failureCode)
+        {
+            return OnBeforePickUpBlock(entity, pos, slot, carriedBlock, ref failureCode);
+        }
+
+        public void TriggerBeforeRemoveBlockFromWorld(CarriedBlock carriedBlock, BlockPos pos)
+        {
+            OnBeforeRemoveBlockFromWorld(carriedBlock, pos);
+        }
+
+        public void TriggerBeforeRestoreBlockEntityData(BlockEntity blockEntity, ITreeAttribute blockEntityData, bool dropped)
+        {
+            OnBeforeRestoreBlockEntityData(blockEntity, blockEntityData, dropped);
+        }
 
         public void TriggerBlockDropped(BlockPos position, Entity entity, CarriedBlock carriedBlock, bool destroyed = false, bool hadContents = false, bool blockPlaced = true)
         {
@@ -36,11 +61,6 @@ namespace CarryOn.API.Event
             OnBlockDropped(args);
         }
 
-        protected virtual void OnBlockDropped(BlockDroppedEventArgs e)
-        {
-            BlockDropped?.Invoke(this, e);
-        }
-
         public void TriggerBlockRemoved(BlockPos position)
         {
             var args = new BlockRemovedEventArgs
@@ -51,9 +71,120 @@ namespace CarryOn.API.Event
             OnBlockRemoved(args);
         }
 
+        protected virtual bool OnCheckPermissionToCarry(EntityPlayer playerEntity, BlockPos pos, bool isReinforced)
+        {
+            var delegates = CheckPermissionToCarry?.GetInvocationList();
+            if (delegates == null) return true;
+
+            foreach (var del in delegates.Cast<CheckPermissionToCarryDelegate>())
+            {
+                try
+                {
+                    del(playerEntity, pos, isReinforced, out bool? hasPermission);
+                    if (hasPermission != null) return hasPermission.Value;
+                }
+                catch (Exception ex)
+                {
+                    OnEventHandlerError?.Invoke(ex);
+                }
+            }
+
+            return true;
+        }
+
+        protected virtual bool OnBeforePickUpBlock(Entity entity, BlockPos pos, CarrySlot slot, CarriedBlock carriedBlock, ref string failureCode)
+        {
+            var delegates = BeforePickUpBlock?.GetInvocationList();
+            if (delegates == null) return true;
+
+            foreach (var del in delegates.Cast<BeforePickUpBlockDelegate>())
+            {
+                try
+                {
+                    del(entity, pos, slot, carriedBlock, out bool? canPickUp, out string delegateFailureCode);
+
+                    if (delegateFailureCode != null) failureCode = delegateFailureCode;
+                    if (canPickUp != null) return canPickUp.Value;
+                }
+                catch (Exception ex)
+                {
+                    OnEventHandlerError?.Invoke(ex);
+                }
+            }
+
+            return true;
+        }
+
+        protected virtual void OnBeforeRemoveBlockFromWorld(CarriedBlock carriedBlock, BlockPos pos)
+        {
+            var delegates = BeforeRemoveBlockFromWorld?.GetInvocationList();
+            if (delegates == null) return;
+
+            foreach (var del in delegates.Cast<BeforeRemoveBlockDelegate>())
+            {
+                try
+                {
+                    del(carriedBlock, pos);
+                }
+                catch (Exception ex)
+                {
+                    OnEventHandlerError?.Invoke(ex);
+                }
+            }
+        }
+
+        protected virtual void OnBeforeRestoreBlockEntityData(BlockEntity blockEntity, ITreeAttribute blockEntityData, bool dropped)
+        {
+            var delegates = BeforeRestoreBlockEntityData?.GetInvocationList();
+            if (delegates == null) return;
+
+            foreach (var del in delegates.Cast<BlockEntityDataDelegate>())
+            {
+                try
+                {
+                    del(blockEntity, blockEntityData, dropped);
+                }
+                catch (Exception ex)
+                {
+                    OnEventHandlerError?.Invoke(ex);
+                }
+            }
+        }
+
+        protected virtual void OnBlockDropped(BlockDroppedEventArgs e)
+        {
+            var delegates = BlockDropped?.GetInvocationList();
+            if (delegates == null) return;
+
+            foreach (var del in delegates.Cast<EventHandler<BlockDroppedEventArgs>>())
+            {
+                try
+                {
+                    del(this, e);
+                }
+                catch (Exception ex)
+                {
+                    OnEventHandlerError?.Invoke(ex);
+                }
+            }
+        }
+
         protected virtual void OnBlockRemoved(BlockRemovedEventArgs e)
         {
-            BlockRemoved?.Invoke(this, e);
+            var delegates = BlockRemoved?.GetInvocationList();
+            if (delegates == null) return;
+
+            foreach (var del in delegates.Cast<EventHandler<BlockRemovedEventArgs>>())
+            {
+                try
+                {
+                    del(this, e);
+                }
+                catch (Exception ex)
+                {
+                    OnEventHandlerError?.Invoke(ex);
+                }
+            }
         }
     }
 }
