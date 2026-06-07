@@ -104,7 +104,7 @@ namespace CarryOn.Utility
         /// <param name="slot"></param>
         /// <param name="markDirty"></param>
         public static void Set(this CarriedBlock carriedBlock, Entity entity, CarrySlot slot, bool markDirty = true)
-            => GetCarryManager(entity.Api)?.SetCarried(entity, slot, carriedBlock.ItemStack, carriedBlock.BlockEntityData, markDirty);
+            => GetCarryManager(entity.Api)?.SetCarried(entity, carriedBlock, slot, markDirty);
 
         /* ------------------------------ */
 

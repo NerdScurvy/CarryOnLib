@@ -4,6 +4,7 @@ namespace CarryOn.API.Common.Models
     public enum CarrySlot
     {
         Hands,
-        Back
+        Back,
+        Attached
     }
 }
