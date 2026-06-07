@@ -103,6 +103,9 @@ namespace CarryOn.API.Common.Models
         [TreeValue("TooHotToCarry")]                       public bool TooHotToCarry { get; set; } = true;
         [TreeValue("TooHotToCarryTemperature")]            public int TooHotToCarryTemperature { get; set; } = 50;
 
+        [TreeValue("CarryAttachedWallSigns")]              public bool CarryAttachedWallSigns { get; set; } = true;
+        [TreeValue("StrictCardinalRotation")]              public bool StrictCardinalRotation { get; set; } = false;
+
         public WalkSpeedOverridesConfig WalkSpeedOverrides { get; set; } = new WalkSpeedOverridesConfig();
 
         [JsonExtensionData(ReadData = true, WriteData = false)]
