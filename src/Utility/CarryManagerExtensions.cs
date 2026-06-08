@@ -48,11 +48,5 @@ namespace CarryOn.Utility
             var failureCode = CarryCode.FailureCode.Ignore;
             return mgr.TryDetach(player, targetEntityId, slotIndex, ref failureCode, playSound);
         }
-
-        /// <summary>Sets the carried block into a specific slot, overriding the slot stored on <paramref name="carriedBlock"/>.</summary>
-        public static void SetCarried(this ICarryManager mgr, Entity entity, CarriedBlock carriedBlock, CarrySlot overrideSlot, bool markDirty = true)
-        {
-            mgr.SetCarried(entity, overrideSlot, carriedBlock.ItemStack, carriedBlock.BlockEntityData, markDirty);
-        }
     }
 }

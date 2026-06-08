@@ -33,6 +33,13 @@ namespace CarryOn.API.Common.Models
     /// </summary>
     public float? OriginalMeshAngle { get; }
 
+    /// <summary>
+    /// Cached carryable behavior, lazily populated by <see cref="CarryOn.Utility.CarryExtensions.GetCarryableBehavior"/>.
+    /// Avoids repeated linear scans of the block's behavior list on the render hot path.
+    /// Not serialized; purely a render-time optimization.
+    /// </summary>
+    public BlockBehavior? CachedCarryableBehavior { get; set; }
+
     public CarriedBlock(CarrySlot slot, ItemStack stack, ITreeAttribute? blockEntityData)
       : this(slot, stack, blockEntityData, null, null, null)
     {

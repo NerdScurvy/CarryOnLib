@@ -165,6 +165,7 @@ namespace CarryOn.API.Common.Models
             public static string SlotDataMissing { get; } = "slot-data-missing";
             public static string SlotIncompatibleBlock { get; } = "slot-incompatible-block";
             public static string SlotPreventAttaching { get; } = "slot-prevent-attaching";
+            public static string BlockHasAttachedBlocks { get; } = "block-has-attached-blocks";
             public static string AttachUnavailable { get; } = "attach-unavailable";
             public static string AttachFailed { get; } = "attach-failed";
             public static string DetachUnavailable { get; } = "detach-unavailable";
