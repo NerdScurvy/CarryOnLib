@@ -95,7 +95,6 @@ namespace CarryOn.API.Common.Models
                 public static string TooHotToCarryTemperatureKey { get; } = "TooHotToCarryTemperature";
 
                 public static string CarryAttachedWallSignsKey { get; } = "CarryAttachedWallSigns";
-                public static string StrictCardinalRotationKey { get; } = "StrictCardinalRotation";
 
             }
 
@@ -190,7 +189,6 @@ namespace CarryOn.API.Common.Models
             public static string PlaceDownFailed { get; } = "place-down-failed";
 
             // Cluster carry failure codes
-            public static string NonCardinalRotationWithAttachments { get; } = "non-cardinal-rotation-with-attachments";
             public static string AttachedBlockNoClearance { get; } = "attached-block-no-clearance";
             public static string UnsupportedAttachment { get; } = "unsupported-attachment";
         }
