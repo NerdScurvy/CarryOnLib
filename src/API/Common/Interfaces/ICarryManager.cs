@@ -35,10 +35,7 @@ namespace CarryOn.API.Common.Interfaces
         CarriedBlock? GetCarried(Entity entity, CarrySlot slot);
 
         /// <summary>Sets the carried block in a slot determined by <paramref name="carriedBlock"/>.Slot.</summary>
-        void SetCarried(Entity entity, CarriedBlock carriedBlock, bool markDirty = true);
-
-        /// <summary>Sets the carried block in the specified slot from raw components.</summary>
-        void SetCarried(Entity entity, CarrySlot slot, ItemStack itemStack, ITreeAttribute? blockEntityData, bool markDirty = true);
+        void SetCarried(Entity entity, CarriedBlock carriedBlock, CarrySlot? overrideSlot = null, bool markDirty = true);
 
         /// <summary>Removes the carried block from the specified slot, clearing it.</summary>
         void RemoveCarried(Entity entity, CarrySlot slot, bool markDirty = true);
