@@ -56,7 +56,7 @@ namespace CarryOn.API.Common.Interfaces
         bool TryPlaceDown(Entity entity, CarriedBlock carriedBlock, BlockSelection selection, ref string failureCode, bool dropped = false, bool playSound = true);
 
         /// <summary>Tries to pick up a block from the world into a carry slot. Returns false and sets <paramref name="failureCode"/> on failure.</summary>
-        bool TryPickUp(Entity entity, BlockPos pos, CarrySlot carrySlot, ref string failureCode, bool checkIsCarryable = true, bool playSound = true);
+        bool TryPickUp(Entity entity, BlockPos pos, CarrySlot carrySlot, ref string failureCode, bool checkIsCarryable = true, bool playSound = true, bool? captureAttachedSigns = null);
 
         /// <summary>Tries to place the carried block at a target position. Returns false and sets <paramref name="failureCode"/> on failure.</summary>
         bool TryPlaceDownAt(IPlayer player, CarrySlot carrySlot, BlockSelection selection, out BlockPos? placedAt, ref string failureCode);
