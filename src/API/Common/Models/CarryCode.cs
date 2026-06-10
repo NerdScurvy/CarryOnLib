@@ -96,6 +96,8 @@ namespace CarryOn.API.Common.Models
 
                 public static string CarryAttachedWallSignsKey { get; } = "CarryAttachedWallSigns";
 
+                public static string BackpackSelectionModeKey { get; } = "BackpackSelectionMode";
+
             }
 
             public static class Interactables
