@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CarryOn.Utility;
 using Newtonsoft.Json;
@@ -102,6 +103,17 @@ namespace CarryOn.API.Common.Models
         [TreeValue("PreventSwapFromBackOnTarget")]         public string[] PreventSwapFromBackOnTarget { get; set; } = ["behavior::Container", "behavior::Door", "class::portals.portal", "code::groundstorage", "class::BlockGroundStorage"];
         [TreeValue("TooHotToCarry")]                       public bool TooHotToCarry { get; set; } = true;
         [TreeValue("TooHotToCarryTemperature")]            public int TooHotToCarryTemperature { get; set; } = 50;
+
+        [TreeValue("CarryAttachedWallSigns")]              public bool CarryAttachedWallSigns { get; set; } = false;
+
+        [JsonProperty("BackpackSelectionMode")]
+        [TreeValue("BackpackSelectionMode")]
+        public string BackpackSelectionModeString { get; set; } = "LastFound";
+
+        [JsonIgnore]
+        public BackpackSelectionMode BackpackSelectionModeEnum
+            => Enum.TryParse<BackpackSelectionMode>(BackpackSelectionModeString, true, out var mode)
+                ? mode : BackpackSelectionMode.LastFound;
 
         public WalkSpeedOverridesConfig WalkSpeedOverrides { get; set; } = new WalkSpeedOverridesConfig();
 

@@ -25,15 +25,25 @@ namespace CarryOn.Utility
 
             var block = world.BlockAccessor.GetBlock(pos);
             if (block.Id == 0) return null; // Can't pick up air.
+
+            // Capture the original block code BEFORE OnPickBlock normalizes it
+            var originalBlockCode = block.Code;
+
             var stack = block.OnPickBlock(world, pos) ?? new ItemStack(block);
 
             ITreeAttribute? blockEntityData = null;
+            float? originalMeshAngle = null;
             var blockEntity = world.BlockAccessor.GetBlockEntity(pos);
             if (blockEntity != null)
             {
                 blockEntityData = new TreeAttribute();
                 blockEntity.ToTreeAttributes(blockEntityData);
                 blockEntityData = blockEntityData.Clone();
+
+                // Capture meshAngle BEFORE stripping: used for rotation delta on placement
+                if (blockEntityData.HasAttribute("meshAngle"))
+                    originalMeshAngle = blockEntityData.GetFloat("meshAngle");
+
                 // We don't need to keep the position.
                 blockEntityData.RemoveAttribute("posx");
                 blockEntityData.RemoveAttribute("posy");
@@ -43,7 +53,7 @@ namespace CarryOn.Utility
                 blockEntityData.RemoveAttribute("meshAngle");
             }
 
-            return new CarriedBlock(slot, stack, blockEntityData);
+            return new CarriedBlock(slot, stack, blockEntityData, null, originalBlockCode, originalMeshAngle);
         }
 
         /// <summary> 

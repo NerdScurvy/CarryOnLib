@@ -23,6 +23,7 @@ namespace CarryOn.API.Common.Models
             public static float TransferSpeed { get; } = 0.8f;
             public static float InteractSpeed { get; } = 0.8f;
             public static int MaxInteractionDistance { get; } = 6;
+            public static int HotbarSize { get; } = 10;
             public static int DoubleTapThresholdMs { get; } = 500;
             public static GlKeys PickupKeybind { get; } = GlKeys.ShiftLeft;
             public static GlKeys SwapBackModifierKeybind { get; } = GlKeys.ControlLeft;
@@ -89,9 +90,13 @@ namespace CarryOn.API.Common.Models
                 public static string WalkSpeedOverridesByBlockCodeKey { get; } = "ByBlockCode";
                 public static string WalkSpeedOverridesByBlockClassKey { get; } = "ByBlockClass";
                 public static string WalkSpeedOverridesSlotDefaultsKey { get; } = "SlotDefaults";
- 
+
                 public static string TooHotToCarryKey { get; } = "TooHotToCarry";
                 public static string TooHotToCarryTemperatureKey { get; } = "TooHotToCarryTemperature";
+
+                public static string CarryAttachedWallSignsKey { get; } = "CarryAttachedWallSigns";
+
+                public static string BackpackSelectionModeKey { get; } = "BackpackSelectionMode";
 
             }
 
@@ -161,6 +166,7 @@ namespace CarryOn.API.Common.Models
             public static string SlotDataMissing { get; } = "slot-data-missing";
             public static string SlotIncompatibleBlock { get; } = "slot-incompatible-block";
             public static string SlotPreventAttaching { get; } = "slot-prevent-attaching";
+            public static string BlockHasAttachedBlocks { get; } = "block-has-attached-blocks";
             public static string AttachUnavailable { get; } = "attach-unavailable";
             public static string AttachFailed { get; } = "attach-failed";
             public static string DetachUnavailable { get; } = "detach-unavailable";
@@ -183,6 +189,10 @@ namespace CarryOn.API.Common.Models
             // Default fallback codes
             public static string PickUpFailed { get; } = "pick-up-failed";
             public static string PlaceDownFailed { get; } = "place-down-failed";
+
+            // Cluster carry failure codes
+            public static string AttachedBlockNoClearance { get; } = "attached-block-no-clearance";
+            public static string UnsupportedAttachment { get; } = "unsupported-attachment";
         }
 
         public static class HotKeyCode
@@ -195,6 +205,17 @@ namespace CarryOn.API.Common.Models
             public static string ToggleDoubleTapDismount { get; } = "carryontoggledoubletapdismountkey";
 
         }
+
+        public static class SoundPath
+        {
+            public static string DefaultPlace { get; } = "sounds/player/build";
+            public static string DefaultBreak { get; } = "game:sounds/block/planks";
+            public static string Throw { get; } = "sounds/player/throw";
+        }
+
+        public static string DefaultTransformGroup { get; } = "default";
+        public static string FrontCarryAttachmentPoint { get; } = "carryon:FrontCarry";
+        public static string WorldConfigPrefix { get; } = "carryon:";
 
     }
 }
