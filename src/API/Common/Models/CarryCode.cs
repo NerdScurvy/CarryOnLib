@@ -104,6 +104,7 @@ namespace CarryOn.API.Common.Models
             {
                 public static string EnabledKey { get; } = "Enabled";
                 public static string DamageThresholdKey { get; } = "DamageThreshold";
+                public static string DropRangeKey { get; } = "DropRange";
             }
 
             public static class Interactables

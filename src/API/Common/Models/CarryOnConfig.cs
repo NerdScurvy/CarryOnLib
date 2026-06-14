@@ -98,6 +98,9 @@ namespace CarryOn.API.Common.Models
 
         [TreeValue("DamageThreshold")]
         public float DamageThreshold { get; set; } = 0f;
+
+        [TreeValue("DropRange")]
+        public int DropRange { get; set; } = 2;
     }
 
     public class CarryOptionsConfig
