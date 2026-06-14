@@ -91,6 +91,15 @@ namespace CarryOn.API.Common.Models
         public CarrySlotSpeedConfig SlotDefaults { get; set; } = new CarrySlotSpeedConfig();
     }
 
+    public class DropOnDamageConfig
+    {
+        [TreeValue("Enabled")]
+        public bool Enabled { get; set; } = true;
+
+        [TreeValue("DamageThreshold")]
+        public float DamageThreshold { get; set; } = 0f;
+    }
+
     public class CarryOptionsConfig
     {
         [TreeValue("AllowSprintWhileCarrying")]           public bool AllowSprintWhileCarrying { get; set; } = false;
@@ -116,6 +125,7 @@ namespace CarryOn.API.Common.Models
                 ? mode : BackpackSelectionMode.LastFound;
 
         public WalkSpeedOverridesConfig WalkSpeedOverrides { get; set; } = new WalkSpeedOverridesConfig();
+        public DropOnDamageConfig DropOnDamage { get; set; } = new DropOnDamageConfig();
 
         [JsonExtensionData(ReadData = true, WriteData = false)]
         internal Dictionary<string, JToken>? Legacy { get; set; }
@@ -308,6 +318,7 @@ namespace CarryOn.API.Common.Models
         {
             var tree = (TreeAttribute)TreeSerializer.ToTree(CarryOptions);
             tree["WalkSpeedOverrides"] = ToWalkSpeedOverridesTree(CarryOptions.WalkSpeedOverrides);
+            tree["DropOnDamage"] = TreeSerializer.ToTree(CarryOptions.DropOnDamage);
             return tree;
         }
 
@@ -317,6 +328,7 @@ namespace CarryOn.API.Common.Models
 
             TreeSerializer.FromTree(tree, carryOptions);
             carryOptions.WalkSpeedOverrides = FromWalkSpeedOverridesTree(tree["WalkSpeedOverrides"] as ITreeAttribute);
+            carryOptions.DropOnDamage = FromDropOnDamageTree(tree["DropOnDamage"] as ITreeAttribute);
         }
 
         private static ITreeAttribute ToWalkSpeedOverridesTree(WalkSpeedOverridesConfig overrides)
@@ -434,6 +446,16 @@ namespace CarryOn.API.Common.Models
             }
 
             return speed;
+        }
+
+        private static DropOnDamageConfig FromDropOnDamageTree(ITreeAttribute? tree)
+        {
+            var config = new DropOnDamageConfig();
+            if (tree != null)
+            {
+                TreeSerializer.FromTree(tree, config);
+            }
+            return config;
         }
     }
 }

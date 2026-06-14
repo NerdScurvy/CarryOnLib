@@ -100,6 +100,12 @@ namespace CarryOn.API.Common.Models
 
             }
 
+            public static class DropOnDamage
+            {
+                public static string EnabledKey { get; } = "Enabled";
+                public static string DamageThresholdKey { get; } = "DamageThreshold";
+            }
+
             public static class Interactables
             {
                 public static string DoorKey { get; } = "Door";
