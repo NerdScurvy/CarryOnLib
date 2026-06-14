@@ -97,7 +97,7 @@ namespace CarryOn.API.Common.Models
         public bool Enabled { get; set; } = true;
 
         [TreeValue("DamageThreshold")]
-        public float DamageThreshold { get; set; } = 0f;
+        public float DamageThreshold { get; set; } = 1.0f;
 
         [TreeValue("DropRange")]
         public int DropRange { get; set; } = 2;
