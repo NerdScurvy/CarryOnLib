@@ -66,9 +66,7 @@ namespace CarryOn.API.Common.Models
     {
         [TreeValue("HandsEnabled")]             public bool HandsEnabled { get; set; } = false;
         [TreeValue("BackEnabled")]              public bool BackEnabled { get; set; } = true;
-        [TreeValue("DefaultHandsModifier")]     public float DefaultHandsModifier { get; set; } = 0.2f;
-        [TreeValue("DefaultBackModifier")]      public float DefaultBackModifier { get; set; } = 0.3f;
-        [TreeValue("MinSaturationThreshold")]   public float MinSaturationThreshold { get; set; } = 150f;
+        [TreeValue("MinSaturationThreshold")]   public float MinSaturationThreshold { get; set; } = Default.MinSaturationThreshold;
 
         public ModifierOverridesConfig ModifierOverrides { get; set; } = new ModifierOverridesConfig();
     }

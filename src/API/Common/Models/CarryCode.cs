@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Vintagestory.API.Client;
 
 namespace CarryOn.API.Common.Models
@@ -29,6 +30,20 @@ namespace CarryOn.API.Common.Models
             public static GlKeys PickupKeybind { get; } = GlKeys.ShiftLeft;
             public static GlKeys SwapBackModifierKeybind { get; } = GlKeys.ControlLeft;
             public static GlKeys FunctionKeybind { get; } = GlKeys.K;
+
+            public static float MinSaturationThreshold { get; } = 150f;
+
+            public static IReadOnlyDictionary<CarrySlot, float> WalkSpeedModifier { get; }
+                = new Dictionary<CarrySlot, float> {
+                    { CarrySlot.Hands, -0.25F },
+                    { CarrySlot.Back , -0.15F }
+                };
+
+            public static IReadOnlyDictionary<CarrySlot, float> HungerRateModifier { get; }
+                = new Dictionary<CarrySlot, float> {
+                    { CarrySlot.Hands, 0.2F },
+                    { CarrySlot.Back , 0.3F }
+                };                
 
         }
 
