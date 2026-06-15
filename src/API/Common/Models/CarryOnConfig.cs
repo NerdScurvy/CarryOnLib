@@ -69,6 +69,8 @@ namespace CarryOn.API.Common.Models
         [TreeValue("DefaultHandsModifier")]     public float DefaultHandsModifier { get; set; } = 0.2f;
         [TreeValue("DefaultBackModifier")]      public float DefaultBackModifier { get; set; } = 0.3f;
         [TreeValue("MinSaturationThreshold")]   public float MinSaturationThreshold { get; set; } = 150f;
+
+        public ModifierOverridesConfig ModifierOverrides { get; set; } = new ModifierOverridesConfig();
     }
 
     public class CarryablesFiltersConfig
@@ -80,7 +82,7 @@ namespace CarryOn.API.Common.Models
         [TreeValue("RemoveCarryableBehaviour")] public string[] RemoveCarryableBehaviour { get; set; } = ["game:banner", "game:clutter-devastation"];
     }
 
-    public class CarrySlotSpeedConfig
+    public class SlotModifierConfig
     {
         public float? Hands { get; set; }
         public float? Back { get; set; }
@@ -89,15 +91,15 @@ namespace CarryOn.API.Common.Models
         public bool IsEmpty => Hands == null && Back == null;
     }
 
-    public class WalkSpeedOverridesConfig
+    public class ModifierOverridesConfig
     {
-        public IDictionary<string, CarrySlotSpeedConfig> ByBlockCode { get; set; }
-            = new Dictionary<string, CarrySlotSpeedConfig>();
+        public IDictionary<string, SlotModifierConfig> ByBlockCode { get; set; }
+            = new Dictionary<string, SlotModifierConfig>();
 
-        public IDictionary<string, CarrySlotSpeedConfig> ByBlockClass { get; set; }
-            = new Dictionary<string, CarrySlotSpeedConfig>();
+        public IDictionary<string, SlotModifierConfig> ByBlockClass { get; set; }
+            = new Dictionary<string, SlotModifierConfig>();
 
-        public CarrySlotSpeedConfig SlotDefaults { get; set; } = new CarrySlotSpeedConfig();
+        public SlotModifierConfig SlotDefaults { get; set; } = new SlotModifierConfig();
     }
 
     public class CarryOptionsConfig
@@ -124,7 +126,7 @@ namespace CarryOn.API.Common.Models
             => Enum.TryParse<BackpackSelectionMode>(BackpackSelectionModeString, true, out var mode)
                 ? mode : BackpackSelectionMode.LastFound;
 
-        public WalkSpeedOverridesConfig WalkSpeedOverrides { get; set; } = new WalkSpeedOverridesConfig();
+        public ModifierOverridesConfig WalkSpeedOverrides { get; set; } = new ModifierOverridesConfig();
 
         [JsonExtensionData(ReadData = true, WriteData = false)]
         internal Dictionary<string, JToken>? Legacy { get; set; }
@@ -290,7 +292,7 @@ namespace CarryOn.API.Common.Models
             tree["Carryables"] = TreeSerializer.ToTree(Carryables);
             tree["CarryablesOnBack"] = TreeSerializer.ToTree(CarryablesOnBack);
             tree["Interactables"] = TreeSerializer.ToTree(Interactables);
-            tree["CarryHungerRate"] = TreeSerializer.ToTree(CarryHungerRate);
+            tree["CarryHungerRate"] = ToCarryHungerRateTree(CarryHungerRate);
             tree["CarryOptions"] = ToCarryOptionsTree();
             tree["CarryableFilters"] = TreeSerializer.ToTree(CarryablesFilters);
             tree["DebuggingOptions"] = TreeSerializer.ToTree(DebuggingOptions);
@@ -309,7 +311,7 @@ namespace CarryOn.API.Common.Models
             TreeSerializer.FromTree(tree["Carryables"] as ITreeAttribute, config.Carryables);
             TreeSerializer.FromTree(tree["CarryablesOnBack"] as ITreeAttribute, config.CarryablesOnBack);
             TreeSerializer.FromTree(tree["Interactables"] as ITreeAttribute, config.Interactables);
-            TreeSerializer.FromTree(tree["CarryHungerRate"] as ITreeAttribute, config.CarryHungerRate);
+            config.CarryHungerRate = FromCarryHungerRateTree(tree["CarryHungerRate"] as ITreeAttribute);
             FromCarryOptionsTree(tree["CarryOptions"] as ITreeAttribute, config.CarryOptions);
             TreeSerializer.FromTree(tree["CarryableFilters"] as ITreeAttribute, config.CarryablesFilters);
             TreeSerializer.FromTree(tree["DebuggingOptions"] as ITreeAttribute, config.DebuggingOptions);
@@ -324,6 +326,23 @@ namespace CarryOn.API.Common.Models
             return tree;
         }
 
+        private static ITreeAttribute ToCarryHungerRateTree(CarryHungerRateConfig config)
+        {
+            var tree = (TreeAttribute)TreeSerializer.ToTree(config);
+            tree["ModifierOverrides"] = ToWalkSpeedOverridesTree(config.ModifierOverrides);
+            return tree;
+        }
+
+        private static CarryHungerRateConfig FromCarryHungerRateTree(ITreeAttribute? tree)
+        {
+            var config = new CarryHungerRateConfig();
+            if (tree == null) return config;
+
+            TreeSerializer.FromTree(tree, config);
+            config.ModifierOverrides = FromWalkSpeedOverridesTree(tree["ModifierOverrides"] as ITreeAttribute);
+            return config;
+        }
+
         private static void FromCarryOptionsTree(ITreeAttribute? tree, CarryOptionsConfig carryOptions)
         {
             if (tree == null) return;
@@ -332,10 +351,10 @@ namespace CarryOn.API.Common.Models
             carryOptions.WalkSpeedOverrides = FromWalkSpeedOverridesTree(tree["WalkSpeedOverrides"] as ITreeAttribute);
         }
 
-        private static ITreeAttribute ToWalkSpeedOverridesTree(WalkSpeedOverridesConfig overrides)
+        private static ITreeAttribute ToWalkSpeedOverridesTree(ModifierOverridesConfig overrides)
         {
             var tree = new TreeAttribute();
-            overrides ??= new WalkSpeedOverridesConfig();
+            overrides ??= new ModifierOverridesConfig();
 
             tree["ByBlockCode"] = ToSpeedMapTree(overrides.ByBlockCode);
             tree["ByBlockClass"] = ToSpeedMapTree(overrides.ByBlockClass);
@@ -344,14 +363,14 @@ namespace CarryOn.API.Common.Models
             return tree;
         }
 
-        private static WalkSpeedOverridesConfig FromWalkSpeedOverridesTree(ITreeAttribute? tree)
+        private static ModifierOverridesConfig FromWalkSpeedOverridesTree(ITreeAttribute? tree)
         {
             if (tree == null)
             {
-                return new WalkSpeedOverridesConfig();
+                return new ModifierOverridesConfig();
             }
 
-            return new WalkSpeedOverridesConfig
+            return new ModifierOverridesConfig
             {
                 ByBlockCode = FromSpeedMapTree(tree["ByBlockCode"] as ITreeAttribute),
                 ByBlockClass = FromSpeedMapTree(tree["ByBlockClass"] as ITreeAttribute),
@@ -359,7 +378,7 @@ namespace CarryOn.API.Common.Models
             };
         }
 
-        private static ITreeAttribute ToSpeedMapTree(IDictionary<string, CarrySlotSpeedConfig> map)
+        private static ITreeAttribute ToSpeedMapTree(IDictionary<string, SlotModifierConfig> map)
         {
             var tree = new TreeAttribute();
 
@@ -381,9 +400,9 @@ namespace CarryOn.API.Common.Models
             return tree;
         }
 
-        private static IDictionary<string, CarrySlotSpeedConfig> FromSpeedMapTree(ITreeAttribute? tree)
+        private static IDictionary<string, SlotModifierConfig> FromSpeedMapTree(ITreeAttribute? tree)
         {
-            var map = new Dictionary<string, CarrySlotSpeedConfig>();
+            var map = new Dictionary<string, SlotModifierConfig>();
 
             if (tree is not TreeAttribute speedTree)
             {
@@ -409,10 +428,10 @@ namespace CarryOn.API.Common.Models
             return map;
         }
 
-        private static ITreeAttribute ToSlotSpeedTree(CarrySlotSpeedConfig speed)
+        private static ITreeAttribute ToSlotSpeedTree(SlotModifierConfig speed)
         {
             var tree = new TreeAttribute();
-            speed ??= new CarrySlotSpeedConfig();
+            speed ??= new SlotModifierConfig();
 
             if (speed.Hands.HasValue)
             {
@@ -427,9 +446,9 @@ namespace CarryOn.API.Common.Models
             return tree;
         }
 
-        private static CarrySlotSpeedConfig FromSlotSpeedTree(ITreeAttribute? tree)
+        private static SlotModifierConfig FromSlotSpeedTree(ITreeAttribute? tree)
         {
-            var speed = new CarrySlotSpeedConfig();
+            var speed = new SlotModifierConfig();
 
             if (tree == null)
             {
