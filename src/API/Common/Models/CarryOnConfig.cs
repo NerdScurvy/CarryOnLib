@@ -62,10 +62,12 @@ namespace CarryOn.API.Common.Models
         [TreeValue("Storage")] public bool Storage { get; set; } = true;
     }
 
-    public class WalkSpeedModifierConfig
+    public class CarryWalkSpeedConfig
     {
         [TreeValue("HandsEnabled")] public bool HandsEnabled { get; set; } = true;
         [TreeValue("BackEnabled")] public bool BackEnabled { get; set; } = true;
+        [TreeValue("InHandsAllowSprint")] public bool InHandsAllowSprint { get; set; }
+        [TreeValue("OnBackAllowSprint")] public bool OnBackAllowSprint { get; set; } = true;
 
         public ModifierOverridesConfig ModifierOverrides { get; set; } = new ModifierOverridesConfig();
     }
@@ -110,8 +112,7 @@ namespace CarryOn.API.Common.Models
 
     public class CarryOptionsConfig
     {
-        [TreeValue("AllowSprintWhileCarrying")] public bool AllowSprintWhileCarrying { get; set; } = false;
-        [TreeValue("RemoveInteractDelayWhileCarrying")] public bool RemoveInteractDelayWhileCarrying { get; set; } = false;
+        [TreeValue("RemoveInteractDelayWhileCarrying")]    public bool RemoveInteractDelayWhileCarrying { get; set; } = false;
         [TreeValue("InteractSpeedMultiplier")] public float InteractSpeedMultiplier { get; set; } = 1.0f;
         [TreeValue("MaxInteractionDistance")] public int MaxInteractionDistance { get; set; } = Default.MaxInteractionDistance;
         [TreeValue("BackSlotEnabled")] public bool BackSlotEnabled { get; set; } = true;
@@ -151,7 +152,7 @@ namespace CarryOn.API.Common.Models
         public CarryablesOnBackConfig CarryablesOnBack { get; set; } = new CarryablesOnBackConfig();
         public InteractablesConfig Interactables { get; set; } = new InteractablesConfig();
         public CarryHungerRateConfig CarryHungerRate { get; set; } = new CarryHungerRateConfig();
-        public WalkSpeedModifierConfig WalkSpeedModifier { get; set; } = new WalkSpeedModifierConfig();
+        public CarryWalkSpeedConfig CarryWalkSpeed { get; set; } = new CarryWalkSpeedConfig();
 
         public CarryOptionsConfig CarryOptions { get; set; } = new CarryOptionsConfig();
         public CarryablesFiltersConfig CarryablesFilters { get; set; } = new CarryablesFiltersConfig();
@@ -251,7 +252,6 @@ namespace CarryOn.API.Common.Models
                         CarryablesOnBack.ChestTrunk = Legacy.TryGetBool("AllowChestTrunksOnBack", CarryablesOnBack.ChestTrunk);
                         CarryOptions.AllowHighCapacityStorageOnBack = Legacy.TryGetBool("AllowLargeChestsOnBack", CarryOptions.AllowHighCapacityStorageOnBack);
                         CarryablesOnBack.Crate = Legacy.TryGetBool("AllowCratesOnBack", CarryablesOnBack.Crate);
-                        CarryOptions.AllowSprintWhileCarrying = Legacy.TryGetBool("AllowSprintWhileCarrying", CarryOptions.AllowSprintWhileCarrying);
                         CarryOptions.RemoveInteractDelayWhileCarrying = Legacy.TryGetBool("RemoveInteractDelayWhileCarrying", CarryOptions.RemoveInteractDelayWhileCarrying);
                         CarryOptions.InteractSpeedMultiplier = Legacy.TryGetFloat("InteractSpeedMultiplier", CarryOptions.InteractSpeedMultiplier);
 
@@ -292,13 +292,15 @@ namespace CarryOn.API.Common.Models
 
                     if (CarryOptions?.Legacy == null) return;
 
-                    WalkSpeedModifier.HandsEnabled = !CarryOptions.Legacy.TryGetBool("IgnoreCarrySpeedPenalty", false);
-                    WalkSpeedModifier.BackEnabled = !CarryOptions.Legacy.TryGetBool("IgnoreCarrySpeedPenalty", false);
+                    CarryWalkSpeed.HandsEnabled = !CarryOptions.Legacy.TryGetBool("IgnoreCarrySpeedPenalty", false);
+                    CarryWalkSpeed.BackEnabled = !CarryOptions.Legacy.TryGetBool("IgnoreCarrySpeedPenalty", false);
+                    CarryWalkSpeed.InHandsAllowSprint = CarryOptions.Legacy.TryGetBool("AllowSprintWhileCarrying", false);
+                    CarryWalkSpeed.OnBackAllowSprint = CarryOptions.Legacy.TryGetBool("AllowSprintWhileCarrying", false);
 
                     if (CarryOptions.Legacy.TryGetValue("WalkSpeedOverrides", out var overridesToken)
                         && overridesToken is JObject overridesObj)
                     {
-                        WalkSpeedModifier.ModifierOverrides = overridesObj.ToObject<ModifierOverridesConfig>()
+                        CarryWalkSpeed.ModifierOverrides = overridesObj.ToObject<ModifierOverridesConfig>()
                             ?? new ModifierOverridesConfig();
                     }
 
@@ -320,7 +322,7 @@ namespace CarryOn.API.Common.Models
             tree["CarryablesOnBack"] = TreeSerializer.ToTree(CarryablesOnBack);
             tree["Interactables"] = TreeSerializer.ToTree(Interactables);
             tree["CarryHungerRate"] = ToCarryHungerRateTree(CarryHungerRate);
-            tree["WalkSpeedModifier"] = ToWalkSpeedModifierTree(WalkSpeedModifier);
+            tree["CarryWalkSpeed"] = ToCarryWalkSpeedTree(CarryWalkSpeed);
             tree["CarryOptions"] = ToCarryOptionsTree();
             tree["CarryableFilters"] = TreeSerializer.ToTree(CarryablesFilters);
             tree["DebuggingOptions"] = TreeSerializer.ToTree(DebuggingOptions);
@@ -340,7 +342,7 @@ namespace CarryOn.API.Common.Models
             TreeSerializer.FromTree(tree["CarryablesOnBack"] as ITreeAttribute, config.CarryablesOnBack);
             TreeSerializer.FromTree(tree["Interactables"] as ITreeAttribute, config.Interactables);
             config.CarryHungerRate = FromCarryHungerRateTree(tree["CarryHungerRate"] as ITreeAttribute);
-            config.WalkSpeedModifier = FromWalkSpeedModifierTree(tree["WalkSpeedModifier"] as ITreeAttribute);
+            config.CarryWalkSpeed = FromCarryWalkSpeedTree(tree["CarryWalkSpeed"] as ITreeAttribute);
             FromCarryOptionsTree(tree["CarryOptions"] as ITreeAttribute, config.CarryOptions);
             TreeSerializer.FromTree(tree["CarryableFilters"] as ITreeAttribute, config.CarryablesFilters);
             TreeSerializer.FromTree(tree["DebuggingOptions"] as ITreeAttribute, config.DebuggingOptions);
@@ -377,16 +379,16 @@ namespace CarryOn.API.Common.Models
             TreeSerializer.FromTree(tree, carryOptions);
         }
 
-        private static ITreeAttribute ToWalkSpeedModifierTree(WalkSpeedModifierConfig config)
+        private static ITreeAttribute ToCarryWalkSpeedTree(CarryWalkSpeedConfig config)
         {
             var tree = (TreeAttribute)TreeSerializer.ToTree(config);
             tree["ModifierOverrides"] = ToWalkSpeedOverridesTree(config.ModifierOverrides);
             return tree;
         }
 
-        private static WalkSpeedModifierConfig FromWalkSpeedModifierTree(ITreeAttribute? tree)
+        private static CarryWalkSpeedConfig FromCarryWalkSpeedTree(ITreeAttribute? tree)
         {
-            var config = new WalkSpeedModifierConfig();
+            var config = new CarryWalkSpeedConfig();
             if (tree == null) return config;
 
             TreeSerializer.FromTree(tree, config);
