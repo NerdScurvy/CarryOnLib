@@ -80,8 +80,8 @@ namespace CarryOn.API.Common.Models
             {
                 public static string HandsEnabledKey { get; } = "HandsEnabled";
                 public static string BackEnabledKey { get; } = "BackEnabled";
-                public static string DefaultHandsRateKey { get; } = "DefaultHandsRate";
-                public static string DefaultBackRateKey { get; } = "DefaultBackRate";
+                public static string DefaultHandsModifierKey { get; } = "DefaultHandsModifier";
+                public static string DefaultBackModifierKey { get; } = "DefaultBackModifier";
                 public static string MinSaturationThresholdKey { get; } = "MinSaturationThreshold";
             }
 

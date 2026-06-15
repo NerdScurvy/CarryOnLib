@@ -131,9 +131,9 @@ namespace CarryOn.API.Common.Models
     public class CarryHungerRateConfig
     {
         [TreeValue("HandsEnabled")]             public bool HandsEnabled { get; set; } = false;
-        [TreeValue("BackEnabled")]              public bool BackEnabled { get; set; } = false;
-        [TreeValue("DefaultHandsRate")]         public float DefaultHandsRate { get; set; } = 1.2f;
-        [TreeValue("DefaultBackRate")]          public float DefaultBackRate { get; set; } = 1.3f;
+        [TreeValue("BackEnabled")]              public bool BackEnabled { get; set; } = true;
+        [TreeValue("DefaultHandsModifier")]     public float DefaultHandsModifier { get; set; } = 0.2f;
+        [TreeValue("DefaultBackModifier")]      public float DefaultBackModifier { get; set; } = 0.3f;
         [TreeValue("MinSaturationThreshold")]   public float MinSaturationThreshold { get; set; } = 150f;
     }
 
