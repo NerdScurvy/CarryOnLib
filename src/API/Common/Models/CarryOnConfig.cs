@@ -112,11 +112,17 @@ namespace CarryOn.API.Common.Models
 
     public class DropCarriedOnDamageConfig
     {
-        [TreeValue("Enabled")]
-        public bool Enabled { get; set; } = true;
+        [TreeValue("HandsEnabled")]
+        public bool HandsEnabled { get; set; } = true;
 
-        [TreeValue("DamageThreshold")]
-        public float DamageThreshold { get; set; } = 1.0f;
+        [TreeValue("BackEnabled")]
+        public bool BackEnabled { get; set; } = true;
+
+        [TreeValue("HandsDamageThreshold")]
+        public float HandsDamageThreshold { get; set; } = 1.0f;
+
+        [TreeValue("BackDamageThreshold")]
+        public float BackDamageThreshold { get; set; } = 6.0f;
 
         [TreeValue("DropRange")]
         public int DropRange { get; set; } = 2;
