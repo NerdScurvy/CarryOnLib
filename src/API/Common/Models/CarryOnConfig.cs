@@ -371,6 +371,13 @@ namespace CarryOn.API.Common.Models
             return tree;
         }
 
+        private static ITreeAttribute ToCarryHungerRateTree(CarryHungerRateConfig config)
+        {
+            var tree = (TreeAttribute)TreeSerializer.ToTree(config);
+            tree["ModifierOverrides"] = ToWalkSpeedOverridesTree(config.ModifierOverrides);
+            return tree;
+        }
+
         private static CarryHungerRateConfig FromCarryHungerRateTree(ITreeAttribute? tree)
         {
             var config = new CarryHungerRateConfig();
