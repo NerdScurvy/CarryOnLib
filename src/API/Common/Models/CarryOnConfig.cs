@@ -66,8 +66,8 @@ namespace CarryOn.API.Common.Models
     {
         [TreeValue("HandsEnabled")] public bool HandsEnabled { get; set; } = true;
         [TreeValue("BackEnabled")] public bool BackEnabled { get; set; } = true;
-        [TreeValue("InHandsAllowSprint")] public bool InHandsAllowSprint { get; set; }
-        [TreeValue("OnBackAllowSprint")] public bool OnBackAllowSprint { get; set; } = true;
+        [TreeValue("HandsAllowSprint")] public bool HandsAllowSprint { get; set; }
+        [TreeValue("BackAllowSprint")] public bool BackAllowSprint { get; set; } = true;
 
         public ModifierOverridesConfig ModifierOverrides { get; set; } = new ModifierOverridesConfig();
     }
@@ -294,8 +294,8 @@ namespace CarryOn.API.Common.Models
 
                     CarryWalkSpeed.HandsEnabled = !CarryOptions.Legacy.TryGetBool("IgnoreCarrySpeedPenalty", false);
                     CarryWalkSpeed.BackEnabled = !CarryOptions.Legacy.TryGetBool("IgnoreCarrySpeedPenalty", false);
-                    CarryWalkSpeed.InHandsAllowSprint = CarryOptions.Legacy.TryGetBool("AllowSprintWhileCarrying", false);
-                    CarryWalkSpeed.OnBackAllowSprint = CarryOptions.Legacy.TryGetBool("AllowSprintWhileCarrying", false);
+                    CarryWalkSpeed.HandsAllowSprint = CarryOptions.Legacy.TryGetBool("AllowSprintWhileCarrying", false);
+                    CarryWalkSpeed.BackAllowSprint = CarryOptions.Legacy.TryGetBool("AllowSprintWhileCarrying", false);
 
                     if (CarryOptions.Legacy.TryGetValue("WalkSpeedOverrides", out var overridesToken)
                         && overridesToken is JObject overridesObj)
