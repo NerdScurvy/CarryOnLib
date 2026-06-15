@@ -290,10 +290,11 @@ namespace CarryOn.API.Common.Models
             tree["Carryables"] = TreeSerializer.ToTree(Carryables);
             tree["CarryablesOnBack"] = TreeSerializer.ToTree(CarryablesOnBack);
             tree["Interactables"] = TreeSerializer.ToTree(Interactables);
+            tree["CarryHungerRate"] = TreeSerializer.ToTree(CarryHungerRate);
             tree["CarryOptions"] = ToCarryOptionsTree();
             tree["CarryableFilters"] = TreeSerializer.ToTree(CarryablesFilters);
             tree["DebuggingOptions"] = TreeSerializer.ToTree(DebuggingOptions);
-            tree["carryHungerRate"] = TreeSerializer.ToTree(CarryHungerRate);
+            
 
             return tree;
         }
@@ -308,10 +309,10 @@ namespace CarryOn.API.Common.Models
             TreeSerializer.FromTree(tree["Carryables"] as ITreeAttribute, config.Carryables);
             TreeSerializer.FromTree(tree["CarryablesOnBack"] as ITreeAttribute, config.CarryablesOnBack);
             TreeSerializer.FromTree(tree["Interactables"] as ITreeAttribute, config.Interactables);
+            TreeSerializer.FromTree(tree["CarryHungerRate"] as ITreeAttribute, config.CarryHungerRate);
             FromCarryOptionsTree(tree["CarryOptions"] as ITreeAttribute, config.CarryOptions);
             TreeSerializer.FromTree(tree["CarryableFilters"] as ITreeAttribute, config.CarryablesFilters);
             TreeSerializer.FromTree(tree["DebuggingOptions"] as ITreeAttribute, config.DebuggingOptions);
-            TreeSerializer.FromTree(tree["carryHungerRate"] as ITreeAttribute, config.CarryHungerRate);
 
             return config;
         }
