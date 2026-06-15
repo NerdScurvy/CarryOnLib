@@ -110,7 +110,7 @@ namespace CarryOn.API.Common.Models
         public SlotModifierConfig SlotDefaults { get; set; } = new SlotModifierConfig();
     }
 
-    public class DropOnDamageConfig
+    public class DropCarriedOnDamageConfig
     {
         [TreeValue("Enabled")]
         public bool Enabled { get; set; } = true;
@@ -144,8 +144,6 @@ namespace CarryOn.API.Common.Models
             => Enum.TryParse<BackpackSelectionMode>(BackpackSelectionModeString, true, out var mode)
                 ? mode : BackpackSelectionMode.LastFound;
 
-        public DropOnDamageConfig DropOnDamage { get; set; } = new DropOnDamageConfig();
-
         [JsonExtensionData(ReadData = true, WriteData = false)]
         internal Dictionary<string, JToken>? Legacy { get; set; }
     }
@@ -167,6 +165,7 @@ namespace CarryOn.API.Common.Models
         public InteractablesConfig Interactables { get; set; } = new InteractablesConfig();
         public CarryHungerRateConfig CarryHungerRate { get; set; } = new CarryHungerRateConfig();
         public CarryWalkSpeedConfig CarryWalkSpeed { get; set; } = new CarryWalkSpeedConfig();
+        public DropCarriedOnDamageConfig DropCarriedOnDamage { get; set; } = new DropCarriedOnDamageConfig();
 
         public CarryOptionsConfig CarryOptions { get; set; } = new CarryOptionsConfig();
         public CarryablesFiltersConfig CarryablesFilters { get; set; } = new CarryablesFiltersConfig();
@@ -337,6 +336,7 @@ namespace CarryOn.API.Common.Models
             tree["Interactables"] = TreeSerializer.ToTree(Interactables);
             tree["CarryHungerRate"] = ToCarryHungerRateTree(CarryHungerRate);
             tree["CarryWalkSpeed"] = ToCarryWalkSpeedTree(CarryWalkSpeed);
+            tree["DropCarriedOnDamage"] = ToDropCarriedOnDamageTree(DropCarriedOnDamage);
             tree["CarryOptions"] = ToCarryOptionsTree();
             tree["CarryableFilters"] = TreeSerializer.ToTree(CarryablesFilters);
             tree["DebuggingOptions"] = TreeSerializer.ToTree(DebuggingOptions);
@@ -357,6 +357,7 @@ namespace CarryOn.API.Common.Models
             TreeSerializer.FromTree(tree["Interactables"] as ITreeAttribute, config.Interactables);
             config.CarryHungerRate = FromCarryHungerRateTree(tree["CarryHungerRate"] as ITreeAttribute);
             config.CarryWalkSpeed = FromCarryWalkSpeedTree(tree["CarryWalkSpeed"] as ITreeAttribute);
+            config.DropCarriedOnDamage = FromDropCarriedOnDamageTree(tree["DropCarriedOnDamage"] as ITreeAttribute);
             FromCarryOptionsTree(tree["CarryOptions"] as ITreeAttribute, config.CarryOptions);
             TreeSerializer.FromTree(tree["CarryableFilters"] as ITreeAttribute, config.CarryablesFilters);
             TreeSerializer.FromTree(tree["DebuggingOptions"] as ITreeAttribute, config.DebuggingOptions);
@@ -366,9 +367,7 @@ namespace CarryOn.API.Common.Models
 
         private ITreeAttribute ToCarryOptionsTree()
         {
-            var tree = (TreeAttribute)TreeSerializer.ToTree(CarryOptions);
-            tree["DropOnDamage"] = TreeSerializer.ToTree(CarryOptions.DropOnDamage);
-            return tree;
+            return (TreeAttribute)TreeSerializer.ToTree(CarryOptions);
         }
 
         private static ITreeAttribute ToCarryHungerRateTree(CarryHungerRateConfig config)
@@ -393,7 +392,6 @@ namespace CarryOn.API.Common.Models
             if (tree == null) return;
 
             TreeSerializer.FromTree(tree, carryOptions);
-            carryOptions.DropOnDamage = FromDropOnDamageTree(tree["DropOnDamage"] as ITreeAttribute);
         }
 
         private static ITreeAttribute ToCarryWalkSpeedTree(CarryWalkSpeedConfig config)
@@ -530,9 +528,14 @@ namespace CarryOn.API.Common.Models
             return speed;
         }
 
-        private static DropOnDamageConfig FromDropOnDamageTree(ITreeAttribute? tree)
+        private static ITreeAttribute ToDropCarriedOnDamageTree(DropCarriedOnDamageConfig config)
         {
-            var config = new DropOnDamageConfig();
+            return (TreeAttribute)TreeSerializer.ToTree(config);
+        }
+
+        private static DropCarriedOnDamageConfig FromDropCarriedOnDamageTree(ITreeAttribute? tree)
+        {
+            var config = new DropCarriedOnDamageConfig();
             if (tree != null)
             {
                 TreeSerializer.FromTree(tree, config);
