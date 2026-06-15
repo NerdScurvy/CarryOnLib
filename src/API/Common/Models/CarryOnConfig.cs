@@ -62,13 +62,22 @@ namespace CarryOn.API.Common.Models
         [TreeValue("Storage")]         public bool Storage { get; set; } = true;
     }
 
+    public class CarryHungerRateConfig
+    {
+        [TreeValue("HandsEnabled")]             public bool HandsEnabled { get; set; } = false;
+        [TreeValue("BackEnabled")]              public bool BackEnabled { get; set; } = true;
+        [TreeValue("DefaultHandsModifier")]     public float DefaultHandsModifier { get; set; } = 0.2f;
+        [TreeValue("DefaultBackModifier")]      public float DefaultBackModifier { get; set; } = 0.3f;
+        [TreeValue("MinSaturationThreshold")]   public float MinSaturationThreshold { get; set; } = 150f;
+    }
+
     public class CarryablesFiltersConfig
     {
-        [TreeValue("AutoMapSimilar")]                public bool AutoMapSimilar { get; set; } = true;
-        [TreeValue("AutoMatchIgnoreMods")]           public string[] AutoMatchIgnoreMods { get; set; } = ["mcrate"];
-        [TreeValue("AllowedShapeOnlyMatches")]       public string[] AllowedShapeOnlyMatches { get; set; } = ["block/clay/lootvessel", "block/wood/chest/normal", "block/wood/trunk/normal", "block/reed/basket-normal"];
-        [TreeValue("RemoveBaseCarryableBehaviour")]  public string[] RemoveBaseCarryableBehaviour { get; set; } = ["woodchests:wtrunk"];
-        [TreeValue("RemoveCarryableBehaviour")]      public string[] RemoveCarryableBehaviour { get; set; } = ["game:banner", "game:clutter-devastation"];
+        [TreeValue("AutoMapSimilar")] public bool AutoMapSimilar { get; set; } = true;
+        [TreeValue("AutoMatchIgnoreMods")] public string[] AutoMatchIgnoreMods { get; set; } = ["mcrate"];
+        [TreeValue("AllowedShapeOnlyMatches")] public string[] AllowedShapeOnlyMatches { get; set; } = ["block/clay/lootvessel", "block/wood/chest/normal", "block/wood/trunk/normal", "block/reed/basket-normal"];
+        [TreeValue("RemoveBaseCarryableBehaviour")] public string[] RemoveBaseCarryableBehaviour { get; set; } = ["woodchests:wtrunk"];
+        [TreeValue("RemoveCarryableBehaviour")] public string[] RemoveCarryableBehaviour { get; set; } = ["game:banner", "game:clutter-devastation"];
     }
 
     public class CarrySlotSpeedConfig
@@ -128,16 +137,6 @@ namespace CarryOn.API.Common.Models
         [TreeValue("EnablePackAdjustmentTool")] public bool EnablePackAdjustmentTool { get; set; } = false;
     }
 
-    public class CarryHungerRateConfig
-    {
-        [TreeValue("HandsEnabled")]             public bool HandsEnabled { get; set; } = false;
-        [TreeValue("BackEnabled")]              public bool BackEnabled { get; set; } = true;
-        [TreeValue("DefaultHandsModifier")]     public float DefaultHandsModifier { get; set; } = 0.2f;
-        [TreeValue("DefaultBackModifier")]      public float DefaultBackModifier { get; set; } = 0.3f;
-        [TreeValue("MinSaturationThreshold")]   public float MinSaturationThreshold { get; set; } = 150f;
-    }
-
-
     public class CarryOnConfig
     {
         private IDictionary<string, string>? backpackMapping;
@@ -146,6 +145,8 @@ namespace CarryOn.API.Common.Models
         public CarryablesConfig Carryables { get; set; } = new CarryablesConfig();
         public CarryablesOnBackConfig CarryablesOnBack { get; set; } = new CarryablesOnBackConfig();
         public InteractablesConfig Interactables { get; set; } = new InteractablesConfig();
+        public CarryHungerRateConfig CarryHungerRate { get; set; } = new CarryHungerRateConfig();
+
         public CarryOptionsConfig CarryOptions { get; set; } = new CarryOptionsConfig();
         public CarryablesFiltersConfig CarryablesFilters { get; set; } = new CarryablesFiltersConfig();
 
@@ -181,7 +182,6 @@ namespace CarryOn.API.Common.Models
             };
 
         public DebuggingOptionsConfig DebuggingOptions { get; set; } = new DebuggingOptionsConfig();
-        public CarryHungerRateConfig CarryHungerRate { get; set; } = new CarryHungerRateConfig();
 
         [JsonExtensionData(ReadData = true, WriteData = false)]
         internal Dictionary<string, JToken>? Legacy { get; set; }
