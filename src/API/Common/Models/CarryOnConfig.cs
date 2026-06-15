@@ -110,6 +110,18 @@ namespace CarryOn.API.Common.Models
         public SlotModifierConfig SlotDefaults { get; set; } = new SlotModifierConfig();
     }
 
+    public class DropOnDamageConfig
+    {
+        [TreeValue("Enabled")]
+        public bool Enabled { get; set; } = true;
+
+        [TreeValue("DamageThreshold")]
+        public float DamageThreshold { get; set; } = 1.0f;
+
+        [TreeValue("DropRange")]
+        public int DropRange { get; set; } = 2;
+    }
+
     public class CarryOptionsConfig
     {
         [TreeValue("RemoveInteractDelayWhileCarrying")]    public bool RemoveInteractDelayWhileCarrying { get; set; } = false;
@@ -131,6 +143,8 @@ namespace CarryOn.API.Common.Models
         public BackpackSelectionMode BackpackSelectionModeEnum
             => Enum.TryParse<BackpackSelectionMode>(BackpackSelectionModeString, true, out var mode)
                 ? mode : BackpackSelectionMode.LastFound;
+
+        public DropOnDamageConfig DropOnDamage { get; set; } = new DropOnDamageConfig();
 
         [JsonExtensionData(ReadData = true, WriteData = false)]
         internal Dictionary<string, JToken>? Legacy { get; set; }
@@ -352,13 +366,8 @@ namespace CarryOn.API.Common.Models
 
         private ITreeAttribute ToCarryOptionsTree()
         {
-            return (TreeAttribute)TreeSerializer.ToTree(CarryOptions);
-        }
-
-        private static ITreeAttribute ToCarryHungerRateTree(CarryHungerRateConfig config)
-        {
-            var tree = (TreeAttribute)TreeSerializer.ToTree(config);
-            tree["ModifierOverrides"] = ToWalkSpeedOverridesTree(config.ModifierOverrides);
+            var tree = (TreeAttribute)TreeSerializer.ToTree(CarryOptions);
+            tree["DropOnDamage"] = TreeSerializer.ToTree(CarryOptions.DropOnDamage);
             return tree;
         }
 
@@ -377,6 +386,7 @@ namespace CarryOn.API.Common.Models
             if (tree == null) return;
 
             TreeSerializer.FromTree(tree, carryOptions);
+            carryOptions.DropOnDamage = FromDropOnDamageTree(tree["DropOnDamage"] as ITreeAttribute);
         }
 
         private static ITreeAttribute ToCarryWalkSpeedTree(CarryWalkSpeedConfig config)
@@ -511,6 +521,16 @@ namespace CarryOn.API.Common.Models
             }
 
             return speed;
+        }
+
+        private static DropOnDamageConfig FromDropOnDamageTree(ITreeAttribute? tree)
+        {
+            var config = new DropOnDamageConfig();
+            if (tree != null)
+            {
+                TreeSerializer.FromTree(tree, config);
+            }
+            return config;
         }
     }
 }
