@@ -128,6 +128,15 @@ namespace CarryOn.API.Common.Models
         [TreeValue("EnablePackAdjustmentTool")] public bool EnablePackAdjustmentTool { get; set; } = false;
     }
 
+    public class CarryHungerRateConfig
+    {
+        [TreeValue("HandsEnabled")]             public bool HandsEnabled { get; set; } = false;
+        [TreeValue("BackEnabled")]              public bool BackEnabled { get; set; } = false;
+        [TreeValue("DefaultHandsRate")]         public float DefaultHandsRate { get; set; } = 1.2f;
+        [TreeValue("DefaultBackRate")]          public float DefaultBackRate { get; set; } = 1.3f;
+        [TreeValue("MinSaturationThreshold")]   public float MinSaturationThreshold { get; set; } = 150f;
+    }
+
 
     public class CarryOnConfig
     {
@@ -172,6 +181,7 @@ namespace CarryOn.API.Common.Models
             };
 
         public DebuggingOptionsConfig DebuggingOptions { get; set; } = new DebuggingOptionsConfig();
+        public CarryHungerRateConfig CarryHungerRate { get; set; } = new CarryHungerRateConfig();
 
         [JsonExtensionData(ReadData = true, WriteData = false)]
         internal Dictionary<string, JToken>? Legacy { get; set; }
@@ -283,6 +293,7 @@ namespace CarryOn.API.Common.Models
             tree["CarryOptions"] = ToCarryOptionsTree();
             tree["CarryableFilters"] = TreeSerializer.ToTree(CarryablesFilters);
             tree["DebuggingOptions"] = TreeSerializer.ToTree(DebuggingOptions);
+            tree["carryHungerRate"] = TreeSerializer.ToTree(CarryHungerRate);
 
             return tree;
         }
@@ -300,6 +311,7 @@ namespace CarryOn.API.Common.Models
             FromCarryOptionsTree(tree["CarryOptions"] as ITreeAttribute, config.CarryOptions);
             TreeSerializer.FromTree(tree["CarryableFilters"] as ITreeAttribute, config.CarryablesFilters);
             TreeSerializer.FromTree(tree["DebuggingOptions"] as ITreeAttribute, config.DebuggingOptions);
+            TreeSerializer.FromTree(tree["carryHungerRate"] as ITreeAttribute, config.CarryHungerRate);
 
             return config;
         }

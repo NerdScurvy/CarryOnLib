@@ -7,6 +7,7 @@ namespace CarryOn.API.Common.Models
         public static string ModId { get; } = "carryon";
 
         public const string ConfigFile = "CarryOnConfig.json";
+        public const int CurrentConfigVersion = 4;
 
         public static class CarryOnLib
         {
@@ -56,6 +57,7 @@ namespace CarryOn.API.Common.Models
             public static string InteractablesKey = "Interactables";
             public static string CarryOptionsKey = "CarryOptions";
             public static string DebuggingOptionsKey = "DebuggingOptions";
+            public static string CarryHungerRateKey = "carryHungerRate";
             public static string CarryableFiltersKey = "CarryableFilters";
 
             public static class CarryableFilters
@@ -72,6 +74,15 @@ namespace CarryOn.API.Common.Models
                 public static string LoggingEnabledKey { get; } = "LoggingEnabled";
                 public static string DisableHarmonyPatchKey { get; } = "DisableHarmonyPatch";
                 public static string EnablePackAdjustmentToolKey { get; } = "EnablePackAdjustmentTool";
+            }
+
+            public static class CarryHungerRate
+            {
+                public static string HandsEnabledKey { get; } = "HandsEnabled";
+                public static string BackEnabledKey { get; } = "BackEnabled";
+                public static string DefaultHandsRateKey { get; } = "DefaultHandsRate";
+                public static string DefaultBackRateKey { get; } = "DefaultBackRate";
+                public static string MinSaturationThresholdKey { get; } = "MinSaturationThreshold";
             }
 
             public static class CarryOptions
