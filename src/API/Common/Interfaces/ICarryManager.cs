@@ -82,20 +82,23 @@ namespace CarryOn.API.Common.Interfaces
         /// <summary>Initializes carry events discovered by the event bootstrap service.</summary>
         void InitEvents(ICoreAPI api);
 
-        /// <summary>Registers a transform group resolver for determining carried-block render transforms.</summary>
-        void RegisterTransformGroupResolver(string modId, ICarriedTransformGroupResolver resolver);
+        /// <summary>Registers a primary transform group resolver (determines the root/base transform group).</summary>
+        void RegisterRootTransformGroupResolver(string modId, IRootTransformGroupResolver resolver);
 
-        /// <summary>Attempts to get a registered transform group resolver by code.</summary>
-        bool TryGetTransformGroupResolver(string resolverCode, out ICarriedTransformGroupResolver? resolver);
+        /// <summary>Attempts to get a registered primary transform group resolver by code.</summary>
+        bool TryGetRootTransformGroupResolver(string resolverCode, out IRootTransformGroupResolver? resolver);
 
-        /// <summary>Attempts to get resolver registration metadata by code.</summary>
-        bool TryGetTransformGroupResolverRegistration(string resolverCode, out RegisteredTransformGroupResolver? registration);
+        /// <summary>Unregisters a previously registered primary transform group resolver.</summary>
+        bool UnregisterRootTransformGroupResolver(IRootTransformGroupResolver resolver);
 
-        /// <summary>Unregisters a previously registered transform group resolver.</summary>
-        bool UnregisterTransformGroupResolver(ICarriedTransformGroupResolver resolver);
+        /// <summary>Registers an attachment transform group resolver (determines child/attachment transforms).</summary>
+        void RegisterAttachmentTransformGroupResolver(string modId, IAttachmentTransformGroupResolver resolver);
 
-        /// <summary>Returns all currently registered transform group resolvers.</summary>
-        IReadOnlyList<RegisteredTransformGroupResolver> GetTransformGroupResolvers();
+        /// <summary>Attempts to get a registered attachment transform group resolver by code.</summary>
+        bool TryGetAttachmentTransformGroupResolver(string resolverCode, out IAttachmentTransformGroupResolver? resolver);
+
+        /// <summary>Unregisters a previously registered attachment transform group resolver.</summary>
+        bool UnregisterAttachmentTransformGroupResolver(IAttachmentTransformGroupResolver resolver);
 
         /// <summary>Checks whether the block has any carryable behavior.</summary>
         bool IsCarryable(Block block);

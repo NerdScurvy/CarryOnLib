@@ -1,27 +1,10 @@
 using CarryOn.API.Common.Models;
 using Vintagestory.API.Common;
-using Vintagestory.API.Datastructures;
 
 namespace CarryOn.Utility
 {
-    public static class TransformGroupResolverHelper
+    public static class AssetResolutionHelper
     {
-        public static TreeAttribute? GetContainerSlots(CarriedBlock? carried)
-        {
-            if (carried?.BlockEntityData == null)
-            {
-                return null;
-            }
-
-            var inventory = carried.BlockEntityData.GetTreeAttribute("inventory");
-            if (inventory == null)
-            {
-                return null;
-            }
-
-            return inventory.GetTreeAttribute("slots") as TreeAttribute;
-        }
-
         public static bool TryResolveFallbackAsset(ICoreAPI api, ItemStack itemStack, out CarriedGroupAssetType assetType, out string? assetName)
         {
             assetType = CarriedGroupAssetType.None;
