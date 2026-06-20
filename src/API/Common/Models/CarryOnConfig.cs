@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using CarryOn.Utility;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using Vintagestory.API.Datastructures;
 using static CarryOn.API.Common.Models.CarryCode;
@@ -64,20 +66,50 @@ namespace CarryOn.API.Common.Models
 
     public class CarryWalkSpeedConfig
     {
+        [DisplayName("Hands Enabled")]
+        [Description("Apply walk speed penalty when carrying in hands")]
+        [DefaultValue(true)]
         [TreeValue("HandsEnabled")] public bool HandsEnabled { get; set; } = true;
+
+        [DisplayName("Back Enabled")]
+        [Description("Apply walk speed penalty when carrying on back")]
+        [DefaultValue(true)]
         [TreeValue("BackEnabled")] public bool BackEnabled { get; set; } = true;
+
+        [DisplayName("Allow Sprint (Hands)")]
+        [Description("Allow sprinting while carrying in hands")]
+        [DefaultValue(false)]
         [TreeValue("HandsAllowSprint")] public bool HandsAllowSprint { get; set; }
+
+        [DisplayName("Allow Sprint (Back)")]
+        [Description("Allow sprinting while carrying on back")]
+        [DefaultValue(true)]
         [TreeValue("BackAllowSprint")] public bool BackAllowSprint { get; set; } = true;
 
+        [DisplayName("Walk Speed Overrides")]
+        [Description("Per-block speed modifier overrides")]
         public ModifierOverridesConfig ModifierOverrides { get; set; } = new ModifierOverridesConfig();
     }
 
     public class CarryHungerRateConfig
     {
+        [DisplayName("Hands Enabled")]
+        [Description("Apply hunger rate modifier when carrying in hands")]
+        [DefaultValue(false)]
         [TreeValue("HandsEnabled")] public bool HandsEnabled { get; set; } = false;
+
+        [DisplayName("Back Enabled")]
+        [Description("Apply hunger rate modifier when carrying on back")]
+        [DefaultValue(true)]
         [TreeValue("BackEnabled")] public bool BackEnabled { get; set; } = true;
+
+        [DisplayName("Min Saturation Threshold")]
+        [Description("Minimum saturation before hunger modifier takes effect")]
+        [DefaultValue(150.0f)]
         [TreeValue("MinSaturationThreshold")] public float MinSaturationThreshold { get; set; } = Default.MinSaturationThreshold;
 
+        [DisplayName("Hunger Rate Overrides")]
+        [Description("Per-block hunger rate modifier overrides")]
         public ModifierOverridesConfig ModifierOverrides { get; set; } = new ModifierOverridesConfig();
     }
 
@@ -92,63 +124,129 @@ namespace CarryOn.API.Common.Models
 
     public class SlotModifierConfig
     {
+        [DisplayName("Key")]
+        [Description("Block code or class name this entry applies to (e.g. \"game:chest-normal\" or \"BlockChest\")")]
+        public string? Key { get; set; }
+
+        [DisplayName("Hands Modifier")]
+        [Description("Modifier value for the hands slot (leave empty for no override)")]
         public float? Hands { get; set; }
+
+        [DisplayName("Back Modifier")]
+        [Description("Modifier value for the back slot (leave empty for no override)")]
         public float? Back { get; set; }
 
         [JsonIgnore]
-        public bool IsEmpty => Hands == null && Back == null;
+        [Browsable(false)]
+        public bool IsEmpty => string.IsNullOrEmpty(Key) && Hands == null && Back == null;
     }
 
     public class ModifierOverridesConfig
     {
-        public IDictionary<string, SlotModifierConfig> ByBlockCode { get; set; }
-            = new Dictionary<string, SlotModifierConfig>();
+        [DisplayName("By Block Code")]
+        [Description("Per-block-code speed/hunger overrides. Add entries with a block code pattern as the Key field (e.g. \"game:chest-normal\", \"game:log*\").")]
+        public List<SlotModifierConfig> ByBlockCode { get; set; }
+            = new List<SlotModifierConfig>();
 
-        public IDictionary<string, SlotModifierConfig> ByBlockClass { get; set; }
-            = new Dictionary<string, SlotModifierConfig>();
+        [DisplayName("By Block Class")]
+        [Description("Per-block-class speed/hunger overrides. Add entries with a block class name as the Key field (e.g. \"BlockChest\").")]
+        public List<SlotModifierConfig> ByBlockClass { get; set; }
+            = new List<SlotModifierConfig>();
 
+        [DisplayName("Slot Defaults")]
+        [Description("Default speed/hunger modifier for all blocks (fallback when no specific override matches)")]
         public SlotModifierConfig SlotDefaults { get; set; } = new SlotModifierConfig();
     }
 
     public class DropCarriedOnDamageConfig
     {
+        [DisplayName("Drop on Damage (Hands)")]
+        [Description("Drop hands-carried block when taking damage")]
+        [DefaultValue(true)]
         [TreeValue("HandsEnabled")]
         public bool HandsEnabled { get; set; } = true;
 
+        [DisplayName("Drop on Damage (Back)")]
+        [Description("Drop back-carried block when taking damage")]
+        [DefaultValue(true)]
         [TreeValue("BackEnabled")]
         public bool BackEnabled { get; set; } = true;
 
+        [DisplayName("Hands Damage Threshold")]
+        [Description("Minimum damage to drop hands-carried block")]
+        [DefaultValue(1.0f)]
         [TreeValue("HandsDamageThreshold")]
         public float HandsDamageThreshold { get; set; } = 1.0f;
 
+        [DisplayName("Back Damage Threshold")]
+        [Description("Minimum damage to drop back-carried block")]
+        [DefaultValue(6.0f)]
         [TreeValue("BackDamageThreshold")]
         public float BackDamageThreshold { get; set; } = 6.0f;
 
+        [DisplayName("Drop Range")]
+        [Description("Max search range (in blocks) for drop placement")]
+        [DefaultValue(2)]
         [TreeValue("DropRange")]
         public int DropRange { get; set; } = 2;
     }
 
     public class CarryOptionsConfig
     {
+        [Category("Interaction")]
+        [DisplayName("Remove Interact Delay")]
+        [Description("Remove interaction delay while carrying")]
+        [DefaultValue(false)]
         [TreeValue("RemoveInteractDelayWhileCarrying")]    public bool RemoveInteractDelayWhileCarrying { get; set; } = false;
+
+        [Category("Interaction")]
+        [DisplayName("Interact Speed Multiplier")]
+        [Description("Multiplier for interaction speed while carrying")]
+        [DefaultValue(1.0f)]
         [TreeValue("InteractSpeedMultiplier")] public float InteractSpeedMultiplier { get; set; } = 1.0f;
+
+        [Category("Interaction")]
+        [DisplayName("Max Interaction Distance")]
+        [Description("Max distance for carry-related interactions")]
+        [DefaultValue(6)]
         [TreeValue("MaxInteractionDistance")] public int MaxInteractionDistance { get; set; } = Default.MaxInteractionDistance;
+
+        [Category("Back Slot")]
+        [DisplayName("Back Slot Enabled")]
+        [Description("Allow carrying items on the back slot")]
+        [DefaultValue(true)]
         [TreeValue("BackSlotEnabled")] public bool BackSlotEnabled { get; set; } = true;
+
+        [Browsable(false)]
         [TreeValue("AllowHighCapacityStorageOnBack")] public bool AllowHighCapacityStorageOnBack { get; set; } = false;
+
+        [Browsable(false)]
         [TreeValue("PreventSwapFromBackOnTarget")] public string[] PreventSwapFromBackOnTarget { get; set; } = ["behavior::Container", "behavior::Door", "class::portals.portal", "code::groundstorage", "class::BlockGroundStorage"];
+
+        [Category("Temperature")]
+        [DisplayName("Too Hot To Carry")]
+        [Description("Prevent picking up blocks that are too hot")]
+        [DefaultValue(true)]
         [TreeValue("TooHotToCarry")] public bool TooHotToCarry { get; set; } = true;
+
+        [Category("Temperature")]
+        [DisplayName("Temperature Threshold (°C)")]
+        [Description("Temperature threshold for too-hot-to-carry check")]
+        [DefaultValue(50)]
         [TreeValue("TooHotToCarryTemperature")] public int TooHotToCarryTemperature { get; set; } = 50;
 
+        [DisplayName("Carry Attached Wall Signs")]
+        [Description("Also capture attached wall signs when picking up")]
+        [DefaultValue(false)]
         [TreeValue("CarryAttachedWallSigns")] public bool CarryAttachedWallSigns { get; set; } = false;
 
-        [JsonProperty("BackpackSelectionMode")]
+        [DisplayName("Backpack Selection Mode")]
+        [Description("How to select which backpack to render")]
+        [DefaultValue(BackpackSelectionMode.LastFound)]
         [TreeValue("BackpackSelectionMode")]
-        public string BackpackSelectionModeString { get; set; } = "LastFound";
-
-        [JsonIgnore]
-        public BackpackSelectionMode BackpackSelectionModeEnum
-            => Enum.TryParse<BackpackSelectionMode>(BackpackSelectionModeString, true, out var mode)
-                ? mode : BackpackSelectionMode.LastFound;
+        [JsonProperty("BackpackSelectionMode")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public BackpackSelectionMode BackpackSelectionMode { get; set; } = BackpackSelectionMode.LastFound;
 
         [JsonExtensionData(ReadData = true, WriteData = false)]
         internal Dictionary<string, JToken>? Legacy { get; set; }
@@ -156,8 +254,19 @@ namespace CarryOn.API.Common.Models
 
     public class DebuggingOptionsConfig
     {
+        [DisplayName("Logging Enabled")]
+        [Description("Enable debug logging (requires restart)")]
+        [DefaultValue(false)]
         [TreeValue("LoggingEnabled")] public bool LoggingEnabled { get; set; } = false;
+
+        [DisplayName("Disable Harmony Patch")]
+        [Description("Disable Harmony runtime patching — changes require a server restart")]
+        [DefaultValue(false)]
         [TreeValue("DisableHarmonyPatch")] public bool DisableHarmonyPatch { get; set; } = false;
+
+        [DisplayName("Enable Pack Adjustment Tool")]
+        [Description("Enable the pack adjustment debug tool (requires restart)")]
+        [DefaultValue(false)]
         [TreeValue("EnablePackAdjustmentTool")] public bool EnablePackAdjustmentTool { get; set; } = false;
     }
 
@@ -165,15 +274,39 @@ namespace CarryOn.API.Common.Models
     {
         private IDictionary<string, string>? backpackMapping;
 
+        [Browsable(false)]
         public int? ConfigVersion { get; set; }
+
+        [Category("Carryables (requires restart)")]
+        [DisplayName("Carryables")]
+        [Description("Which blocks can be carried — changes require a server restart to take effect")]
         public CarryablesConfig Carryables { get; set; } = new CarryablesConfig();
+
+        [Category("Carryables on Back (requires restart)")]
+        [DisplayName("Carryables on Back")]
+        [Description("Which blocks can be placed on the back slot — changes require a server restart")]
         public CarryablesOnBackConfig CarryablesOnBack { get; set; } = new CarryablesOnBackConfig();
+
+        [Category("Interactables (requires restart)")]
+        [DisplayName("Interactables")]
+        [Description("Which block interactions are allowed while carrying — changes require a server restart")]
         public InteractablesConfig Interactables { get; set; } = new InteractablesConfig();
+
+        [Category("Hunger Rate")]
         public CarryHungerRateConfig CarryHungerRate { get; set; } = new CarryHungerRateConfig();
+
+        [Category("Walk Speed")]
         public CarryWalkSpeedConfig CarryWalkSpeed { get; set; } = new CarryWalkSpeedConfig();
+
+        [Category("Damage Drop")]
         public DropCarriedOnDamageConfig DropCarriedOnDamage { get; set; } = new DropCarriedOnDamageConfig();
 
+        [Category("Carry Options")]
         public CarryOptionsConfig CarryOptions { get; set; } = new CarryOptionsConfig();
+
+        [Category("Carryable Filters (requires restart)")]
+        [DisplayName("Carryable Filters")]
+        [Description("Advanced carryable filtering rules — changes require a server restart")]
         public CarryablesFiltersConfig CarryablesFilters { get; set; } = new CarryablesFiltersConfig();
 
         [JsonIgnore]
@@ -200,6 +333,11 @@ namespace CarryOn.API.Common.Models
             }
         }
 
+        public void InvalidateBackpackCache()
+        {
+            backpackMapping = null;
+        }
+
         public IDictionary<string, string[]> BackpackTypes { get; set; }
             = new Dictionary<string, string[]>()
             {
@@ -207,6 +345,9 @@ namespace CarryOn.API.Common.Models
                 ["large"] = ["game:backpack-normal", "game:backpack-sturdy"]
             };
 
+        [Category("Debugging (requires restart)")]
+        [DisplayName("Debugging")]
+        [Description("Debug and developer options — some changes require a server restart")]
         public DebuggingOptionsConfig DebuggingOptions { get; set; } = new DebuggingOptionsConfig();
 
         [JsonExtensionData(ReadData = true, WriteData = false)]
@@ -373,7 +514,9 @@ namespace CarryOn.API.Common.Models
 
         private ITreeAttribute ToCarryOptionsTree()
         {
-            return (TreeAttribute)TreeSerializer.ToTree(CarryOptions);
+            var tree = (TreeAttribute)TreeSerializer.ToTree(CarryOptions);
+            tree.SetString("BackpackSelectionMode", CarryOptions.BackpackSelectionMode.ToString());
+            return tree;
         }
 
         private static ITreeAttribute ToCarryHungerRateTree(CarryHungerRateConfig config)
@@ -398,6 +541,12 @@ namespace CarryOn.API.Common.Models
             if (tree == null) return;
 
             TreeSerializer.FromTree(tree, carryOptions);
+
+            var modeStr = tree.GetString("BackpackSelectionMode");
+            if (!string.IsNullOrEmpty(modeStr) && Enum.TryParse<BackpackSelectionMode>(modeStr, true, out var mode))
+            {
+                carryOptions.BackpackSelectionMode = mode;
+            }
         }
 
         private static ITreeAttribute ToCarryWalkSpeedTree(CarryWalkSpeedConfig config)
@@ -444,35 +593,35 @@ namespace CarryOn.API.Common.Models
             };
         }
 
-        private static ITreeAttribute ToSpeedMapTree(IDictionary<string, SlotModifierConfig> map)
+        private static ITreeAttribute ToSpeedMapTree(List<SlotModifierConfig> list)
         {
             var tree = new TreeAttribute();
 
-            if (map == null)
+            if (list == null)
             {
                 return tree;
             }
 
-            foreach (var entry in map)
+            foreach (var entry in list)
             {
-                if (string.IsNullOrWhiteSpace(entry.Key) || entry.Value == null || entry.Value.IsEmpty)
+                if (string.IsNullOrWhiteSpace(entry.Key) || entry.IsEmpty)
                 {
                     continue;
                 }
 
-                tree[entry.Key.Trim()] = ToSlotSpeedTree(entry.Value);
+                tree[entry.Key.Trim()] = ToSlotSpeedTree(entry);
             }
 
             return tree;
         }
 
-        private static IDictionary<string, SlotModifierConfig> FromSpeedMapTree(ITreeAttribute? tree)
+        private static List<SlotModifierConfig> FromSpeedMapTree(ITreeAttribute? tree)
         {
-            var map = new Dictionary<string, SlotModifierConfig>();
+            var list = new List<SlotModifierConfig>();
 
             if (tree is not TreeAttribute speedTree)
             {
-                return map;
+                return list;
             }
 
             foreach (var key in speedTree.Keys)
@@ -488,10 +637,11 @@ namespace CarryOn.API.Common.Models
                     continue;
                 }
 
-                map[key.Trim()] = value;
+                value.Key = key.Trim();
+                list.Add(value);
             }
 
-            return map;
+            return list;
         }
 
         private static ITreeAttribute ToSlotSpeedTree(SlotModifierConfig speed)
