@@ -460,8 +460,68 @@ namespace CarryOn.API.Common.Models
                     if (CarryOptions.Legacy.TryGetValue("WalkSpeedOverrides", out var overridesToken)
                         && overridesToken is JObject overridesObj)
                     {
-                        CarryWalkSpeed.ModifierOverrides = overridesObj.ToObject<ModifierOverridesConfig>()
-                            ?? new ModifierOverridesConfig();
+                        var overrides = new ModifierOverridesConfig();
+
+                        if (overridesObj["ByBlockCode"] is JObject byBlockCode)
+                        {
+                            foreach (var entry in byBlockCode.Properties())
+                            {
+                                if (entry.Value is JObject slotConfig)
+                                {
+                                    overrides.ByBlockCode.Add(new SlotModifierConfig
+                                    {
+                                        Key = entry.Name,
+                                        Hands = slotConfig.Value<float?>("Hands"),
+                                        Back = slotConfig.Value<float?>("Back")
+                                    });
+                                }
+                                else if (entry.Value is JValue val && val.Type == JTokenType.Float)
+                                {
+                                    overrides.ByBlockCode.Add(new SlotModifierConfig
+                                    {
+                                        Key = entry.Name,
+                                        Hands = (float?)val,
+                                        Back = (float?)val
+                                    });
+                                }
+                            }
+                        }
+
+                        if (overridesObj["ByBlockClass"] is JObject byBlockClass)
+                        {
+                            foreach (var entry in byBlockClass.Properties())
+                            {
+                                if (entry.Value is JObject slotConfig)
+                                {
+                                    overrides.ByBlockClass.Add(new SlotModifierConfig
+                                    {
+                                        Key = entry.Name,
+                                        Hands = slotConfig.Value<float?>("Hands"),
+                                        Back = slotConfig.Value<float?>("Back")
+                                    });
+                                }
+                                else if (entry.Value is JValue val && val.Type == JTokenType.Float)
+                                {
+                                    overrides.ByBlockClass.Add(new SlotModifierConfig
+                                    {
+                                        Key = entry.Name,
+                                        Hands = (float?)val,
+                                        Back = (float?)val
+                                    });
+                                }
+                            }
+                        }
+
+                        if (overridesObj["SlotDefaults"] is JObject slotDefaults)
+                        {
+                            overrides.SlotDefaults = new SlotModifierConfig
+                            {
+                                Hands = slotDefaults.Value<float?>("Hands"),
+                                Back = slotDefaults.Value<float?>("Back")
+                            };
+                        }
+
+                        CarryWalkSpeed.ModifierOverrides = overrides;
                     }
 
                 }
@@ -522,7 +582,7 @@ namespace CarryOn.API.Common.Models
         private static ITreeAttribute ToCarryHungerRateTree(CarryHungerRateConfig config)
         {
             var tree = (TreeAttribute)TreeSerializer.ToTree(config);
-            tree["ModifierOverrides"] = ToWalkSpeedOverridesTree(config.ModifierOverrides);
+            tree["ModifierOverrides"] = ToModifierOverridesTree(config.ModifierOverrides);
             return tree;
         }
 
@@ -532,7 +592,7 @@ namespace CarryOn.API.Common.Models
             if (tree == null) return config;
 
             TreeSerializer.FromTree(tree, config);
-            config.ModifierOverrides = FromWalkSpeedOverridesTree(tree["ModifierOverrides"] as ITreeAttribute);
+            config.ModifierOverrides = FromModifierOverridesTree(tree["ModifierOverrides"] as ITreeAttribute);
             return config;
         }
 
@@ -552,7 +612,7 @@ namespace CarryOn.API.Common.Models
         private static ITreeAttribute ToCarryWalkSpeedTree(CarryWalkSpeedConfig config)
         {
             var tree = (TreeAttribute)TreeSerializer.ToTree(config);
-            tree["ModifierOverrides"] = ToWalkSpeedOverridesTree(config.ModifierOverrides);
+            tree["ModifierOverrides"] = ToModifierOverridesTree(config.ModifierOverrides);
             return tree;
         }
 
@@ -562,11 +622,11 @@ namespace CarryOn.API.Common.Models
             if (tree == null) return config;
 
             TreeSerializer.FromTree(tree, config);
-            config.ModifierOverrides = FromWalkSpeedOverridesTree(tree["ModifierOverrides"] as ITreeAttribute);
+            config.ModifierOverrides = FromModifierOverridesTree(tree["ModifierOverrides"] as ITreeAttribute);
             return config;
         }
 
-        private static ITreeAttribute ToWalkSpeedOverridesTree(ModifierOverridesConfig overrides)
+        private static ITreeAttribute ToModifierOverridesTree(ModifierOverridesConfig overrides)
         {
             var tree = new TreeAttribute();
             overrides ??= new ModifierOverridesConfig();
@@ -578,7 +638,7 @@ namespace CarryOn.API.Common.Models
             return tree;
         }
 
-        private static ModifierOverridesConfig FromWalkSpeedOverridesTree(ITreeAttribute? tree)
+        private static ModifierOverridesConfig FromModifierOverridesTree(ITreeAttribute? tree)
         {
             if (tree == null)
             {
