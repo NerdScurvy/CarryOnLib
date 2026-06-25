@@ -191,6 +191,52 @@ namespace CarryOn.API.Common.Models
         public int DropRange { get; set; } = 2;
     }
 
+    public class CarriedBlockEntityConfig
+    {
+        [DisplayName("Always Drop As Entity")]
+        [Description("When enabled, carried blocks are always dropped as a dropped-block entity instead of trying to place in the world or dropping items")]
+        [DefaultValue(false)]
+        [TreeValue("AlwaysDropAsEntity")] public bool AlwaysDropAsEntity { get; set; } = false;
+
+        [DisplayName("Random Drop Rotation")]
+        [Description("When enabled, dropped block entities spawn with a random facing rotation")]
+        [DefaultValue(true)]
+        [TreeValue("RandomDropRotation")] public bool RandomDropRotation { get; set; } = true;
+
+        [DisplayName("Show Particles")]
+        [Description("When enabled, dropped block entities display glowing pickup particles")]
+        [DefaultValue(true)]
+        [TreeValue("ShowParticles")] public bool ShowParticles { get; set; } = true;
+
+        [DisplayName("Drop As Entity On Permission Denied")]
+        [Description("When enabled and placement fails due to a permission check (e.g., land claim), the carried block is dropped as a block entity instead of dropping items")]
+        [DefaultValue(false)]
+        [TreeValue("DropAsEntityOnPermissionDenied")] public bool DropAsEntityOnPermissionDenied { get; set; } = false;
+
+        [DisplayName("Despawn After Days")]
+        [Description("In-game days after which a dropped block entity despawns (0 or negative to never despawn)")]
+        [DefaultValue(14)]
+        [TreeValue("DespawnAfterDays")] public float DespawnAfterDays { get; set; } = 14f;
+
+        [DisplayName("Pickup Access")]
+        [Description("Who can pick up the dropped block entity: Anyone (no restrictions), OwnerOnly (only the dropper, forever), or OwnerFirst (only the dropper for GracePeriodSeconds, then anyone)")]
+        [DefaultValue(PickupAccess.OwnerFirst)]
+        [TreeValue("PickupAccess")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public PickupAccess PickupAccess { get; set; } = PickupAccess.OwnerFirst;
+
+        [DisplayName("Grace Period Seconds")]
+        [Description("Real-time seconds the owner has exclusive pickup access. Only relevant when PickupAccess is OwnerFirst")]
+        [DefaultValue(300f)]
+        [TreeValue("GracePeriodSeconds")] public float GracePeriodSeconds { get; set; } = 300f;
+
+        [DisplayName("Entity Visual Scale")]
+        [Description("Uniform scale for the dropped block entity visual size and collision hitbox (0.1 to 10.0, default 0.6)")]
+        [DefaultValue(0.6f)]
+        [TreeValue("Scale")]
+        public float Scale { get; set; } = 0.6f;
+    }
+
     public class CarryOptionsConfig
     {
         [Category("Interaction")]
@@ -300,6 +346,9 @@ namespace CarryOn.API.Common.Models
 
         [Category("Damage Drop")]
         public DropCarriedOnDamageConfig DropCarriedOnDamage { get; set; } = new DropCarriedOnDamageConfig();
+
+        [Category("Dropped Block Entity")]
+        public CarriedBlockEntityConfig CarriedBlockEntity { get; set; } = new CarriedBlockEntityConfig();
 
         [Category("Carry Options")]
         public CarryOptionsConfig CarryOptions { get; set; } = new CarryOptionsConfig();
@@ -546,6 +595,7 @@ namespace CarryOn.API.Common.Models
             tree["DropCarriedOnDamage"] = ToDropCarriedOnDamageTree(DropCarriedOnDamage);
             tree["CarryOptions"] = ToCarryOptionsTree();
             tree["CarryableFilters"] = TreeSerializer.ToTree(CarryablesFilters);
+            tree["CarriedBlockEntity"] = TreeSerializer.ToTree(CarriedBlockEntity);
             tree["DebuggingOptions"] = TreeSerializer.ToTree(DebuggingOptions);
 
 
@@ -567,6 +617,7 @@ namespace CarryOn.API.Common.Models
             config.DropCarriedOnDamage = FromDropCarriedOnDamageTree(tree["DropCarriedOnDamage"] as ITreeAttribute);
             FromCarryOptionsTree(tree["CarryOptions"] as ITreeAttribute, config.CarryOptions);
             TreeSerializer.FromTree(tree["CarryableFilters"] as ITreeAttribute, config.CarryablesFilters);
+            TreeSerializer.FromTree(tree["CarriedBlockEntity"] as ITreeAttribute, config.CarriedBlockEntity);
             TreeSerializer.FromTree(tree["DebuggingOptions"] as ITreeAttribute, config.DebuggingOptions);
 
             return config;
@@ -574,9 +625,7 @@ namespace CarryOn.API.Common.Models
 
         private ITreeAttribute ToCarryOptionsTree()
         {
-            var tree = (TreeAttribute)TreeSerializer.ToTree(CarryOptions);
-            tree.SetString("BackpackSelectionMode", CarryOptions.BackpackSelectionMode.ToString());
-            return tree;
+            return TreeSerializer.ToTree(CarryOptions);
         }
 
         private static ITreeAttribute ToCarryHungerRateTree(CarryHungerRateConfig config)
@@ -601,12 +650,6 @@ namespace CarryOn.API.Common.Models
             if (tree == null) return;
 
             TreeSerializer.FromTree(tree, carryOptions);
-
-            var modeStr = tree.GetString("BackpackSelectionMode");
-            if (!string.IsNullOrEmpty(modeStr) && Enum.TryParse<BackpackSelectionMode>(modeStr, true, out var mode))
-            {
-                carryOptions.BackpackSelectionMode = mode;
-            }
         }
 
         private static ITreeAttribute ToCarryWalkSpeedTree(CarryWalkSpeedConfig config)

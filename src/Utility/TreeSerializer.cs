@@ -63,6 +63,10 @@ namespace CarryOn.Utility
                     var val = value as int?;
                     if (val.HasValue) tree.SetInt(attr.Key, val.Value);
                 }
+                else if (type.IsEnum && value is Enum e)
+                {
+                    tree.SetString(attr.Key, e.ToString());
+                }
             }
         }
 
@@ -108,6 +112,15 @@ namespace CarryOn.Utility
                 {
                     if (tree.HasAttribute(key))
                         prop.SetValue(config, (int?)tree.GetInt(key));
+                }
+                else if (type.IsEnum)
+                {
+                    if (tree.HasAttribute(key))
+                    {
+                        var str = tree.GetString(key);
+                        if (!string.IsNullOrEmpty(str) && Enum.TryParse(type, str, true, out var result))
+                            prop.SetValue(config, result);
+                    }
                 }
             }
         }
