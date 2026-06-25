@@ -60,6 +60,26 @@ namespace CarryOn.API.Common.Models
                 public static string EntityDoubleTapDismountEnabled { get; } = CarryOnCode("DoubleTapDismountEnabled");
 
             }
+
+            public static class CarriedBlock
+            {
+                // Entity WatchedAttributes keys (top-level on the entity)
+                public static string WatchedTree { get; } = "carriedBlock";
+                public static string OwnerUid { get; } = "ownerUid";
+                public static string DropTime { get; } = "dropTime";
+                public static string DropTimeRealTicks { get; } = "dropTimeRealTicks";
+
+                // Keys within the carried block serialization subtree
+                public static string Stack { get; } = "Stack";
+                public static string Data { get; } = "Data";
+                public static string Children { get; } = "Children";
+                public static string OffsetX { get; } = "OffsetX";
+                public static string OffsetY { get; } = "OffsetY";
+                public static string OffsetZ { get; } = "OffsetZ";
+                public static string OriginalFace { get; } = "OriginalFace";
+                public static string OriginalBlockCode { get; } = "OriginalBlockCode";
+                public static string OriginalMeshAngle { get; } = "OriginalMeshAngle";
+            }
         }
 
         public static class FailureCode
@@ -115,6 +135,9 @@ namespace CarryOn.API.Common.Models
             // Cluster carry failure codes
             public static string AttachedBlockNoClearance { get; } = "attached-block-no-clearance";
             public static string UnsupportedAttachment { get; } = "unsupported-attachment";
+
+            // Entity pickup failure codes
+            public static string NotOwner { get; } = "not-owner";
         }
 
         public static class HotKeyCode
