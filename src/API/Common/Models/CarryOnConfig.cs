@@ -286,6 +286,11 @@ namespace CarryOn.API.Common.Models
         [DefaultValue(false)]
         [TreeValue("CarryAttachedWallSigns")] public bool CarryAttachedWallSigns { get; set; } = false;
 
+        [DisplayName("Track Dropped Blocks (Legacy)")]
+        [Description("Track dropped blocks to allow pickup from claimed areas (legacy behavior)")]
+        [DefaultValue(false)]
+        [TreeValue("TrackDroppedBlocks")] public bool TrackDroppedBlocks { get; set; } = false;
+
         [DisplayName("Backpack Selection Mode")]
         [Description("How to select which backpack to render")]
         [DefaultValue(BackpackSelectionMode.LastFound)]
