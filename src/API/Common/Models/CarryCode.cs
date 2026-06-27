@@ -127,6 +127,7 @@ namespace CarryOn.API.Common.Models
             public static string CannotSwapBack { get; } = "cannot-swap-back";
             public static string NothingCarried { get; } = "nothing-carried";
             public static string PlaceDownNoPermission { get; } = "place-down-no-permission";
+            public static string PickUpNoPermission { get; } = "pick-up-no-permission";
 
             // Default fallback codes
             public static string PickUpFailed { get; } = "pick-up-failed";
