@@ -212,8 +212,8 @@ namespace CarryOn.API.Common.Models
 
         [DisplayName("Despawn After Days")]
         [Description("In-game days after which a dropped block entity despawns (0 or negative to never despawn)")]
-        [DefaultValue(14)]
-        [TreeValue("DespawnAfterDays")] public float DespawnAfterDays { get; set; } = 14f;
+        [DefaultValue(30)]
+        [TreeValue("DespawnAfterDays")] public float DespawnAfterDays { get; set; } = 30f;
 
         [DisplayName("Pickup Access")]
         [Description("Who can pick up the dropped block entity: Anyone (no restrictions), OwnerOnly (only the dropper, forever), or OwnerFirst (only the dropper for GracePeriodSeconds, then anyone)")]
