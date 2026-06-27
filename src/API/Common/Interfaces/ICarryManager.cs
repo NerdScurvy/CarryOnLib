@@ -76,8 +76,8 @@ namespace CarryOn.API.Common.Interfaces
         /// <summary>Drops a single carried block, attempting world placement within range.</summary>
         void DropCarriedBlock(Entity entity, CarriedBlock carriedBlock, int range = 4);
 
-        /// <summary>Drops a carried block as item(s) at the given position.</summary>
-        void DropBlockAsItem(CarriedBlock carriedBlock, BlockPos centerBlock, IServerPlayer player, Entity entity);
+        /// <summary>Drops a carried block as an entity or item(s) at the given position.</summary>
+        void DropBlockAsEntityOrItem(CarriedBlock carriedBlock, BlockPos centerBlock, IServerPlayer player, Entity entity);
 
         /// <summary>Initializes carry events discovered by the event bootstrap service.</summary>
         void InitEvents(ICoreAPI api);
