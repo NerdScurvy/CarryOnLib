@@ -26,7 +26,7 @@ namespace CarryOn.API.Common.Interfaces
         CarryOnConfig? Config { get; }
 
         /// <summary>Checks whether the entity has permission to carry the block at the specified position.</summary>
-        bool HasPermissionToCarry(Entity entity, BlockPos pos, bool showErrorMessage = true);
+        bool HasPermissionAt(Entity entity, BlockPos pos, bool showErrorMessage = true);
 
         /// <summary>Gets all carried blocks currently stored on the entity.</summary>
         IEnumerable<CarriedBlock> GetAllCarried(Entity entity);

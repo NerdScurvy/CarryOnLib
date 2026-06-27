@@ -18,7 +18,7 @@ namespace CarryOn.API.Event
 
         public event BlockEntityDataDelegate? BeforeRestoreBlockEntityData;
 
-        public event CheckPermissionToCarryDelegate? CheckPermissionToCarry;
+        public event CheckPermissionAtDelegate? CheckPermissionAt;
 
         public event EventHandler<BlockDroppedEventArgs>? BlockDropped;
 
@@ -26,9 +26,9 @@ namespace CarryOn.API.Event
 
         public Action<Exception>? OnEventHandlerError { get; set; }
 
-        public bool? TriggerCheckPermissionToCarry(EntityPlayer playerEntity, BlockPos pos, bool isReinforced)
+        public bool? TriggerCheckPermissionAt(EntityPlayer playerEntity, BlockPos pos, bool isReinforced)
         {
-            return OnCheckPermissionToCarry(playerEntity, pos, isReinforced);
+            return OnCheckPermissionAt(playerEntity, pos, isReinforced);
         }
 
         public bool TriggerBeforePickUpBlock(Entity entity, BlockPos pos, CarrySlot slot, CarriedBlock carriedBlock, ref string failureCode)
@@ -71,12 +71,12 @@ namespace CarryOn.API.Event
             OnBlockRemoved(args);
         }
 
-        protected virtual bool? OnCheckPermissionToCarry(EntityPlayer playerEntity, BlockPos pos, bool isReinforced)
+        protected virtual bool? OnCheckPermissionAt(EntityPlayer playerEntity, BlockPos pos, bool isReinforced)
         {
-            var delegates = CheckPermissionToCarry?.GetInvocationList();
+            var delegates = CheckPermissionAt?.GetInvocationList();
             if (delegates == null) return null;
 
-            foreach (var del in delegates.Cast<CheckPermissionToCarryDelegate>())
+            foreach (var del in delegates.Cast<CheckPermissionAtDelegate>())
             {
                 try
                 {
