@@ -193,10 +193,12 @@ namespace CarryOn.API.Common.Models
 
     public class CarriedBlockEntityConfig
     {
-        [DisplayName("Always Drop As Entity")]
-        [Description("When enabled, carried blocks are always dropped as a dropped-block entity instead of trying to place in the world or dropping items")]
-        [DefaultValue(false)]
-        [TreeValue("AlwaysDropAsEntity")] public bool AlwaysDropAsEntity { get; set; } = false;
+        [DisplayName("Drop Mode")]
+        [Description("Controls how carried blocks are dropped: Items (place in world or drop as items), EntityOnFailedPlacement (place in world or drop as block entity), EntityAlways (always drop as block entity)")]
+        [DefaultValue(DropMode.EntityOnFailedPlacement)]
+        [TreeValue("DropMode")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public DropMode DropMode { get; set; } = DropMode.EntityOnFailedPlacement;
 
         [DisplayName("Random Drop Rotation")]
         [Description("When enabled, dropped block entities spawn with a random facing rotation")]
@@ -207,11 +209,6 @@ namespace CarryOn.API.Common.Models
         [Description("When enabled, dropped block entities display glowing pickup particles")]
         [DefaultValue(true)]
         [TreeValue("ShowParticles")] public bool ShowParticles { get; set; } = true;
-
-        [DisplayName("Drop As Entity On Permission Denied")]
-        [Description("When enabled and placement fails due to a permission check (e.g., land claim), the carried block is dropped as a block entity instead of dropping items")]
-        [DefaultValue(false)]
-        [TreeValue("DropAsEntityOnPermissionDenied")] public bool DropAsEntityOnPermissionDenied { get; set; } = false;
 
         [DisplayName("Despawn After Days")]
         [Description("In-game days after which a dropped block entity despawns (0 or negative to never despawn)")]
