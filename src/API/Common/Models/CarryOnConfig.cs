@@ -286,7 +286,7 @@ namespace CarryOn.API.Common.Models
         [DisplayName("Track Dropped Blocks (Legacy)")]
         [Description("Track dropped blocks to allow pickup from claimed areas (legacy behavior)")]
         [DefaultValue(false)]
-        [TreeValue("TrackDroppedBlocks")] public bool TrackDroppedBlocks { get; set; } = false;
+        [TreeValue("LegacyTrackDroppedBlocks")] public bool TrackDroppedBlocks { get; set; } = false;
 
         [DisplayName("Backpack Selection Mode")]
         [Description("How to select which backpack to render")]
