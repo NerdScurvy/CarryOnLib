@@ -260,10 +260,15 @@ namespace CarryOn.API.Common.Models
         [DefaultValue(true)]
         [TreeValue("BackSlotEnabled")] public bool BackSlotEnabled { get; set; } = true;
 
-        [Browsable(false)]
+        [Category("Back Slot")]
+        [DisplayName("Allow High Capacity Storage On Back (Requires Restart)")]
+        [Description("Allow carrying high capacity storage items on the back slot")]
+        [DefaultValue(false)]
         [TreeValue("AllowHighCapacityStorageOnBack")] public bool AllowHighCapacityStorageOnBack { get; set; } = false;
 
-        [Browsable(false)]
+        [Category("Back Slot")]
+        [DisplayName("Prevent Swap From Back On Target")]
+        [Description("List of targets where swapping from the back slot is prevented")]
         [TreeValue("PreventSwapFromBackOnTarget")] public string[] PreventSwapFromBackOnTarget { get; set; } = ["behavior::Container", "behavior::Door", "class::portals.portal", "code::groundstorage", "class::BlockGroundStorage"];
 
         [Category("Temperature")]
