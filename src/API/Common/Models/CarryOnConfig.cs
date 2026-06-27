@@ -283,6 +283,11 @@ namespace CarryOn.API.Common.Models
         [DefaultValue(false)]
         [TreeValue("CarryAttachedWallSigns")] public bool CarryAttachedWallSigns { get; set; } = false;
 
+        [DisplayName("Client-Side Permission Check")]
+        [Description("Allow client-side permission checks to avoid optimistic pickup attempts on claims (may be inaccurate)")]
+        [DefaultValue(true)]
+        [TreeValue("ClientSidePermissionCheck")] public bool ClientSidePermissionCheck { get; set; } = true;
+
         [DisplayName("Track Dropped Blocks (Legacy)")]
         [Description("Track dropped blocks to allow pickup from claimed areas (legacy behavior)")]
         [DefaultValue(false)]
