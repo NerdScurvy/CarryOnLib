@@ -491,19 +491,21 @@ namespace CarryOn.API.Common.Models
                 {
                     ConfigVersion = 3;
 
-                    if (CarryOptions?.Legacy == null) return;
+                    if (CarryOptions?.Legacy != null)
+                    {
 
-                    if (CarryOptions.Legacy.ContainsKey("AllowLargeChestsOnBack"))
-                    {
-                        CarryOptions.AllowHighCapacityStorageOnBack = CarryOptions.Legacy.TryGetBool("AllowLargeChestsOnBack", CarryOptions.AllowHighCapacityStorageOnBack);
-                    }
-                    if (CarryOptions.Legacy.ContainsKey("AllowChestTrunksOnBack"))
-                    {
-                        CarryablesOnBack.ChestTrunk = CarryOptions.Legacy.TryGetBool("AllowChestTrunksOnBack", CarryablesOnBack.ChestTrunk);
-                    }
-                    if (CarryOptions.Legacy.ContainsKey("AllowCratesOnBack"))
-                    {
-                        CarryablesOnBack.Crate = CarryOptions.Legacy.TryGetBool("AllowCratesOnBack", CarryablesOnBack.Crate);
+                        if (CarryOptions.Legacy.ContainsKey("AllowLargeChestsOnBack"))
+                        {
+                            CarryOptions.AllowHighCapacityStorageOnBack = CarryOptions.Legacy.TryGetBool("AllowLargeChestsOnBack", CarryOptions.AllowHighCapacityStorageOnBack);
+                        }
+                        if (CarryOptions.Legacy.ContainsKey("AllowChestTrunksOnBack"))
+                        {
+                            CarryablesOnBack.ChestTrunk = CarryOptions.Legacy.TryGetBool("AllowChestTrunksOnBack", CarryablesOnBack.ChestTrunk);
+                        }
+                        if (CarryOptions.Legacy.ContainsKey("AllowCratesOnBack"))
+                        {
+                            CarryablesOnBack.Crate = CarryOptions.Legacy.TryGetBool("AllowCratesOnBack", CarryablesOnBack.Crate);
+                        }
                     }
 
                 }
@@ -511,80 +513,81 @@ namespace CarryOn.API.Common.Models
                 {
                     ConfigVersion = 4;
 
-                    if (CarryOptions?.Legacy == null) return;
-
-                    CarryWalkSpeed.HandsEnabled = !CarryOptions.Legacy.TryGetBool("IgnoreCarrySpeedPenalty", false);
-                    CarryWalkSpeed.BackEnabled = !CarryOptions.Legacy.TryGetBool("IgnoreCarrySpeedPenalty", false);
-                    CarryWalkSpeed.HandsAllowSprint = CarryOptions.Legacy.TryGetBool("AllowSprintWhileCarrying", false);
-                    CarryWalkSpeed.BackAllowSprint = CarryOptions.Legacy.TryGetBool("AllowSprintWhileCarrying", false);
-
-                    if (CarryOptions.Legacy.TryGetValue("WalkSpeedOverrides", out var overridesToken)
-                        && overridesToken is JObject overridesObj)
+                    if (CarryOptions?.Legacy != null)
                     {
-                        var overrides = new ModifierOverridesConfig();
 
-                        if (overridesObj["ByBlockCode"] is JObject byBlockCode)
+                        CarryWalkSpeed.HandsEnabled = !CarryOptions.Legacy.TryGetBool("IgnoreCarrySpeedPenalty", false);
+                        CarryWalkSpeed.BackEnabled = !CarryOptions.Legacy.TryGetBool("IgnoreCarrySpeedPenalty", false);
+                        CarryWalkSpeed.HandsAllowSprint = CarryOptions.Legacy.TryGetBool("AllowSprintWhileCarrying", false);
+                        CarryWalkSpeed.BackAllowSprint = CarryOptions.Legacy.TryGetBool("AllowSprintWhileCarrying", false);
+
+                        if (CarryOptions.Legacy.TryGetValue("WalkSpeedOverrides", out var overridesToken)
+                            && overridesToken is JObject overridesObj)
                         {
-                            foreach (var entry in byBlockCode.Properties())
+                            var overrides = new ModifierOverridesConfig();
+
+                            if (overridesObj["ByBlockCode"] is JObject byBlockCode)
                             {
-                                if (entry.Value is JObject slotConfig)
+                                foreach (var entry in byBlockCode.Properties())
                                 {
-                                    overrides.ByBlockCode.Add(new SlotModifierConfig
+                                    if (entry.Value is JObject slotConfig)
                                     {
-                                        Key = entry.Name,
-                                        Hands = slotConfig.Value<float?>("Hands"),
-                                        Back = slotConfig.Value<float?>("Back")
-                                    });
-                                }
-                                else if (entry.Value is JValue val && val.Type == JTokenType.Float)
-                                {
-                                    overrides.ByBlockCode.Add(new SlotModifierConfig
+                                        overrides.ByBlockCode.Add(new SlotModifierConfig
+                                        {
+                                            Key = entry.Name,
+                                            Hands = slotConfig.Value<float?>("Hands"),
+                                            Back = slotConfig.Value<float?>("Back")
+                                        });
+                                    }
+                                    else if (entry.Value is JValue val && val.Type == JTokenType.Float)
                                     {
-                                        Key = entry.Name,
-                                        Hands = (float?)val,
-                                        Back = (float?)val
-                                    });
+                                        overrides.ByBlockCode.Add(new SlotModifierConfig
+                                        {
+                                            Key = entry.Name,
+                                            Hands = (float?)val,
+                                            Back = (float?)val
+                                        });
+                                    }
                                 }
                             }
-                        }
 
-                        if (overridesObj["ByBlockClass"] is JObject byBlockClass)
-                        {
-                            foreach (var entry in byBlockClass.Properties())
+                            if (overridesObj["ByBlockClass"] is JObject byBlockClass)
                             {
-                                if (entry.Value is JObject slotConfig)
+                                foreach (var entry in byBlockClass.Properties())
                                 {
-                                    overrides.ByBlockClass.Add(new SlotModifierConfig
+                                    if (entry.Value is JObject slotConfig)
                                     {
-                                        Key = entry.Name,
-                                        Hands = slotConfig.Value<float?>("Hands"),
-                                        Back = slotConfig.Value<float?>("Back")
-                                    });
-                                }
-                                else if (entry.Value is JValue val && val.Type == JTokenType.Float)
-                                {
-                                    overrides.ByBlockClass.Add(new SlotModifierConfig
+                                        overrides.ByBlockClass.Add(new SlotModifierConfig
+                                        {
+                                            Key = entry.Name,
+                                            Hands = slotConfig.Value<float?>("Hands"),
+                                            Back = slotConfig.Value<float?>("Back")
+                                        });
+                                    }
+                                    else if (entry.Value is JValue val && val.Type == JTokenType.Float)
                                     {
-                                        Key = entry.Name,
-                                        Hands = (float?)val,
-                                        Back = (float?)val
-                                    });
+                                        overrides.ByBlockClass.Add(new SlotModifierConfig
+                                        {
+                                            Key = entry.Name,
+                                            Hands = (float?)val,
+                                            Back = (float?)val
+                                        });
+                                    }
                                 }
                             }
-                        }
 
-                        if (overridesObj["SlotDefaults"] is JObject slotDefaults)
-                        {
-                            overrides.SlotDefaults = new SlotModifierConfig
+                            if (overridesObj["SlotDefaults"] is JObject slotDefaults)
                             {
-                                Hands = slotDefaults.Value<float?>("Hands"),
-                                Back = slotDefaults.Value<float?>("Back")
-                            };
-                        }
+                                overrides.SlotDefaults = new SlotModifierConfig
+                                {
+                                    Hands = slotDefaults.Value<float?>("Hands"),
+                                    Back = slotDefaults.Value<float?>("Back")
+                                };
+                            }
 
-                        CarryWalkSpeed.ModifierOverrides = overrides;
+                            CarryWalkSpeed.ModifierOverrides = overrides;
+                        }
                     }
-
                 }
             }
             finally
