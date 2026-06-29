@@ -130,10 +130,12 @@ namespace CarryOn.API.Common.Models
 
         [DisplayName("Hands Modifier")]
         [Description("Modifier value for the hands slot (leave empty for no override)")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public float? Hands { get; set; }
 
         [DisplayName("Back Modifier")]
         [Description("Modifier value for the back slot (leave empty for no override)")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public float? Back { get; set; }
 
         [JsonIgnore]
