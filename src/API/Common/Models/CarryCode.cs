@@ -43,7 +43,15 @@ namespace CarryOn.API.Common.Models
                 = new Dictionary<CarrySlot, float> {
                     { CarrySlot.Hands, 0.2F },
                     { CarrySlot.Back , 0.3F }
-                };                
+                };
+
+            public static class CarriedBlockEntity
+            {
+                public static float DespawnAfterDays { get; } = 14f;
+                public static float GracePeriodSeconds { get; } = 300f;
+                public static bool ShowParticles { get; } = true;
+                public static PickupAccess PickupAccess { get; } = PickupAccess.OwnerFirst;
+            }
 
         }
 
