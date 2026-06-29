@@ -126,6 +126,7 @@ namespace CarryOn.API.Common.Models
     {
         [DisplayName("Key")]
         [Description("Block code or class name this entry applies to (e.g. \"game:chest-normal\" or \"BlockChest\")")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string? Key { get; set; }
 
         [DisplayName("Hands Modifier")]
