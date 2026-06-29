@@ -326,6 +326,11 @@ namespace CarryOn.API.Common.Models
         [Description("Enable the pack adjustment debug tool (requires restart)")]
         [DefaultValue(false)]
         [TreeValue("EnablePackAdjustmentTool")] public bool EnablePackAdjustmentTool { get; set; } = false;
+
+        [DisplayName("Disable Config Watcher")]
+        [Description("Disable the file system watcher that hot-reloads the config on change (requires restart)")]
+        [DefaultValue(false)]
+        [TreeValue("DisableConfigWatcher")] public bool DisableConfigWatcher { get; set; } = false;
     }
 
     public class CarryOnConfig
