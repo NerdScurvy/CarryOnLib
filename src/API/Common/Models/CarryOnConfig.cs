@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 using CarryOn.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -432,6 +433,24 @@ namespace CarryOn.API.Common.Models
             ConfigVersion = version;
         }
 
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            PopulateSlotDefaults(CarryWalkSpeed?.ModifierOverrides?.SlotDefaults, CarryCode.Default.WalkSpeedModifier);
+            PopulateSlotDefaults(CarryHungerRate?.ModifierOverrides?.SlotDefaults, CarryCode.Default.HungerRateModifier);
+        }
+
+        internal static void PopulateSlotDefaults(SlotModifierConfig? slotDefaults, IReadOnlyDictionary<CarrySlot, float> defaultValue)
+        {
+            if (slotDefaults == null) return;
+
+            if (slotDefaults.Hands == null && defaultValue.TryGetValue(CarrySlot.Hands, out var hands))
+                slotDefaults.Hands = hands;
+
+            if (slotDefaults.Back == null && defaultValue.TryGetValue(CarrySlot.Back, out var back))
+                slotDefaults.Back = back;
+        }
+
         public void UpgradeVersion()
         {
             try
@@ -594,6 +613,7 @@ namespace CarryOn.API.Common.Models
                             }
 
                             CarryWalkSpeed.ModifierOverrides = overrides;
+                            PopulateSlotDefaults(CarryWalkSpeed.ModifierOverrides?.SlotDefaults, CarryCode.Default.WalkSpeedModifier);
                         }
                     }
                 }
@@ -665,6 +685,7 @@ namespace CarryOn.API.Common.Models
 
             TreeSerializer.FromTree(tree, config);
             config.ModifierOverrides = FromModifierOverridesTree(tree["ModifierOverrides"] as ITreeAttribute);
+            PopulateSlotDefaults(config.ModifierOverrides?.SlotDefaults, CarryCode.Default.HungerRateModifier);
             return config;
         }
 
@@ -689,6 +710,7 @@ namespace CarryOn.API.Common.Models
 
             TreeSerializer.FromTree(tree, config);
             config.ModifierOverrides = FromModifierOverridesTree(tree["ModifierOverrides"] as ITreeAttribute);
+            PopulateSlotDefaults(config.ModifierOverrides?.SlotDefaults, CarryCode.Default.WalkSpeedModifier);
             return config;
         }
 
