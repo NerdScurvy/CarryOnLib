@@ -2,7 +2,7 @@
 	"type": "Code",
 	"name": "CarryOnLib",
 	"modid": "carryonlib",
-	"version": "1.0.0-pre.4",
+	"version": "1.0.0-pre.5",
 
 	"description": "Library for the CarryOn mod",
 	"website": "https://github.com/NerdScurvy/CarryOnLib",

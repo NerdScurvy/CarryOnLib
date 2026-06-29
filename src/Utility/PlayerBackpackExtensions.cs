@@ -46,7 +46,7 @@ namespace CarryOn.Utility
                 return "hands";
             }
 
-            var selectionMode = config?.CarryOptions?.BackpackSelectionModeEnum ?? BackpackSelectionMode.LastFound;
+            var selectionMode = config?.CarryOptions?.BackpackSelectionMode ?? BackpackSelectionMode.LastFound;
             var backpackItemCode = entityPlayer?.Player?.GetRenderedBackpackItemCode(selectionMode);
             if (!string.IsNullOrEmpty(backpackItemCode)
                 && (config?.BackpackMapping?.TryGetValue(backpackItemCode, out var backpackType) ?? false)
