@@ -3,7 +3,6 @@ using CarryOn.API.Common.Models;
 using CarryOn.API.Event;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
-using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 
@@ -21,9 +20,6 @@ namespace CarryOn.API.Common.Interfaces
 
         /// <summary>Gets the carry event hub for subscribing to carry lifecycle events.</summary>
         CarryEvents CarryEvents { get; }
-
-        /// <summary>Gets the active CarryOn configuration, or null if not yet loaded.</summary>
-        CarryOnConfig? Config { get; }
 
         /// <summary>Checks whether the entity has permission to carry the block at the specified position.</summary>
         bool HasPermissionAt(Entity entity, BlockPos pos, bool showErrorMessage = true);
