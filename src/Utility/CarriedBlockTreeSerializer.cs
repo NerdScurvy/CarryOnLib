@@ -14,7 +14,6 @@ namespace CarryOn.Utility
             var tree = new TreeAttribute();
 
             var stack = carriedBlock.ItemStack;
-            if (stack == null) return null;
 
             tree.SetItemstack(AttributeKey.CarriedBlock.Stack, stack);
 
