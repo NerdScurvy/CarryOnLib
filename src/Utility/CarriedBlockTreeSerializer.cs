@@ -14,7 +14,6 @@ namespace CarryOn.Utility
             var tree = new TreeAttribute();
 
             var stack = carriedBlock.ItemStack;
-            if (stack == null) return null;
 
             tree.SetItemstack(AttributeKey.CarriedBlock.Stack, stack);
 
@@ -41,6 +40,8 @@ namespace CarryOn.Utility
 
         public static CarriedBlock? Deserialize(ITreeAttribute tree, IWorldAccessor? world, CarrySlot slot = CarrySlot.Hands)
         {
+            if (world == null) return null;
+
             var stack = tree.GetItemstack(AttributeKey.CarriedBlock.Stack);
             if (stack?.Class != EnumItemClass.Block) return null;
             if (stack.Block == null)
@@ -79,6 +80,7 @@ namespace CarryOn.Utility
                 if (childStack?.Class != EnumItemClass.Block) continue;
                 if (childStack.Block == null)
                 {
+                    if (world == null) continue;
                     childStack.ResolveBlockOrItem(world);
                     if (childStack.Block == null) continue;
                 }
