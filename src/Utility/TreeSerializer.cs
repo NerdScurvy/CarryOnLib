@@ -8,7 +8,9 @@ namespace CarryOn.Utility
 {
     public static class TreeSerializer
     {
-        private static readonly Dictionary<Type, PropertyInfo[]> _cache = new();
+        // Safe to hold permanently: only VS engine types and loaded mod types are stored,
+        // and mods do not unload during a Vintage Story session.
+        private static readonly Dictionary<Type, PropertyInfo[]> propertyTypeCache = [];
 
         public static ITreeAttribute ToTree(object config)
         {
@@ -25,11 +27,11 @@ namespace CarryOn.Utility
 
         private static PropertyInfo[] GetTreeProperties(Type type)
         {
-            if (_cache.TryGetValue(type, out var props))
+            if (propertyTypeCache.TryGetValue(type, out var props))
                 return props;
 
             props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            _cache[type] = props;
+            propertyTypeCache[type] = props;
             return props;
         }
 

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Newtonsoft.Json.Linq;
@@ -231,7 +230,7 @@ namespace CarryOn.Utility
         public static string[] TryGetTokenStringArray(IDictionary<string, JToken> dict, string key, string[] defaultValue)
         {
             return dict != null && dict.TryGetValue(key, out var token) && token.Type == JTokenType.Array
-                ? token.ToObject<string[]>()!
+                ? token.ToObject<string[]>() ?? defaultValue
                 : defaultValue;
         }
 

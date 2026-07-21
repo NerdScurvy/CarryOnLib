@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using CarryOn.API.Common.Models;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 
@@ -29,7 +30,7 @@ namespace CarryOn.Utility
                 var key = keys[i];
                 if (attr is not ITreeAttribute tree)
                 {
-                    if ((attr == null) && (value == null)) return;
+                    if (value == null) return;
                     var getter = $"attr{keys.Take(i).Select(k => $"[\"{k}\"]")}";
                     var type = attr?.GetType()?.ToString() ?? "null";
                     throw new ArgumentException($"{getter} is {type}, not TreeAttribute.", nameof(attr));
@@ -108,7 +109,7 @@ namespace CarryOn.Utility
                             andResult &= boolAttr.value;
                         else
                         {
-                            api.Logger.Warning($"CarryOn: EvaluateDotNotationLogic - Key '{key.Trim()}' not found or not boolean, assuming true.");
+                            api.Logger.Warning($"{CarryConstants.ModId}: EvaluateDotNotationLogic - Key '{key.Trim()}' not found or not boolean, assuming true.");
                             andResult &= true;
                         }
                     }
@@ -126,7 +127,7 @@ namespace CarryOn.Utility
                     value = boolAttr.value;
                 else
                 {
-                    api.Logger.Warning($"CarryOn: EvaluateDotNotationLogic - Key '{key.Trim()}' not found or not boolean, assuming true.");
+                    api.Logger.Warning($"{CarryConstants.ModId}: EvaluateDotNotationLogic - Key '{key.Trim()}' not found or not boolean, assuming true.");
                     value = true;
                 }
 

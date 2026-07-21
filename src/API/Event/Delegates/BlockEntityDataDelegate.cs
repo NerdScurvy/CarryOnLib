@@ -3,5 +3,5 @@ using Vintagestory.API.Datastructures;
 
 namespace CarryOn.API.Event.Delegates
 {
-    public delegate void BlockEntityDataDelegate(BlockEntity blockEntity, ITreeAttribute blockEntityData, bool dropped = false);
+    public delegate void BlockEntityDataDelegate(BlockEntity blockEntity, ITreeAttribute blockEntityData, bool dropped);
 }
