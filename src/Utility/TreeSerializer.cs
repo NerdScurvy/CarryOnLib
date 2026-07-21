@@ -8,6 +8,8 @@ namespace CarryOn.Utility
 {
     public static class TreeSerializer
     {
+        // Safe to hold permanently: only VS engine types and loaded mod types are stored,
+        // and mods do not unload during a Vintage Story session.
         private static readonly Dictionary<Type, PropertyInfo[]> propertyTypeCache = [];
 
         public static ITreeAttribute ToTree(object config)

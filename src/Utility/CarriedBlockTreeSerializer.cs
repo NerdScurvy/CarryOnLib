@@ -3,7 +3,7 @@ using CarryOn.API.Common.Models;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
-using static CarryOn.API.Common.Models.CarryConstant;
+using static CarryOn.API.Common.Models.CarryConstants;
 
 namespace CarryOn.Utility
 {
@@ -15,22 +15,22 @@ namespace CarryOn.Utility
 
             var stack = carriedBlock.ItemStack;
 
-            tree.SetItemstack(AttributeKey.CarriedBlock.Stack, stack);
+            tree.SetItemstack(AttributeKeys.CarriedBlockData.Stack, stack);
 
             if (carriedBlock.BlockEntityData != null)
             {
-                tree[AttributeKey.CarriedBlock.Data] = carriedBlock.BlockEntityData;
+                tree[AttributeKeys.CarriedBlockData.Data] = carriedBlock.BlockEntityData;
             }
 
             var childrenTree = BuildAttachedBlocksTree(carriedBlock.AttachedBlocks);
             if (childrenTree != null)
-                tree[AttributeKey.CarriedBlock.Children] = childrenTree;
+                tree[AttributeKeys.CarriedBlockData.Children] = childrenTree;
 
             if (carriedBlock.OriginalBlockCode != null)
-                tree.SetString(AttributeKey.CarriedBlock.OriginalBlockCode, carriedBlock.OriginalBlockCode.ToString());
+                tree.SetString(AttributeKeys.CarriedBlockData.OriginalBlockCode, carriedBlock.OriginalBlockCode.ToString());
 
             if (carriedBlock.OriginalMeshAngle.HasValue)
-                tree.SetFloat(AttributeKey.CarriedBlock.OriginalMeshAngle, carriedBlock.OriginalMeshAngle.Value);
+                tree.SetFloat(AttributeKeys.CarriedBlockData.OriginalMeshAngle, carriedBlock.OriginalMeshAngle.Value);
 
             return tree;
         }
@@ -42,7 +42,7 @@ namespace CarryOn.Utility
         {
             if (world == null) return null;
 
-            var stack = tree.GetItemstack(AttributeKey.CarriedBlock.Stack);
+            var stack = tree.GetItemstack(AttributeKeys.CarriedBlockData.Stack);
             if (stack?.Class != EnumItemClass.Block) return null;
             if (stack.Block == null)
             {
@@ -50,15 +50,15 @@ namespace CarryOn.Utility
                 if (stack.Block == null) return null;
             }
 
-            var blockEntityData = tree[AttributeKey.CarriedBlock.Data] as ITreeAttribute;
+            var blockEntityData = tree[AttributeKeys.CarriedBlockData.Data] as ITreeAttribute;
             var attachedBlocks = DeserializeAttachedBlocks(tree, world);
 
-            var originalCodeStr = tree.GetString(AttributeKey.CarriedBlock.OriginalBlockCode, null);
+            var originalCodeStr = tree.GetString(AttributeKeys.CarriedBlockData.OriginalBlockCode, null);
             var originalCode = originalCodeStr != null ? new AssetLocation(originalCodeStr) : null;
 
             float? originalMeshAngle = null;
-            if (tree.HasAttribute(AttributeKey.CarriedBlock.OriginalMeshAngle))
-                originalMeshAngle = tree.GetFloat(AttributeKey.CarriedBlock.OriginalMeshAngle);
+            if (tree.HasAttribute(AttributeKeys.CarriedBlockData.OriginalMeshAngle))
+                originalMeshAngle = tree.GetFloat(AttributeKeys.CarriedBlockData.OriginalMeshAngle);
 
             return new CarriedBlock(slot, stack, blockEntityData, attachedBlocks, originalCode, originalMeshAngle);
         }
@@ -68,7 +68,7 @@ namespace CarryOn.Utility
 
         public static List<AttachedCarriedBlock>? DeserializeAttachedBlocks(ITreeAttribute slotAttribute, IWorldAccessor? world)
         {
-            if (slotAttribute[AttributeKey.CarriedBlock.Children] is not TreeAttribute childrenTree || childrenTree.Count == 0)
+            if (slotAttribute[AttributeKeys.CarriedBlockData.Children] is not TreeAttribute childrenTree || childrenTree.Count == 0)
                 return null;
 
             var attached = new List<AttachedCarriedBlock>();
@@ -76,7 +76,7 @@ namespace CarryOn.Utility
             {
                 if (childrenTree[key] is not ITreeAttribute childAttr) continue;
 
-                var childStack = childAttr.GetItemstack(AttributeKey.CarriedBlock.Stack);
+                var childStack = childAttr.GetItemstack(AttributeKeys.CarriedBlockData.Stack);
                 if (childStack?.Class != EnumItemClass.Block) continue;
                 if (childStack.Block == null)
                 {
@@ -85,22 +85,22 @@ namespace CarryOn.Utility
                     if (childStack.Block == null) continue;
                 }
 
-                var childData = childAttr[AttributeKey.CarriedBlock.Data] as ITreeAttribute;
+                var childData = childAttr[AttributeKeys.CarriedBlockData.Data] as ITreeAttribute;
 
-                var offsetX = childAttr.GetInt(AttributeKey.CarriedBlock.OffsetX, 0);
-                var offsetY = childAttr.GetInt(AttributeKey.CarriedBlock.OffsetY, 0);
-                var offsetZ = childAttr.GetInt(AttributeKey.CarriedBlock.OffsetZ, 0);
+                var offsetX = childAttr.GetInt(AttributeKeys.CarriedBlockData.OffsetX, 0);
+                var offsetY = childAttr.GetInt(AttributeKeys.CarriedBlockData.OffsetY, 0);
+                var offsetZ = childAttr.GetInt(AttributeKeys.CarriedBlockData.OffsetZ, 0);
                 var relativeOffset = new BlockPos(offsetX, offsetY, offsetZ);
 
-                var faceCode = childAttr.GetString(AttributeKey.CarriedBlock.OriginalFace, null);
+                var faceCode = childAttr.GetString(AttributeKeys.CarriedBlockData.OriginalFace, null);
                 var originalFace = faceCode != null ? BlockFacing.FromCode(faceCode) : null;
 
-                var originalCodeStr = childAttr.GetString(AttributeKey.CarriedBlock.OriginalBlockCode, null);
+                var originalCodeStr = childAttr.GetString(AttributeKeys.CarriedBlockData.OriginalBlockCode, null);
                 var originalCode = originalCodeStr != null ? new AssetLocation(originalCodeStr) : null;
 
                 float? originalMeshAngle = null;
-                if (childAttr.HasAttribute(AttributeKey.CarriedBlock.OriginalMeshAngle))
-                    originalMeshAngle = childAttr.GetFloat(AttributeKey.CarriedBlock.OriginalMeshAngle);
+                if (childAttr.HasAttribute(AttributeKeys.CarriedBlockData.OriginalMeshAngle))
+                    originalMeshAngle = childAttr.GetFloat(AttributeKeys.CarriedBlockData.OriginalMeshAngle);
 
                 var carriedBlock = new CarriedBlock(CarrySlot.Attached, childStack, childData, null, originalCode, originalMeshAngle);
                 attached.Add(new AttachedCarriedBlock(relativeOffset, carriedBlock, originalFace));
@@ -119,25 +119,25 @@ namespace CarryOn.Utility
                 var child = attachedBlocks[i];
                 var childAttr = new TreeAttribute();
 
-                childAttr.SetItemstack(AttributeKey.CarriedBlock.Stack, child.ItemStack);
+                childAttr.SetItemstack(AttributeKeys.CarriedBlockData.Stack, child.ItemStack);
 
                 if (child.BlockEntityData != null)
                 {
-                    childAttr[AttributeKey.CarriedBlock.Data] = child.BlockEntityData;
+                    childAttr[AttributeKeys.CarriedBlockData.Data] = child.BlockEntityData;
                 }
 
-                childAttr.SetInt(AttributeKey.CarriedBlock.OffsetX, child.RelativeOffset.X);
-                childAttr.SetInt(AttributeKey.CarriedBlock.OffsetY, child.RelativeOffset.Y);
-                childAttr.SetInt(AttributeKey.CarriedBlock.OffsetZ, child.RelativeOffset.Z);
+                childAttr.SetInt(AttributeKeys.CarriedBlockData.OffsetX, child.RelativeOffset.X);
+                childAttr.SetInt(AttributeKeys.CarriedBlockData.OffsetY, child.RelativeOffset.Y);
+                childAttr.SetInt(AttributeKeys.CarriedBlockData.OffsetZ, child.RelativeOffset.Z);
 
                 if (child.OriginalLocalFace != null)
-                    childAttr.SetString(AttributeKey.CarriedBlock.OriginalFace, child.OriginalLocalFace.Code);
+                    childAttr.SetString(AttributeKeys.CarriedBlockData.OriginalFace, child.OriginalLocalFace.Code);
 
                 if (child.OriginalBlockCode != null)
-                    childAttr.SetString(AttributeKey.CarriedBlock.OriginalBlockCode, child.OriginalBlockCode.ToString());
+                    childAttr.SetString(AttributeKeys.CarriedBlockData.OriginalBlockCode, child.OriginalBlockCode.ToString());
 
                 if (child.OriginalMeshAngle.HasValue)
-                    childAttr.SetFloat(AttributeKey.CarriedBlock.OriginalMeshAngle, child.OriginalMeshAngle.Value);
+                    childAttr.SetFloat(AttributeKeys.CarriedBlockData.OriginalMeshAngle, child.OriginalMeshAngle.Value);
 
                 childrenTree[$"child_{i}"] = childAttr;
             }
