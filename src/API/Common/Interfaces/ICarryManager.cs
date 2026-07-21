@@ -78,6 +78,10 @@ namespace CarryOn.API.Common.Interfaces
         /// <summary>Initializes carry events discovered by the event bootstrap service.</summary>
         void InitEvents(ICoreAPI api);
 
+        /// <summary>Registers a carry event handler. The handler will be initialized during <see cref="InitEvents"/>.</summary>
+        /// <typeparam name="T">The event handler type, which must implement <see cref="ICarryEventHandler"/>.</typeparam>
+        void RegisterEventHandler<T>() where T : ICarryEventHandler, new();
+
         /// <summary>Registers a primary transform group resolver (determines the root/base transform group).</summary>
         void RegisterRootTransformGroupResolver(string modId, IRootTransformGroupResolver resolver);
 
@@ -110,6 +114,14 @@ namespace CarryOn.API.Common.Interfaces
 
         /// <summary>Gets the current carried-state revision for change detection.</summary>
         int GetCarriedRevision(Entity entity);
+
+        /// <summary>Registers a transfer behavior by its block behavior code.
+        /// The behavior must already be registered with the VintageStory API
+        /// via <c>api.RegisterBlockBehaviorClass(code, type)</c>.</summary>
+        void RegisterTransferBehavior(string modId, string behaviorCode);
+
+        /// <summary>Enumerates all registered transfer behavior codes.</summary>
+        IEnumerable<string> EnumerateTransferBehaviors();
 
     }
 }

@@ -4,12 +4,32 @@ using Vintagestory.API.Common;
 
 namespace CarryOn.API.Common.Interfaces
 {
+    /// <summary>
+    /// Provides dynamic transform group candidates for the primary/root carried block during rendering.
+    /// Register implementations via <see cref="ICarryManager.RegisterRootTransformGroupResolver"/>.
+    /// </summary>
     public interface IRootTransformGroupResolver
     {
+        /// <summary>Unique identifier for this resolver, used for registration and lookup.</summary>
         string ResolverCode { get; }
 
-        bool TryResolve(ICoreAPI api, CarriedBlock carried, string baseGroup, out IList<string>? candidates);
+        /// <summary>
+        /// Attempts to resolve transform group candidates for the given carried block.
+        /// Returns true if custom candidates were resolved; false to fall back to the default.
+        /// </summary>
+        /// <param name="api">The core API instance.</param>
+        /// <param name="carried">The carried block being rendered.</param>
+        /// <param name="baseGroup">The default transform group determined by the carry system.</param>
+        /// <param name="candidates">The ordered list of transform group candidates to try, or null to use the default.</param>
+        bool TryResolve(ICoreAPI api, CarriedBlock carried, string baseGroup, out IReadOnlyList<string>? candidates);
 
+        /// <summary>
+        /// Returns an optional cache signature string. When non-null and equal to a previous call,
+        /// the resolver's output can be cached. Return null to disable caching.
+        /// </summary>
+        /// <param name="api">The core API instance.</param>
+        /// <param name="carried">The carried block being rendered.</param>
+        /// <param name="baseGroup">The default transform group determined by the carry system.</param>
         string? GetCacheSignature(ICoreAPI api, CarriedBlock carried, string baseGroup) => null;
     }
 }

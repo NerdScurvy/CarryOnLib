@@ -1,17 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CarryOn.API.Common.Models
 {
-    public enum CarriedGroupAssetType
-    {
-        None,
-        Block,
-        Item
-    }
-
     public class CarriedGroupCandidateSet
     {
-        public IList<string> Groups { get; set; } = new List<string>();
+        public IReadOnlyList<string> Groups { get; }
 
         public bool AddAllMatches { get; set; } = false;
 
@@ -26,5 +20,10 @@ namespace CarryOn.API.Common.Models
         public bool ApplyDisplayCaseYawOffset { get; set; } = false;
 
         public bool ApplyOnDisplayTransform { get; set; } = false;
+
+        public CarriedGroupCandidateSet(IEnumerable<string> groups)
+        {
+            Groups = groups.ToList().AsReadOnly();
+        }
     }
 }

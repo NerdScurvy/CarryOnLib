@@ -1,11 +1,17 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CarryOn.API.Common.Models
 {
     public class AttachmentResolveResult
     {
-        public IList<CarriedGroupCandidateSet> Candidates { get; set; } = new List<CarriedGroupCandidateSet>();
+        public IReadOnlyList<CarriedGroupCandidateSet> Candidates { get; }
 
         public bool EnableVertexWarp { get; set; }
+
+        public AttachmentResolveResult(IEnumerable<CarriedGroupCandidateSet> candidates)
+        {
+            Candidates = candidates.ToList().AsReadOnly();
+        }
     }
 }
