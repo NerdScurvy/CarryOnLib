@@ -28,6 +28,7 @@ CarryOnLib is designed to be used as a dependency by other mods that want to int
 | `CarriedGroupCandidateSet` | Immutable candidate set: groups (via constructor), rendering hints, and asset fallbacks for transform group resolvers |
 | `AttachmentResolveResult` | Immutable attachment resolver output: candidate sets (via constructor) and vertex warp flag |
 | `CarryConstants` | Static constants: `ModId`, `FailureCodes`, `HotKeyCodes`, `AttributeKeys` |
+| `CarriedGroupAssetType` | Enum: `None`, `Block`, `Item` — asset type for transform group resolution |
 | `TreeValueAttribute` | Attribute for mapping C# properties to attribute tree keys during serialization |
 
 ## Events
@@ -72,6 +73,7 @@ CarryOnLib includes utility classes for common operations:
 | `JsonHelper` | Typed JSON extraction helpers for `JsonObject` and `JToken` |
 | `CarryManagerExtensions` | Convenience overloads for `ICarryManager` methods that suppress failure codes |
 | `CarryInputExtensions` | Client-side helpers for checking carry key states |
+| `JTokenExtensions` | Extension methods on `Dictionary<string, JToken>` for typed JSON extraction |
 
 ## Usage
 
@@ -84,7 +86,7 @@ Reference CarryOnLib in your mod project to:
 - Use inventory conversion and attribute tree utilities
 - Register carryable block behaviors
 
-Note: `CarryOnConfig`, `CarryCodes`, and related configuration types live in the [CarryOn mod](https://github.com/Nerdscurvy/CarryOn) itself, not in CarryOnLib.
+Note: `CarryOnConfig`, `CarryCodes`, and related configuration types live in the [CarryOn mod](https://github.com/Nerdscurvy/CarryOn) itself, not in CarryOnLib. CarryOnLib provides `CarryConstants` as a small subset of codes for modder use.
 
 ## License
 
