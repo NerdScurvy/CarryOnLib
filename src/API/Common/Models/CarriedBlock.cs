@@ -35,28 +35,52 @@ namespace CarryOn.API.Common.Models
         public float? OriginalMeshAngle { get; }
 
         /// <summary>
-        /// Cached carryable behavior, lazily populated by <see cref="CarryOn.Utility.CarryExtensions.GetCarryableBehavior"/>.
-        /// Avoids repeated linear scans of the block's behavior list on the render hot path.
-        /// Not serialized; purely a render-time optimization.
+        /// The factory code of the <see cref="CarryOn.API.Common.Interfaces.ICarryEntitySpawnerFactory"/>
+        /// that should handle spawning the entity when this carried block is placed or dropped.
+        /// Populated during pickup (entity to carried block) by the pickup handler's
+        /// <see cref="CarryOn.API.Common.Interfaces.ICarryableEntityPickupHandler.SerializeToCarriedBlock"/>
+        /// method. Null when the carried block was picked up from the world (not from an entity),
+        /// meaning it will be placed as a normal block.
         /// </summary>
-        public BlockBehavior? CachedCarryableBehavior { get; set; }
+        public string? SpawnerFactoryCode { get; }
+
+        /// <summary>
+        /// Signal decoupling "this block has a factory code" from "this block should re-spawn
+        /// as an entity when placed by hand (<c>dropped == false</c>)". Set by pickup handlers
+        /// for genuinely custom entity blocks (racks, boats, ...) that must round-trip through
+        /// their entity factory on placement. Null for normal blocks picked up from the world;
+        /// the placement pipeline resolves null against the CarryOn config default. Persisted
+        /// with the carried block so it survives the drop → <c>EntityCarriedBlock</c> → pickup
+        /// round trip.
+        /// </summary>
+        public bool? SpawnAsEntityOnPlacement { get; }
 
         public CarriedBlock(CarrySlot slot, ItemStack stack, ITreeAttribute? blockEntityData)
-          : this(slot, stack, blockEntityData, null, null, null)
+          : this(slot, stack, blockEntityData, null, null, null, null)
         {
         }
 
         public CarriedBlock(CarrySlot slot, ItemStack stack, ITreeAttribute? blockEntityData, IEnumerable<AttachedCarriedBlock>? attachedBlocks)
-          : this(slot, stack, blockEntityData, attachedBlocks, null, null)
+          : this(slot, stack, blockEntityData, attachedBlocks, null, null, null)
         {
         }
 
         public CarriedBlock(CarrySlot slot, ItemStack stack, ITreeAttribute? blockEntityData, IEnumerable<AttachedCarriedBlock>? attachedBlocks, AssetLocation? originalBlockCode)
-          : this(slot, stack, blockEntityData, attachedBlocks, originalBlockCode, null)
+          : this(slot, stack, blockEntityData, attachedBlocks, originalBlockCode, null, null)
         {
         }
 
         public CarriedBlock(CarrySlot slot, ItemStack stack, ITreeAttribute? blockEntityData, IEnumerable<AttachedCarriedBlock>? attachedBlocks, AssetLocation? originalBlockCode, float? originalMeshAngle)
+          : this(slot, stack, blockEntityData, attachedBlocks, originalBlockCode, originalMeshAngle, null)
+        {
+        }
+
+        public CarriedBlock(CarrySlot slot, ItemStack stack, ITreeAttribute? blockEntityData, IEnumerable<AttachedCarriedBlock>? attachedBlocks, AssetLocation? originalBlockCode, float? originalMeshAngle, string? spawnerFactoryCode)
+          : this(slot, stack, blockEntityData, attachedBlocks, originalBlockCode, originalMeshAngle, spawnerFactoryCode, null)
+        {
+        }
+
+        public CarriedBlock(CarrySlot slot, ItemStack stack, ITreeAttribute? blockEntityData, IEnumerable<AttachedCarriedBlock>? attachedBlocks, AssetLocation? originalBlockCode, float? originalMeshAngle, string? spawnerFactoryCode, bool? spawnAsEntityOnPlacement)
         {
             Slot = slot;
             ItemStack = stack ?? throw new ArgumentNullException(nameof(stack));
@@ -64,7 +88,8 @@ namespace CarryOn.API.Common.Models
             AttachedBlocks = attachedBlocks?.ToList().AsReadOnly();
             OriginalBlockCode = originalBlockCode;
             OriginalMeshAngle = originalMeshAngle;
+            SpawnerFactoryCode = spawnerFactoryCode;
+            SpawnAsEntityOnPlacement = spawnAsEntityOnPlacement;
         }
-
     }
 }

@@ -32,7 +32,7 @@ namespace CarryOn.Utility
                 {
                     if (value == null) return;
                     var getter = $"attr{keys.Take(i).Select(k => $"[\"{k}\"]")}";
-                    var type = attr?.GetType()?.ToString() ?? "null";
+                    var type = attr.GetType()?.ToString() ?? "null";
                     throw new ArgumentException($"{getter} is {type}, not TreeAttribute.", nameof(attr));
                 }
                 if (i == keys.Length - 1)
@@ -79,6 +79,18 @@ namespace CarryOn.Utility
             return current;
         }
 
+        /// <summary>
+        /// Evaluates a boolean logic expression using dot-notation attribute keys.
+        /// Supports <c>&amp;</c> (AND) and <c>|</c> (OR) operators.
+        /// Precedence: AND binds tighter than OR (standard boolean precedence).
+        /// When both operators are present, the expression is split on <c>|</c> first,
+        /// then each group is split on <c>&amp;</c>. Missing or non-boolean keys are
+        /// treated as <c>true</c> (with a warning logged).
+        /// </summary>
+        /// <param name="config">The attribute tree to evaluate against.</param>
+        /// <param name="api">The API, used for logging.</param>
+        /// <param name="logicString">The dot-notation logic expression, e.g. <c>"a.b &amp; c.d"</c>.</param>
+        /// <returns>The evaluated boolean result; true when the expression is null/empty.</returns>
         public static bool EvaluateDotNotationLogic(this ITreeAttribute config, ICoreAPI api, string logicString)
         {
             if (string.IsNullOrWhiteSpace(logicString)) return true;

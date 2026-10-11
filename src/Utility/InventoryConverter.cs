@@ -4,14 +4,22 @@ namespace CarryOn.Utility
 {
     public static class InventoryConverter
     {
-        public static ITreeAttribute ConvertBlockInventoryToBackpack(ITreeAttribute blockInventory)
+        /// <summary>
+        /// Converts block-entity inventory data into the backpack attribute format used
+        /// by attachable entities. Returns null when the inventory is null or has no
+        /// slots, preserving the "uninitialized" state so vanilla can lazily initialize
+        /// the container when it is first opened.
+        /// </summary>
+        public static ITreeAttribute? ConvertBlockInventoryToBackpack(ITreeAttribute? blockInventory)
         {
-            var backpack = new TreeAttribute();
-            if (blockInventory == null) return backpack;
+            if (blockInventory == null) return null;
 
             var slotCount = blockInventory.GetInt("qslots");
+            if (slotCount <= 0) return null;
+
             var slots = blockInventory.GetTreeAttribute("slots");
 
+            var backpack = new TreeAttribute();
             var backpackSlots = new TreeAttribute();
             for (int i = 0; i < slotCount; i++)
             {
@@ -24,14 +32,22 @@ namespace CarryOn.Utility
             return backpack;
         }
 
-        public static ITreeAttribute ConvertBackpackToBlockInventory(ITreeAttribute? backpack)
+        /// <summary>
+        /// Converts the backpack attribute from an attachable entity itemstack back into
+        /// block-entity inventory data. Returns null when the backpack is null or empty,
+        /// preserving the "uninitialized" state so the container gets its default slots
+        /// when placed as a block or re-attached without having been opened.
+        /// </summary>
+        public static ITreeAttribute? ConvertBackpackToBlockInventory(ITreeAttribute? backpack)
         {
-            var blockInventory = new TreeAttribute();
-            if (backpack == null || backpack.Count == 0) return blockInventory;
+            if (backpack == null || backpack.Count == 0) return null;
 
             var backpackSlots = backpack.GetTreeAttribute("slots");
+            if (backpackSlots == null) return null;
+
             var count = backpackSlots.Count;
 
+            var blockInventory = new TreeAttribute();
             blockInventory.SetInt("qslots", count);
             var slotsAttribute = new TreeAttribute();
 

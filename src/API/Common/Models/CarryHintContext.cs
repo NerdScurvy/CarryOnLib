@@ -2,6 +2,10 @@ using Vintagestory.API.Common;
 
 namespace CarryOn.API.Common.Models
 {
+    /// <summary>
+    /// Mutable context passed to hint-policy evaluators. Use the public setters to
+    /// configure the hint evaluation state before calling an <c>ICarryHintPolicy</c>.
+    /// </summary>
     public class CarryHintContext
     {
         public IPlayer? Player { get; set; }
