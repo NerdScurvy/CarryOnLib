@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using CarryOn.API.Common.Models;
 using CarryOn.API.Event;
-using CarryOn.Utility;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
@@ -47,7 +46,7 @@ namespace CarryOn.API.Common.Interfaces
         /// so callers can distinguish a present-but-unusable carry (for example a block whose
         /// mod was removed, surfaced as <see cref="CarriedBlockReadResult.Failed(string)"/>
         /// with reason <c>missing-block</c>) from a genuinely empty slot. Never throws; see
-        /// <see cref="CarriedBlockTreeSerializer.DeserializeSafe(ITreeAttribute, ICoreAPI?, CarrySlot)"/>.
+        /// <see cref="CarryOn.Utility.CarriedBlockTreeSerializer.DeserializeSafe(ITreeAttribute, ICoreAPI?, CarrySlot)"/>.
         /// </summary>
         /// <param name="entity">The entity to inspect.</param>
         /// <param name="slot">The slot to read.</param>
