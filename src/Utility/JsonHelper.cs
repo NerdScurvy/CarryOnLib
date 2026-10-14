@@ -8,6 +8,14 @@ namespace CarryOn.Utility
 {
     public static class JsonHelper
     {
+        /// <summary>
+        /// Tries to read a boolean value from a JsonObject key. Returns false when the key
+        /// is absent or the value cannot be read as a bool.
+        /// </summary>
+        /// <param name="json">The JSON object to read from.</param>
+        /// <param name="key">The key to look up.</param>
+        /// <param name="result">Set to the parsed value on success.</param>
+        /// <returns>True if the key exists and the value was read; false otherwise.</returns>
         public static bool TryGetBool(JsonObject json, string key, out bool result)
         {
             if (!json.KeyExists(key))
@@ -19,6 +27,13 @@ namespace CarryOn.Utility
             return true;
         }
 
+        /// <summary>
+        /// Tries to read a string value from a JsonObject key.
+        /// </summary>
+        /// <param name="json">The JSON object to read from.</param>
+        /// <param name="key">The key to look up.</param>
+        /// <param name="result">Set to the parsed value on success, or null on failure.</param>
+        /// <returns>True if the key exists and resolved to a non-null string; false otherwise.</returns>
         public static bool TryGetString(JsonObject json, string key, out string? result)
         {
             if (!json.KeyExists(key))
@@ -29,6 +44,14 @@ namespace CarryOn.Utility
             result = json[key].AsString();
             return result != null;
         }        
+        /// <summary>
+        /// Tries to read an integer value from a JsonObject key. Returns false when the key
+        /// is absent.
+        /// </summary>
+        /// <param name="json">The JSON object to read from.</param>
+        /// <param name="key">The key to look up.</param>
+        /// <param name="result">Set to the parsed value on success.</param>
+        /// <returns>True if the key exists and the value was read; false otherwise.</returns>
         public static bool TryGetInt(JsonObject json, string key, out int result)
         {
             if (!json.KeyExists(key))
@@ -40,6 +63,18 @@ namespace CarryOn.Utility
             return true;
         }
 
+        /// <summary>
+        /// Tries to read a float value from a JsonObject key.
+        /// </summary>
+        /// <param name="json">The JSON object to read from.</param>
+        /// <param name="key">The key to look up.</param>
+        /// <param name="result">Set to the parsed value on success.</param>
+        /// <returns>
+        /// True if the key exists and resolved to a valid (non-NaN) float; false otherwise.
+        /// Note: <c>result</c> is <see cref="float.NaN"/> on both "key not found" and
+        /// "value is NaN", so callers cannot distinguish those two cases - they only
+        /// receive a true/false for existence-and-validity.
+        /// </returns>
         public static bool TryGetFloat(JsonObject json, string key, out float result)
         {
             if (!json.KeyExists(key))
@@ -51,6 +86,15 @@ namespace CarryOn.Utility
             return !float.IsNaN(result);
         }
 
+        /// <summary>
+        /// Tries to read a 3-component vector from a JsonObject key. Supports array form
+        /// <c>[x, y, z]</c> and object form <c>{ x, y, z }</c>; missing object components
+        /// default to 0.
+        /// </summary>
+        /// <param name="json">The JSON object to read from.</param>
+        /// <param name="key">The key to look up.</param>
+        /// <param name="result">Set to the parsed vector on success, or null on failure.</param>
+        /// <returns>True if a valid vector was parsed; false otherwise.</returns>
         public static bool TryGetVec3f(JsonObject json, string key, out Vec3f? result)
         {
             if (!json.KeyExists(key))
@@ -82,6 +126,15 @@ namespace CarryOn.Utility
             return false;
         }
 
+        /// <summary>
+        /// Tries to read a 4-component vector from a JsonObject key. Supports array form
+        /// <c>[x, y, z, w]</c> and object form <c>{ x, y, z, w }</c>; missing object components
+        /// default to 0.
+        /// </summary>
+        /// <param name="json">The JSON object to read from.</param>
+        /// <param name="key">The key to look up.</param>
+        /// <param name="result">Set to the parsed vector on success, or null on failure.</param>
+        /// <returns>True if a valid vector was parsed; false otherwise.</returns>
         public static bool TryGetVec4f(JsonObject json, string key, out Vec4f? result)
         {
             if (!json.KeyExists(key))
@@ -93,8 +146,7 @@ namespace CarryOn.Utility
             var floats = json[key].AsArray<float>();
             if (floats != null && floats.Length == 4)
             {
-                result = new Vec4f();
-                result.Set(floats);
+                result = new Vec4f(floats[0], floats[1], floats[2], floats[3]);
                 return true;
             }
             // Try object form: { x: ..., y: ..., z: ..., w: ... } with partials allowed (missing -> 0)
@@ -117,6 +169,15 @@ namespace CarryOn.Utility
         }
     
 
+        /// <summary>
+        /// Tries to read a 3-component integer vector from a JsonObject key. Supports array
+        /// form <c>[x, y, z]</c> and object form <c>{ x, y, z }</c>; missing object
+        /// components default to 0.
+        /// </summary>
+        /// <param name="json">The JSON object to read from.</param>
+        /// <param name="key">The key to look up.</param>
+        /// <param name="result">Set to the parsed vector on success, or null on failure.</param>
+        /// <returns>True if a valid vector was parsed; false otherwise.</returns>
         public static bool TryGetVec3i(JsonObject json, string key, out Vec3i? result)
         {
             if (!json.KeyExists(key))
@@ -128,6 +189,19 @@ namespace CarryOn.Utility
             if (ints != null && ints.Length == 3)
             {
                 result = new Vec3i(ints[0], ints[1], ints[2]);
+                return true;
+            }
+            // Try object form: { x: ..., y: ..., z: ... } with partials allowed (missing -> 0)
+            var xObj = json[key]["x"];
+            var yObj = json[key]["y"];
+            var zObj = json[key]["z"];
+            bool anyProvided = xObj.Exists || yObj.Exists || zObj.Exists;
+            if (anyProvided)
+            {
+                int x = xObj.Exists ? xObj.AsInt(0) : 0;
+                int y = yObj.Exists ? yObj.AsInt(0) : 0;
+                int z = zObj.Exists ? zObj.AsInt(0) : 0;
+                result = new Vec3i(x, y, z);
                 return true;
             }
             result = null;
@@ -232,85 +306,6 @@ namespace CarryOn.Utility
             return dict != null && dict.TryGetValue(key, out var token) && token.Type == JTokenType.Array
                 ? token.ToObject<string[]>() ?? defaultValue
                 : defaultValue;
-        }
-
-        /// <summary>
-        /// Tries to get a value from a dictionary by exact key, then by trimmed case-insensitive key.
-        /// </summary>
-        public static bool TryGetValueTrimmedIgnoreCase<T>(IDictionary<string, T> map, string key, out T? value)
-        {
-            value = default;
-
-            if (map == null || string.IsNullOrWhiteSpace(key))
-            {
-                return false;
-            }
-
-            if (map.TryGetValue(key, out value))
-            {
-                return true;
-            }
-
-            var trimmedKey = key.Trim();
-            foreach (var entry in map)
-            {
-                if (!string.Equals(entry.Key?.Trim(), trimmedKey, StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                value = entry.Value;
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Tries to get a value by trailing-* wildcard key where longest matching prefix wins.
-        /// </summary>
-        public static bool TryGetTrailingWildcardValue<T>(IDictionary<string, T> map, string input, out T? value, System.Func<T, bool>? canUseValue = null)
-        {
-            value = default;
-
-            if (map == null || string.IsNullOrWhiteSpace(input))
-            {
-                return false;
-            }
-
-            var bestPrefixLength = -1;
-            var found = false;
-
-            foreach (var entry in map)
-            {
-                var entryKey = entry.Key?.Trim();
-                if (string.IsNullOrWhiteSpace(entryKey) || !entryKey.EndsWith("*", StringComparison.Ordinal))
-                {
-                    continue;
-                }
-
-                var prefix = entryKey.Substring(0, entryKey.Length - 1);
-                if (string.IsNullOrEmpty(prefix) || !input.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                if (prefix.Length <= bestPrefixLength)
-                {
-                    continue;
-                }
-
-                if (canUseValue != null && !canUseValue(entry.Value))
-                {
-                    continue;
-                }
-
-                bestPrefixLength = prefix.Length;
-                value = entry.Value;
-                found = true;
-            }
-
-            return found;
         }
 
         /// <summary>

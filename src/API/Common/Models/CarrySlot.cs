@@ -4,12 +4,12 @@ namespace CarryOn.API.Common.Models
     public enum CarrySlot
     {
         /// <summary> Block carried in the player's hands (primary carry slot). </summary>
-        Hands,
+        Hands = 0,
 
         /// <summary> Block carried on the player's back (secondary carry slot). </summary>
-        Back,
+        Back = 1,
 
         /// <summary> Child block attached to a primary carried block (cluster/attachment system). </summary>
-        Attached
+        Attached = 2
     }
 }

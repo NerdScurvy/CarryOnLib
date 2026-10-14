@@ -36,7 +36,10 @@ namespace CarryOn.API.Common.Models
                 public const string OffsetZ = "OffsetZ";
                 public const string OriginalFace = "OriginalFace";
                 public const string OriginalBlockCode = "OriginalBlockCode";
+                public const string OriginalItemCode = "OriginalItemCode";
                 public const string OriginalMeshAngle = "OriginalMeshAngle";
+                public const string SpawnerFactoryCode = "SpawnerFactoryCode";
+                public const string SpawnAsEntityOnPlacement = "SpawnAsEntityOnPlacement";
             }
         }
     }

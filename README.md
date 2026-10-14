@@ -9,12 +9,13 @@ CarryOnLib is designed to be used as a dependency by other mods that want to int
 | Interface | Purpose |
 |---|---|
 | `ICarryManager` | Central API for carry operations: `TryPickUp`, `TryPlaceDown`, `GetCarried`, `SetCarried`, `RemoveCarried`, `SwapCarried`, `DropCarried`, plus resolver registration |
-| `ICarryableTransfer` | Contract for behaviors that support transferring carryable items between carried state and block entity inventories (e.g., shelving, displays) |
+| `ICarryableBlockSlotHandler` | Contract for behaviors that support transferring carryable items between carried state and block entity inventories (e.g., shelving, displays) |
 | `ICarryableHintPolicy` | Optional policy hook to dynamically filter which interaction hints are shown to the player |
 | `ICarryEventHandler` | Bootstrap interface for event subscribers to register handlers during initialization |
 | `IConditionalBlockBehavior` | Marker for block behaviors that should only be active under certain conditions |
 | `IRootTransformGroupResolver` | Implement to provide dynamic transform group candidates for the root carried block during rendering |
 | `IAttachmentTransformGroupResolver` | Implement to provide dynamic transform group candidates for attached/cluster children during rendering |
+| `IEntityTransformGroupResolver` | Implement to override the wearing entity's base transform group during rendering (e.g. downgrading to the no-backpack group when a cosmetic mod hides the wearer's backpack) |
 
 ## Key Models
 
@@ -44,6 +45,8 @@ Access events via `ICarryManager.CarryEvents`:
 | `BlockDropped` | `EventHandler<BlockDroppedEventArgs>` | After a carried block is dropped |
 | `BlockRemoved` | `EventHandler<BlockRemovedEventArgs>` | After a block is removed from the world |
 
+The `CheckPermissionAt` handler is registered with `RegisterCheckPermissionAt(priority, handler)` / `UnregisterCheckPermissionAt(handler)`. Priorities: handlers run in ascending priority order (lower int first). The first non-null result wins. Convention: internal CarryOn handlers use priority 0. Use a negative priority to run before CarryOn's handlers, positive to run after.
+
 ## Resolver Registration
 
 Register custom transform group resolvers to control which render groups are used for carried blocks:
@@ -54,6 +57,9 @@ carryManager.RegisterRootTransformGroupResolver("yourmod", new MyRootResolver())
 
 // Attachment resolver (selects transform groups for attached children)
 carryManager.RegisterAttachmentTransformGroupResolver("yourmod", new MyAttachmentResolver());
+
+// Entity resolver (overrides the wearing entity's base group per wearer)
+carryManager.RegisterEntityTransformGroupResolver("yourmod", new MyEntityResolver());
 ```
 
 ## Utilities
@@ -73,6 +79,7 @@ CarryOnLib includes utility classes for common operations:
 | `JsonHelper` | Typed JSON extraction helpers for `JsonObject` and `JToken` |
 | `CarryManagerExtensions` | Convenience overloads for `ICarryManager` methods that suppress failure codes |
 | `CarryInputExtensions` | Client-side helpers for checking carry key states |
+| `CarryErrorHelper` | Show/send error messages resolved with a hybrid rule: a full lang key (containing `:`) resolves verbatim, a bare code gets the `carryon:` prefix (`ResolveLangKey` for the resolution, `ShowError` on the client, `SendError` to a server player, 1- and 2-arg overloads) |
 | `JTokenExtensions` | Extension methods on `Dictionary<string, JToken>` for typed JSON extraction |
 
 ## Usage
@@ -82,7 +89,7 @@ Reference CarryOnLib in your mod project to:
 - Access carry operations via `ICarryManager`
 - Listen for and handle carry events
 - Implement custom transform group resolvers
-- Implement `ICarryableTransfer` for block entity inventory integration
+- Implement `ICarryableBlockSlotHandler` for block entity inventory integration
 - Use inventory conversion and attribute tree utilities
 - Register carryable block behaviors
 

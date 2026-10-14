@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using CarryOn.API.Common.Models;
 using CarryOn.API.Event.Data;
@@ -10,6 +11,13 @@ using Vintagestory.API.MathTools;
 
 namespace CarryOn.API.Event
 {
+    /// <summary>
+    /// Event bus for CarryOn lifecycle and permission events.
+    /// Thread safety: this class is not thread-safe for subscribe/unsubscribe during trigger.
+    /// All trigger methods iterate synchronously at the time of the trigger call.
+    /// Subscribe/unsubscribe is safe between triggers but not during a concurrent trigger.
+    /// This matches VintageStory's predominantly single-threaded game loop.
+    /// </summary>
     public class CarryEvents
     {
         public event BeforePickUpBlockDelegate? BeforePickUpBlock;
@@ -18,13 +26,49 @@ namespace CarryOn.API.Event
 
         public event BlockEntityDataDelegate? BeforeRestoreBlockEntityData;
 
-        public event CheckPermissionAtDelegate? CheckPermissionAt;
+        private readonly SortedDictionary<int, List<CheckPermissionAtDelegate>> permissionHandlers = new();
 
         public event EventHandler<BlockDroppedEventArgs>? BlockDropped;
 
         public event EventHandler<BlockRemovedEventArgs>? BlockRemoved;
 
+        /// <summary>
+        /// Optional callback invoked when a subscribed event handler throws an exception.
+        /// If null, exceptions from handlers are silently swallowed.
+        /// Set this during mod initialization to receive handler errors (e.g. for logging).
+        /// </summary>
         public Action<Exception>? OnEventHandlerError { get; set; }
+
+        /// <summary>
+        /// Registers a permission-check handler at the given priority. Handlers run in ascending
+        /// priority order (lower int = runs first). The first handler to return a non-null
+        /// <c>hasPermission</c> decides the outcome; later handlers are not consulted.
+        ///
+        /// Returning a non-null value is an authoritative decision (allow or deny). Returning null
+        /// means "no opinion" and defers to the next handler by priority.
+        ///
+        /// Priorities are not globally reserved; modders may choose any <c>int</c>. CarryOn's own
+        /// internal handler (<c>DroppedBlockTracker</c>) registers at priority 0 by convention.
+        /// A mod wanting to override internal drops handling would use a negative priority; one
+        /// wanting to run after would use a positive priority.
+        /// </summary>
+        /// <param name="priority">Execution priority; lower runs first.</param>
+        /// <param name="handler">The permission-check handler.</param>
+        public void RegisterCheckPermissionAt(int priority, CheckPermissionAtDelegate handler)
+        {
+            ArgumentNullException.ThrowIfNull(handler);
+            if (!permissionHandlers.TryGetValue(priority, out var list))
+                permissionHandlers[priority] = list = new List<CheckPermissionAtDelegate>();
+            list.Add(handler);
+        }
+
+        /// <summary>
+        /// Removes a previously registered permission-check handler. Returns true if found and removed.
+        /// </summary>
+        /// <param name="handler">The permission-check handler previously registered.</param>
+        /// <returns>True if the handler was found and removed; false if it was not registered.</returns>
+        public bool UnregisterCheckPermissionAt(CheckPermissionAtDelegate handler)
+            => permissionHandlers.Values.Any(list => list.Remove(handler));
 
         public bool? TriggerCheckPermissionAt(EntityPlayer playerEntity, BlockPos pos, bool isReinforced)
         {
@@ -73,19 +117,19 @@ namespace CarryOn.API.Event
 
         protected virtual bool? OnCheckPermissionAt(EntityPlayer playerEntity, BlockPos pos, bool isReinforced)
         {
-            var delegates = CheckPermissionAt?.GetInvocationList();
-            if (delegates == null) return null;
-
-            foreach (var del in delegates.Cast<CheckPermissionAtDelegate>())
+            foreach (var list in permissionHandlers.Values)
             {
-                try
+                foreach (var del in list)
                 {
-                    del(playerEntity, pos, isReinforced, out bool? hasPermission);
-                    if (hasPermission != null) return hasPermission.Value;
-                }
-                catch (Exception ex)
-                {
-                    OnEventHandlerError?.Invoke(ex);
+                    try
+                    {
+                        del(playerEntity, pos, isReinforced, out bool? hasPermission);
+                        if (hasPermission != null) return hasPermission.Value;
+                    }
+                    catch (Exception ex)
+                    {
+                        OnEventHandlerError?.Invoke(ex);
+                    }
                 }
             }
 

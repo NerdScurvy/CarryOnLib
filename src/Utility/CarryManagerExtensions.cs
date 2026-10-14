@@ -3,7 +3,6 @@ using CarryOn.API.Common.Models;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.MathTools;
-using Vintagestory.API.Server;
 using static CarryOn.API.Common.Models.CarryConstants;
 
 namespace CarryOn.Utility
@@ -42,26 +41,6 @@ namespace CarryOn.Utility
         {
             var failureCode = FailureCodes.Ignore;
             return mgr.TryPlaceDownAt(player, slot, selection, out placedAt, ref failureCode);
-        }
-
-        /// <summary>
-        /// Convenience overload that suppresses failure details.
-        /// Use <see cref="ICarryManager.TryAttach"/> directly when error reporting is needed.
-        /// </summary>
-        public static bool TryAttach(this ICarryManager mgr, IServerPlayer player, long targetEntityId, int slotIndex, bool playSound = true)
-        {
-            var failureCode = FailureCodes.Ignore;
-            return mgr.TryAttach(player, targetEntityId, slotIndex, ref failureCode, playSound);
-        }
-
-        /// <summary>
-        /// Convenience overload that suppresses failure details.
-        /// Use <see cref="ICarryManager.TryDetach"/> directly when error reporting is needed.
-        /// </summary>
-        public static bool TryDetach(this ICarryManager mgr, IServerPlayer player, long targetEntityId, int slotIndex, bool playSound = true)
-        {
-            var failureCode = FailureCodes.Ignore;
-            return mgr.TryDetach(player, targetEntityId, slotIndex, ref failureCode, playSound);
         }
     }
 }

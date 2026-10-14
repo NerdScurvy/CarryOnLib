@@ -20,8 +20,8 @@ namespace CarryOn.Utility
             where T : BlockBehavior
                 => block.HasBehavior(typeof(T));
 
-        public static T GetBehaviorOrDefault<T>(this Block block, T @default)
+        public static T GetBehaviorOrDefault<T>(this Block? block, T @default)
             where T : BlockBehavior
-                => block.GetBehavior<T>() ?? @default;
+                => block?.GetBehavior<T>() ?? @default;
     }
 }
